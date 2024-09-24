@@ -1,0 +1,45 @@
+@layer tailwind-base, antd;
+
+@layer tailwind-base {
+    @tailwind base;
+}
+
+@layer antd {
+    /* Import các CSS của antd tại đây */
+    @import "antd/dist/reset.css";
+}
+
+@tailwind components;
+@tailwind utilities;
+
+.dhn-menu {
+    @apply font-semibold;
+}
+
+.dhn-btn {
+    @apply bg-slate-900 text-white rounded-lg hover:bg-gray-400 hover:text-black;
+}
+
+.dhn-icons {
+    @apply w-6 h-6
+}
+
+.dhn-container {
+    @apply py-4 w-10/12 m-auto;
+}
+
+.dhn-menu-con {
+    @apply block leading-8 hover:text-blue-500;
+}
+
+.dhn-btn-add-to-cart {
+    @apply left-11 px-16 h-10 rounded-lg absolute bottom-8 bg-white;
+}
+
+.dhn-content {
+    @apply hidden;
+}
+
+.dhn-content.active {
+    @apply block;
+}
