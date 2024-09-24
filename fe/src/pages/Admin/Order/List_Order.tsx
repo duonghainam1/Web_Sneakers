@@ -1,6 +1,7 @@
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { Table } from "antd"
+import { Link } from "react-router-dom";
 
 const List_Order = () => {
     const { data } = useOrder()
@@ -57,7 +58,7 @@ const List_Order = () => {
             render: (_: any, order: any) => {
                 return (
                     <div className="flex justify-center">
-                        <EllipsisOutlined />
+                        <Link to={`/admin/orders/${order._id}`}><EllipsisOutlined /></Link>
                     </div>
                 )
             }
