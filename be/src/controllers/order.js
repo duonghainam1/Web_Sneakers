@@ -26,6 +26,18 @@ export const get_order = async (req, res) => {
 
     }
 }
+export const get_order_Id = async (req, res) => {
+    try {
+        const data = await Order.findById(req.params.id)
+        if (!data || data.length === 0) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Lấy tất cả đơn hàng thành công" });
+        }
+        return res.status(StatusCodes.CREATED).json(data);
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+
+    }
+}
 export const get_Order_ById = async (req, res) => {
     const { userId } = req.params
     try {
