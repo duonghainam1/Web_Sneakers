@@ -28,7 +28,6 @@ const Router = () => {
     return (
         <>
             <Routes>
-                 <Switch>
                 <Route path="/" element={<LayOutClient />}>
                     <Route index element={<Page />} />
                     <Route path="shops" element={<Page_Shop />} />
@@ -60,7 +59,6 @@ const Router = () => {
                     {/* Auth */}
                     <Route path="auth" element={<List_Auth />} />
                 </Route>
-                      </Switch>
             </Routes>
         </>
     );
