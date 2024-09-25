@@ -1,13 +1,8 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  base: './', // Sử dụng base để đường dẫn tĩnh đúng
-  build: {
-    outDir: 'dist', // Vercel yêu cầu thư mục build là dist
-  },
-  server: {
-    port: 3000, // Cấu hình cổng nếu cần khi chạy local
-  },
-});
+  plugins: [react(), tsconfigPaths()],
+})
