@@ -1,21 +1,19 @@
+import { useOrder } from "@/common/hooks/Order/useOrder";
 import { CheckOutlined, ClockCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Table, Timeline } from "antd";
+import { useParams } from "react-router-dom";
 
 const Order_Detail = () => {
-    const dataSource = [
-        {
-            key: '1',
-            name: 'Mike',
-            age: 32,
-            address: '10 Downing Street',
-        },
-        {
-            key: '2',
-            name: 'John',
-            age: 42,
-            address: '10 Downing Street',
-        },
-    ];
+    const { id } = useParams()
+    const { data } = useOrder(id)
+    console.log(data);
+
+    const dataSource = data?.data?.map((order: any) => {
+        return {
+            key: order._id,
+            ...order
+        }
+    })
 
     const columns = [
         {
