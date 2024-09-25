@@ -1,5 +1,5 @@
 import instance from "@/configs/axios"
-import { add_To_Cart, delete_Cart, update_Cart_status, } from "@/services/Cart/cart";
+import { add_To_Cart, update_Cart_status, } from "@/services/Cart/cart";
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { message } from "antd";
 type Action = 'ADD' | 'UPDATE' | 'DELETE' | 'UPDATE_STATUS';
