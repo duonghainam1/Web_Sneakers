@@ -1,35 +1,57 @@
+import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { CheckOutlined, ClockCircleOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Table, Timeline } from "antd";
+import { Button, message, Popconfirm, Table, Timeline } from "antd";
 import { useParams } from "react-router-dom";
 
 const Order_Detail = () => {
     const { id } = useParams()
-    const { data } = useOrder(id)
-    console.log(data);
-
-    const dataSource = data?.data?.map((order: any) => {
+    const { data, isLoading } = useOrder(id)
+    const { mutate } = mutation_Order('UPDATE')
+    const dataSource = data?.items?.map((item: any) => {
         return {
-            key: order._id,
-            ...order
+            key: item._id,
+            ...item
         }
     })
 
     const columns = [
         {
-            title: 'Name',
+            title: 'Ảnh ',
+            dataIndex: 'image',
+            key: 'image',
+        },
+        {
+            title: 'Tên sản phẩm',
             dataIndex: 'name',
             key: 'name',
+
         },
         {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
+            title: 'Số lượng',
+            dataIndex: 'quantity',
+            key: 'quantity',
         },
         {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
+            title: 'Giá',
+            dataIndex: 'total_price_item',
+            key: 'total_price_item',
+            render: (_: any, order: any) => {
+                return (
+                    <p>{(order?.total_price_item)?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                )
+            }
+        },
+        {
+            title: 'Thành tiền',
+            dataIndex: 'total_price_item',
+            key: 'total_price_item',
+            render: (_: any, order: any) => {
+                return (
+                    <p>{(order?.total_price_item * order?.quantity)?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                )
+            }
+
         },
     ];
     const columns_shipper = [
@@ -83,6 +105,15 @@ const Order_Detail = () => {
             address_shipper: '10 Downing Street',
         },
     ];
+    const handle_Update_Status = async (newStatus: string) => {
+        try {
+            await mutate({ id, status: newStatus });
+            message.success('Cập nhật trạng thái đơn hàng thành công!');
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi cập nhật trạng thái.');
+        }
+    }
+    if (isLoading) return <p>Loading...</p>
     return (
         <div >
             <h1 className="text-center text-2xl pb-8 font-bold">Chi tiết đơn hàng</h1>
@@ -93,14 +124,11 @@ const Order_Detail = () => {
                         <Table dataSource={dataShipper} columns={columns_shipper} pagination={false} />
 
                     </div>
-
-
                     <div className="mb-8">
                         <p className="pb-8 text-lg font-bold">Sản phẩm</p>
                         <Table dataSource={dataSource} columns={columns} pagination={false} />
 
                     </div>
-
                     <div className="border px-3 py-8 mt-8">
                         <div className="flex items-center gap-8 pb-4">
                             <p className="text-lg font-bold"> Phương thức thanh toán:</p>
@@ -113,24 +141,79 @@ const Order_Detail = () => {
                                 <p>Tổng thanh toán:</p>
                             </div>
                             <div>
-                                <p>200.000 VND</p>
+                                <p>{data?.totalPrice?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                 <p className="py-2">0 VND</p>
-                                <p>200.000 VND</p>
+                                <p>{data?.totalPrice?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                             </div>
                         </div>
                     </div>
                     <div className="flex justify-center gap-4 mt-8">
-                        <Button className="py-5 !bg-blue-500 !text-white !border-none">Xác nhận</Button>
-                        <Popconfirm
-                            title="Delete the task"
-                            description="Are you sure to delete this task?"
-                            // onConfirm={confirm}
-                            // onCancel={cancel}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button className="py-5 !bg-red-500 !text-white !border-none">Từ Chối</Button>
-                        </Popconfirm>
+                        {data.status == '1' ? (
+                            <>
+                                <Button className="py-5 !bg-blue-500 !text-white !border-none" onClick={() => handle_Update_Status("2")}>Xác nhận</Button>
+                                <Popconfirm
+                                    title="Delete the task"
+                                    description="Are you sure to delete this task?"
+                                    onConfirm={() => handle_Update_Status("5")}
+                                    // onCancel={cancel}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button className="py-5 !bg-red-500 !text-white !border-none">Từ Chối</Button>
+                                </Popconfirm>
+                            </>
+                        ) : data.status == '2' ? (
+                            <>
+                                <Button className="py-5 !bg-blue-500 !text-white !border-none" onClick={() => handle_Update_Status("3")}>Xác nhận vận chuyển</Button>
+                            </>
+                        ) : data.status == '3' ? (
+                            <>
+                                <Button className="py-5 !bg-blue-500 !text-white !border-none" onClick={() => handle_Update_Status("4")}>Đã giao hàng</Button>
+
+                            </>
+                        ) : data.status == '4' ? (
+                            <>
+                                <Button className="py-5 !bg-blue-500 !text-white !border-none" onClick={() => handle_Update_Status("2")}>Xác nhận</Button>
+                                <Popconfirm
+                                    title="Delete the task"
+                                    description="Are you sure to delete this task?"
+                                    onConfirm={() => handle_Update_Status("5")}
+                                    // onCancel={cancel}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button className="py-5 !bg-red-500 !text-white !border-none">Từ Chối</Button>
+                                </Popconfirm>
+                            </>
+                        ) : data.status == '5' ? (
+                            <>
+                                <Button className="py-5 !bg-blue-500 !text-white !border-none" onClick={() => handle_Update_Status("2")}>Xác nhận</Button>
+                                <Popconfirm
+                                    title="Delete the task"
+                                    description="Are you sure to delete this task?"
+                                    onConfirm={() => handle_Update_Status("5")}
+                                    // onCancel={cancel}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button className="py-5 !bg-red-500 !text-white !border-none">Từ Chối</Button>
+                                </Popconfirm>
+                            </>
+                        ) : (
+                            <>
+                                <Button className="py-5 !bg-blue-500 !text-white !border-none" onClick={() => handle_Update_Status("2")}>Xác nhận</Button>
+                                <Popconfirm
+                                    title="Delete the task"
+                                    description="Are you sure to delete this task?"
+                                    onConfirm={() => handle_Update_Status("5")}
+                                    // onCancel={cancel}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button className="py-5 !bg-red-500 !text-white !border-none">Từ Chối</Button>
+                                </Popconfirm>
+                            </>
+                        )}
 
                     </div>
                 </div>
@@ -172,9 +255,9 @@ const Order_Detail = () => {
                                 <p>Địa chỉ:</p>
                             </div>
                             <div>
-                                <p>Dương Hải Nam</p>
-                                <p className="py-2">0123456789</p>
-                                <p>Minh Khai Hà Nội</p>
+                                <p>{data?.customerInfo?.name}</p>
+                                <p className="py-2">{data?.customerInfo?.phone}</p>
+                                <p>{data?.customerInfo?.address_detail} - {data?.customerInfo?.address}</p>
                             </div>
                         </div>
                     </div>

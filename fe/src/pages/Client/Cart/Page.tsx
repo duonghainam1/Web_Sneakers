@@ -9,6 +9,8 @@ const Page = () => {
     const [user] = useLocalStorage("user", {});
     const userId = user?.data?.user?._id;
     const { data, isLoading } = useCart(userId);
+    console.log(data);
+
     const { mutate: updateStatus } = mutatioinCart('UPDATE_STATUS');
     // const { mutate } = mutatioinCart('DELETE');
     const navi = useNavigate();
@@ -23,6 +25,8 @@ const Page = () => {
             cartId: cart._id,
         }))
     );
+    console.log(dataSource);
+
 
     const handleSelectProduct = (product: any, checked: boolean) => {
         const updatedProduct = {
@@ -83,8 +87,10 @@ const Page = () => {
             title: 'Giá',
             dataIndex: 'totalPriceItem',
             key: 'totalPriceItem',
-            render: (price: number) => (
-                price?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+            render: (totalPriceItem: number) => (
+                console.log(totalPriceItem),
+
+                totalPriceItem?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
             ),
         },
         {

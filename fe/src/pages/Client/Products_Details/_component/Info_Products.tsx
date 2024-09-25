@@ -55,6 +55,7 @@ const Info_Products = ({ data_Detail }: any) => {
         const attribute = data_Detail?.attributes?.find((attr: any) => attr.color === selectedColor);
         const sizeAttribute = attribute?.sizes.find((size: any) => size.size === selectedSize);
         const price_item = sizeAttribute?.price ?? minPrice;
+        console.log(price_item);
 
         const productData = {
             productId: data_Detail.product._id,
@@ -62,10 +63,11 @@ const Info_Products = ({ data_Detail }: any) => {
             quantity,
             size: selectedSize,
             color: selectedColor,
-            total_price_item: (price_item ?? 0) * quantity,
+            total_price_item: price_item,
             total_price: (price_item ?? 0) * quantity,
             status_checked: false
         };
+        console.log(productData);
 
         mutate(productData);
     };

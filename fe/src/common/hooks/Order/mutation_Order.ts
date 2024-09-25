@@ -1,4 +1,4 @@
-import { add_Create } from "@/services/Order/order";
+import { add_Create, update_order } from "@/services/Order/order";
 import { useMutation } from "@tanstack/react-query"
 import { message } from "antd";
 type Actions = "ADD" | 'UPDATE';
@@ -7,9 +7,13 @@ export const mutation_Order = (action: Actions) => {
 
     const { mutate, isPending } = useMutation({
         mutationFn: async (data_order: any) => {
+            console.log(data_order);
+
             switch (action) {
                 case 'ADD':
                     return await add_Create(data_order)
+                case 'UPDATE':
+                    return await update_order(data_order.id, data_order.status)
                 default:
                     return
             }

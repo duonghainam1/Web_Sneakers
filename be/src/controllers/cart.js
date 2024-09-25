@@ -42,7 +42,7 @@ export const addCart = async (req, res) => {
         if (!cart) {
             const newCart = await Cart.create({
                 userId,
-                products: [{ productId, quantity, total_price_item: price_item * quantity, size, color, status_checked }],
+                products: [{ productId, quantity, total_price_item: price_item, size, color, status_checked }],
                 total_price: price_item * quantity
             });
             return res.status(StatusCodes.CREATED).json(newCart);
@@ -54,12 +54,12 @@ export const addCart = async (req, res) => {
         );
         if (productIndex !== -1) {
             cart.products[productIndex].quantity += quantity;
-            cart.products[productIndex].total_price_item = price_item * cart.products[productIndex].quantity;
+            cart.products[productIndex].total_price_item = price_item;
         } else {
             cart.products.push({
                 productId,
                 quantity,
-                total_price_item: price_item * quantity,
+                total_price_item: price_item,
                 size,
                 color,
                 status_checked
