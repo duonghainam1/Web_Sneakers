@@ -59,7 +59,7 @@ const Order_Detail = () => {
         {
             title: '',
             dataIndex: 'action',
-            render: (_: any, order: any) => {
+            render: (_: any,) => {
                 return (
                     <div className="flex gap-4">
                         <Button className="!bg-green-500 !text-white !border-none"><CheckOutlined /></Button>

@@ -111,7 +111,7 @@ const Page = () => {
             title: '',
             dataIndex: 'action',
             key: 'action',
-            render: (_: any, product: any) => (
+            render: (_: any,) => (
                 <Popconfirm
                     title="Xóa sản phẩm"
                     description="Bạn có chắc chắn muốn xóa sản phẩm này không?"

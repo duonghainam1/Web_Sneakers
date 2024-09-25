@@ -13,8 +13,8 @@ export const mutatioinCart = (action: Action) => {
                     return await add_To_Cart(cart)
                 case 'UPDATE':
                     return await instance.put(`/cart`)
-                case 'DELETE':
-                    return await delete_Cart(cart)
+                // case 'DELETE':
+                //     return await delete_Cart(cart)
                 case 'UPDATE_STATUS':
                     return await update_Cart_status(cart)
                 default:
