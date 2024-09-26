@@ -1,9 +1,8 @@
 import bcryptjs from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
-import Joi from "joi";
 import jwt from "jsonwebtoken";
-import User from "../models/user";
-import { signupSchema } from "../validate/signup_Schema";
+import User from "../models/user.js";
+import { signupSchema } from "../validate/signup_Schema.js";
 
 
 

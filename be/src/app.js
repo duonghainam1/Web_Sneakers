@@ -3,14 +3,13 @@ import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 
-import { connectDB } from "./config/db";
-
-import authRouter from "./routers/auth";
-import cartRouter from "./routers/cart";
-import productRouter from "./routers/product";
-import categoryRouter from "./routers/category";
-import attributeRouter from "./routers/attribute";
-import Router_order from "./routers/order";
+import { connectDB } from "./config/db.js";
+import authRouter from "./routers/auth.js";
+import cartRouter from "./routers/cart.js";
+import productRouter from "./routers/product.js";
+import categoryRouter from "./routers/category.js";
+import attributeRouter from "./routers/attribute.js";
+import Router_order from "./routers/order.js";
 
 
 const app = express();
@@ -31,4 +30,9 @@ app.use("/api/v1", categoryRouter);
 app.use("/api/v1", attributeRouter);
 app.use("/api/v1", Router_order)
 
-export const viteNodeApp = app;
+
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
+})
+// export const viteNodeApp = app;
+

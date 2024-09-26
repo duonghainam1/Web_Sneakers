@@ -1,6 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import Order from '../models/order';
-import Cart from '../models/cart';
+import Order from '../models/order.js';
 
 export const createOrder = async (req, res) => {
     // const { userId } = req.body;

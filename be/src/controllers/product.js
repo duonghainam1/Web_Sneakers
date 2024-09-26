@@ -1,7 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import Products from "../models/product";
-import Attribute from "../models/attribute";
-import product from "../models/product";
+import Products from "../models/product.js";
+import Attribute from "../models/attribute.js";
 export const GetAllProduct = async (req, res) => {
     try {
         const products = await Products.find()
