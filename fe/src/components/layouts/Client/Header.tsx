@@ -8,8 +8,6 @@ import { HeartOutlined, SearchOutlined, ShoppingCartOutlined } from '@ant-design
 
 const Header = () => {
     const [user] = useLocalStorage("user", {});
-    console.log(user);
-
     const userId = user?.data?.user?._id;
     const user_data = user?.data?.user;
     const { data } = useCart(userId);
@@ -17,7 +15,6 @@ const Header = () => {
     data?.cart?.map((cart: any) => {
         total += cart.products.length;
     })
-
     return (
         <header className="py-4">
             <nav className="flex flex-row lg:flex-nowrap justify-between items-center py-2">
@@ -73,10 +70,9 @@ const Header = () => {
                         <div className="relative hidden lg:block">
                             <Link to={`/profile`} className="flex items-center gap-2">
                                 <img
-                                    src={user_data.avatar} // Thay thế bằng URL mặc định nếu không có avatar
+                                    src={user_data.avatar}
                                     alt="User Avatar"
                                     className="w-9 h-9 rounded-full cursor-pointer"
-                                    onClick={() => { /* Handle avatar click, e.g., navigate to profile */ }}
                                 />
                             </Link>
                         </div>

@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Menu_mobile = ({ userId, user_data }: any) => {
-    console.log(userId, user_data);
-
     const [open, setOpen] = useState(false);
 
     const showDrawer = () => {
@@ -52,12 +50,10 @@ const Menu_mobile = ({ userId, user_data }: any) => {
 
                                 </div>
                             ) : (
-                                <Link to="/signin" className="bg-black text-white p-2 text-sm rounded">Đăng nhập</Link>
+                                <Link to="/signin" className="bg-black text-white p-2 text-sm rounded hidden">Đăng nhập</Link>
                             )}
                         </ul>
                     </div>
-
-
                 </Drawer>
             </>
         </div>
