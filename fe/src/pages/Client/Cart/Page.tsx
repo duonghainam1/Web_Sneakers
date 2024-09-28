@@ -1,7 +1,7 @@
 import useCart from "@/common/hooks/Cart/useCart";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Checkbox, InputNumber, Popconfirm, Table } from "antd";
+import { Button, Checkbox, InputNumber, message, Popconfirm, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { mutatioinCart } from "@/common/hooks/Cart/mutationCart";
 
@@ -9,8 +9,6 @@ const Page = () => {
     const [user] = useLocalStorage("user", {});
     const userId = user?.data?.user?._id;
     const { data, isLoading } = useCart(userId);
-    console.log(data);
-
     const { mutate: updateStatus } = mutatioinCart('UPDATE_STATUS');
     // const { mutate } = mutatioinCart('DELETE');
     const navi = useNavigate();
@@ -18,21 +16,19 @@ const Page = () => {
         cart.products.map((product: any) => ({
             key: product._id,
             ...product,
-            productId: product.productId,
             totalPriceItem: product.total_price_item,
             quantity: product.quantity,
             status_checked: product.status_checked,
             cartId: cart._id,
         }))
     );
-    console.log(dataSource);
-
-
     const handleSelectProduct = (product: any, checked: boolean) => {
+        console.log(checked);
+
         const updatedProduct = {
             userId,
             cartId: product.cartId,
-            productId: product.productId,
+            product: product,
             color: product.color,
             size: product.size,
             status_checked: checked,
@@ -47,7 +43,7 @@ const Page = () => {
     const handleProceedToCheckout = () => {
         const selectedForPayment = dataSource?.filter((product: any) => product.status_checked);
         if (selectedForPayment.length === 0) {
-            alert("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
+            message.error("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
             return;
         }
         navi(`/orders`);
@@ -59,26 +55,26 @@ const Page = () => {
             key: 'checkbox',
             render: (_: any, product: any) => (
                 <Checkbox
-                    checked={product.status_checked}
+                    checked={product?.status_checked}
                     onChange={(e) => handleSelectProduct(product, e.target.checked)}
                 />
             ),
         },
         {
             title: 'Ảnh',
-            dataIndex: 'productId',
-            key: 'productId',
-            render: (productId: any) => (
-                <img src={productId?.images[0]} alt={productId?.name} className="w-[100px]" />
+            dataIndex: 'image',
+            key: 'image',
+            render: (_: any, product: any) => (
+                <img src={product?.productId?.images[0]} alt={product?.name} className="w-[100px]" />
             ),
         },
         {
             title: 'Sản phẩm',
-            dataIndex: 'productId',
-            key: 'productId',
-            render: (productId: any, product: any) => (
+            dataIndex: 'product',
+            key: 'product',
+            render: (_: any, product: any) => (
                 <div className="flex flex-col">
-                    <h1 className="font-bold">{productId?.name.length > 20 ? `${productId?.name.substring(0, 35)}...` : productId?.name}</h1>
+                    <h1 className="font-bold">{product?.productId?.name.length > 20 ? `${product?.productId?.name.substring(0, 35)}...` : product?.productId?.name}</h1>
                     <p>{product?.color} - {product?.size}</p>
                 </div>
             ),
@@ -88,8 +84,6 @@ const Page = () => {
             dataIndex: 'totalPriceItem',
             key: 'totalPriceItem',
             render: (totalPriceItem: number) => (
-                console.log(totalPriceItem),
-
                 totalPriceItem?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
             ),
         },
@@ -135,9 +129,9 @@ const Page = () => {
 
     return (
         <>
-            <div className="dhn-container">
+            <div className="lg:mx-28">
                 <h1 className="text-3xl">Giỏ hàng</h1>
-                <div className="flex gap-6 mt-7">
+                <div className="flex flex-col lg:flex-row gap-6 mt-7">
                     <div className="basis-4/6">
                         <Table columns={columns} dataSource={dataSource} pagination={false} />
                     </div>

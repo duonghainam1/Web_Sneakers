@@ -5,6 +5,8 @@ export const createOrder = async (req, res) => {
     // const { userId } = req.body;
     try {
         const order = new Order(req.body);
+        console.log(order);
+
         // const dataCart = await Cart.findOne({ userId }).populate('products.productId').exec();
         await order.save();
         res.status(201).json(order);

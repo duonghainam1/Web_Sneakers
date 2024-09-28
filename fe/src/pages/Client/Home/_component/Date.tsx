@@ -1,10 +1,11 @@
+import { ArrowRightOutlined } from "@ant-design/icons"
 
 const Date = () => {
     return (
-        <div className="month dhn-container grid grid-cols-2 gap-4 items-center">
-            <div>
-                <h2 className="text-3xl font-medium mb-4">Deals of the Month</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta officia aliquam
+        <div className="month lg:mx-28 lg:w-1/3 gap-4 items-center">
+            <div className="flex flex-wrap lg:flex-col justify-center lg:justify-start">
+                <h2 className="text-3xl font-medium mb-4">Khuyến mại trong tháng</h2>
+                <p className="text-center lg:text-left">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta officia aliquam
                     veritatis
                     molestias architecto, itaque sed corrupti animi similique perferendis. Ab deserunt
                     quibusdam
@@ -28,11 +29,9 @@ const Date = () => {
                         <span>Secs</span>
                     </div>
                 </div>
-                <button className="dhn-btn w-44 h-12 text-sm flex justify-center items-center gap-3 mt-8">View All
-                    Products <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="dhn-icons">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                    </svg>
-                    </span></button>
+                <button className="dhn-btn w-44 h-12 text-sm flex justify-center items-center gap-3 mt-8">
+                    Xem tất cả <ArrowRightOutlined />
+                </button>
             </div>
             <div>
                 <img src="../img/Rectangle 3463273.png" alt="" />

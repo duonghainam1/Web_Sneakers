@@ -23,6 +23,7 @@ import List_Orders from "@/pages/Client/Profile/_component/List_Orders";
 import Profile from "@/pages/Client/Profile/_component/Profile";
 import SignIn from "@/pages/Client/Auth/SignIn";
 import SignUp from "@/pages/Client/Auth/SignUp";
+import Mini_cart from "@/pages/Client/Cart/_component/Mini_cart";
 
 const Router = () => {
     return (
@@ -33,6 +34,7 @@ const Router = () => {
                     <Route path="shops" element={<Page_Shop />} />
                     <Route path="shops/:id" element={<Page_Detail_Products />} />
                     <Route path="cart" element={<Page_Cart />} />
+                    <Route path="cart/mini" element={<Mini_cart />} />
                     <Route path="orders" element={<Page_Orders />} />
                     <Route path="profile" element={<Page_Profile />}>
                         <Route index element={<Profile />} />

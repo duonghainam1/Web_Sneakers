@@ -16,16 +16,14 @@ const Add_adderss = ({ handleOpned, setAddress }: any) => {
     };
 
     return (
-        <div className="relative bg-white w-[600px] h-[400px] p-5 rounded flex items-center justify-between ">
+        <div className="relative bg-white w-full max-w-sm md:max-w-md lg:max-w-xl p-5 rounded shadow-md flex flex-col">
             <Form
                 name="basic"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                style={{ maxWidth: 600 }}
+                labelCol={{ span: 24 }}
+                wrapperCol={{ span: 24 }}
+                style={{ width: '100%' }}
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
-                className="w-full"
-                // onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
                 <Form.Item<FieldType>
@@ -60,8 +58,8 @@ const Add_adderss = ({ handleOpned, setAddress }: any) => {
 
 
 
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" htmlType="submit">
+                <Form.Item wrapperCol={{ span: 24 }}>
+                    <Button type="primary" htmlType="submit" className="w-full">
                         Thêm
                     </Button>
                 </Form.Item>

@@ -12,7 +12,7 @@ const Page = () => {
     if (isLoading) return <div>Loading...</div>
     return (
         <main>
-            <div className="dhn-container">
+            <div className="lg:mx-28">
                 <Menu_Detail />
                 <Info_Products data_Detail={data} />
                 <Description data_Detail={data} />

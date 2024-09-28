@@ -93,7 +93,7 @@ const Page = () => {
     const totalAmount = dataSource.reduce((total: any, product: any) => total + (product.quantity * product.total_price_item), 0);
     return (
         <>
-            <div className="dhn-container">
+            <div className="lg:mx-28">
                 {contextHolder}
                 <h1 className="text-3xl">Thanh toán</h1>
                 <div className="my-3 p-4 rounded bg-stone-50">
@@ -144,7 +144,7 @@ const Page = () => {
                             onChange={(value) => setPayment(value)}
                         />
                     </div>
-                    <div className="flex justify-end gap-8 border-t border-b p-4">
+                    <div className="flex justify-between lg:justify-end gap-8 border-t border-b p-4">
                         <div className="py-5">
                             <p>Tổng tiền hàng:</p>
                             <p className="py-2">Phí vận chuyển:</p>
@@ -156,9 +156,9 @@ const Page = () => {
                             <p className="text-xl font-bold">{totalAmount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                         </div>
                     </div>
-                    <div className="flex justify-between items-center p-4">
+                    <div className="flex flex-col lg:flex-row justify-between items-center p-4">
                         <p>Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản Krist</p>
-                        <button className="bg-black text-white px-5 py-3 my-3 rounded" onClick={handleOrders}>Đặt hàng</button>
+                        <button className="bg-black text-white px-5 py-3 my-3 rounded w-full lg:w-52" onClick={handleOrders}>Đặt hàng</button>
                     </div>
                 </div>
             </div>

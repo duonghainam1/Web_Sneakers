@@ -1,9 +1,14 @@
 import Products_Item from "@/components/Items/Products"
+import Fillter_Menu from "./Fillter_Menu"
 const Products = () => {
     return (
         <div className="basis-4/5">
             <div className="mb-3 flex justify-between items-center">
-                <p>Products</p>
+                <div className="flex gap-4 lg:hidden">
+                    <Fillter_Menu />
+                    <p>Products</p>
+                </div>
+                <p className="hidden lg:block">Products</p>
                 <div className="flex gap-1 items-center">
                     <p>Shot by latest</p>
                     <span>
@@ -13,7 +18,7 @@ const Products = () => {
                     </span>
                 </div>
             </div>
-            <div className="mb-4 grid grid-cols-3 gap-4">
+            <div className="mb-4 grid grid-cols-2 lg:grid-cols-3 gap-4">
                 <Products_Item />
             </div>
 

@@ -5,12 +5,12 @@ import { Link } from "react-router-dom"
 const Category = () => {
     const { data, isLoading } = useProducts()
     return (
-        <div className="categories dhn-container">
+        <div className="categories lg:mx-28">
             <div className="categorie-top flex items-center justify-center">
                 <h1 className="text-3xl font-medium">Sản phẩm nổi bật</h1>
             </div>
             {isLoading ? <p>Loading...</p> :
-                <div className="mb-4 grid grid-cols-4 gap-4 my-4">
+                <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
                     {data?.products?.map((product: any) => (
                         (product?.product_featured === true) &&
                         <Link to={`/shops/${product._id}`} key={product._id}>

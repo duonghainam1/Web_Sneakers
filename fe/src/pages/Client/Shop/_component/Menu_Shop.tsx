@@ -1,7 +1,7 @@
 
 const Menu_Shop = () => {
     return (
-        <div className="dhn-container">
+        <div className="lg:mx-28">
             <div>
                 <div className="flex gap-2 items-center">
                     <p>Shop</p>

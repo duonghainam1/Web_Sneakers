@@ -8,8 +8,8 @@ const Page = () => {
     return (
         <main>
             <Menu_Shop />
-            <div className="dhn-container">
-                <div className="flex gap-4">
+            <div className="lg:lg:mx-28">
+                <div className="flex flex-col lg:flex-row gap-4">
                     <SideBar_shop />
                     <Products />
                 </div>

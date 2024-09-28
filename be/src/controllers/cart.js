@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import Cart from '../models/cart.js';
 import Attribute from '../models/attribute.js';
+import Product from '../models/product.js';
 export const getCart = async (req, res) => {
     const { userId } = req.params;
     try {
@@ -22,7 +23,9 @@ export const addCart = async (req, res) => {
         if (!productId || !userId || quantity <= 0 || !size || !color) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: "Dữ liệu không hợp lệ" });
         }
-        const cart = await Cart.findOne({ userId });
+        const cart = await Cart.findOne({ userId }).populate('products.productId');
+        console.log(cart);
+
         const attribute = await Attribute.findOne({ productId, color });
         if (!attribute) {
             return res.status(StatusCodes.NOT_FOUND).json({ message: "Kích thước, màu sắc không hợp lệ hoặc sản phẩm không tồn tại" });

@@ -2,23 +2,23 @@
 const Customer = () => {
     return (
         <div className="customer bg-slate-50 py-5">
-            <div className="dhn-container">
+            <div className="lg:mx-28">
                 <div className="categorie-top flex items-center justify-between mb-8">
-                    <h1 className="text-3xl font-medium">What our Customer say's</h1>
+                    <h1 className="text-3xl font-medium">Khách hàng</h1>
                     <div className="categorie-btn flex gap-3">
-                        <button className="dhn-btn w-12 h-12 flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                        <button className="dhn-btn w-9 h-9 lg:w-12 lg:h-12 flex justify-center items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 lg:w-6 lg:h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                             </svg>
                         </button>
-                        <button className="dhn-btn w-12 h-12 flex justify-center items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                        <button className="dhn-btn w-9 h-9 lg:w-12 lg:h-12 flex justify-center items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 lg:w-6 lg:h-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                             </svg>
                         </button>
                     </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid lg:grid-cols-3 gap-4">
                     <div className="bg-white p-5">
                         <span className="flex gap-2 mb-1">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-yellow-400">

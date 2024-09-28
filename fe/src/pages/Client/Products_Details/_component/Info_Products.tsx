@@ -73,7 +73,7 @@ const Info_Products = ({ data_Detail }: any) => {
     };
 
     return (
-        <div className="flex gap-5 mt-9">
+        <div className="flex flex-col lg:flex-row gap-5 mt-9">
             {contextHolder}
             <div className="basis-1/2">
                 <Image src={largeImage} className="w-full h-auto" alt="Product Image" />

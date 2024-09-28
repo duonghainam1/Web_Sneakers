@@ -1,88 +1,87 @@
 import logo from '../../../assets/icons/kit.png'
 import visa from '../../../assets/icons/visa.jpeg'
 import Gpay from '../../../assets/icons/G pay.png'
+
 const Footer = () => {
     return (
-        <footer className="bg-black">
-            <div className="dhn-container  text-white">
-                <div className="flex border-b border-gray-400 pb-12 gap-4">
-                    <div className="basis-2/5">
-                        <a href="index.html">
-                            <img src={logo} alt="" className="logo__img w-24 mb-7" />
+        <footer className="bg-black text-white py-4 lg:py-12">
+            <div className="lg:container mx-auto px-4 md:px-12">
+                {/* Logo and Contact */}
+                <div className="flex flex-col lg:flex-row justify-between border-b border-gray-600 pb-4 lg:pb-8 mb-4 lg:mb-8 gap-8">
+                    <div className="flex-1">
+                        <a href="/" className="block mb-6">
+                            <img src={logo} alt="Logo" className="w-32" />
                         </a>
-                        <ul className="leading-8">
-                            <li>
-                                <a href="#" className="flex gap-4">
-                                    <span><i className="fa-solid fa-phone" /></span>
-                                    <p>0357219736</p>
-                                </a>
+                        <ul className="space-y-4">
+                            <li className="flex items-center">
+                                <i className="fa-solid fa-phone mr-3"></i>
+                                <p>0357219736</p>
                             </li>
-                            <li>
-                                <a href="#" className="flex gap-4">
-                                    <span><i className="fa-solid fa-envelope" /></span>
-                                    <p>duonghainam03012004@gmail.com</p>
-                                </a>
+                            <li className="flex items-center">
+                                <i className="fa-solid fa-envelope mr-3"></i>
+                                <p>duonghainam03012004@gmail.com</p>
                             </li>
-                            <li>
-                                <a href="#" className="flex gap-4">
-                                    <span><i className="fa-solid fa-location-dot" /></span>
-                                    <p> Lạng Sơn</p>
-                                </a>
+                            <li className="flex items-center">
+                                <i className="fa-solid fa-location-dot mr-3"></i>
+                                <p>Lạng Sơn</p>
                             </li>
                         </ul>
                     </div>
-                    <div className="basis-1/5">
-                        <p className="font-medium pb-3">Information</p>
-                        <ul className="leading-8">
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Login</a></li>
-                            <li><a href="#">My Cart</a></li>
-                            <li><a href="#">My Wishlist</a></li>
-                            <li><a href="#">Checkout</a></li>
-                        </ul>
+
+                    {/* Information and Service Links */}
+                    <div className="flex-1 flex justify-between lg:flex-row gap-8">
+                        {/* Information Links */}
+                        <div className="flex-1">
+                            <p className="font-medium mb-4">Information</p>
+                            <ul className="space-y-3">
+                                <li><a href="#">My Account</a></li>
+                                <li><a href="#">Login</a></li>
+                                <li><a href="#">My Cart</a></li>
+                                <li><a href="#">My Wishlist</a></li>
+                                <li><a href="#">Checkout</a></li>
+                            </ul>
+                        </div>
+
+                        {/* Service Links */}
+                        <div className="flex-1">
+                            <p className="font-medium mb-4">Service</p>
+                            <ul className="space-y-3">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Careers</a></li>
+                                <li><a href="#">My Cart</a></li>
+                                <li><a href="#">My Wishlist</a></li>
+                                <li><a href="#">Checkout</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div className="basis-1/5">
-                        <p className="font-medium pb-3">Serivce</p>
-                        <ul className="leading-8">
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">My Cart</a></li>
-                            <li><a href="#">My Wishlist</a></li>
-                            <li><a href="#">Checkout</a></li>
-                        </ul>
-                    </div>
-                    <div className="basis-1/5">
-                        <p className="font-medium pb-3">Subsribe</p>
-                        <p>Lorem ipsum dolor sit, amet consectetur </p>
-                        <form className="flex gap-4 border-2 border-gray-200 p-3 rounded-xl mt-4">
-                            <span><i className="fa-solid fa-envelope dhn-icons" /></span>
-                            <input type="text" placeholder="  Your Email" className="outline-none bg-transparent text-white border-none" />
-                            <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
-                            </span>
+
+                    {/* Subscribe */}
+                    <div className="flex-1">
+                        <p className="font-medium mb-4">Subscribe</p>
+                        <p className="mb-4">Subscribe to our newsletter to receive the latest news and updates.</p>
+                        <form className="flex gap-2 border border-gray-500 rounded-md p-2">
+                            <input type="email" placeholder="Your Email" className="flex-grow bg-transparent outline-none text-white px-2" />
+                            <button type="submit" className="bg-white text-black px-4 py-2 rounded-md">Send</button>
                         </form>
                     </div>
                 </div>
-                <div className="mt-4 flex justify-between items-center">
-                    <div className="flex gap-4 items-center w-10 *:border">
-                        <img src={visa} className="p-2" alt="" />
-                        <img src={Gpay} className="p-2" alt="" />
-                        <img src={visa} className="p-2" alt="" />
-                        <img src={Gpay} className="p-2" alt="" />
+
+                {/* Payment Methods and Social Icons */}
+                <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+                    <div className="flex gap-4">
+                        <img src={visa} alt="Visa" className="w-12 h-8 object-contain" />
+                        <img src={Gpay} alt="GPay" className="w-12 h-8 object-contain" />
                     </div>
-                    <div>
-                        <p>2023 Krist All Rights are reserved</p>
-                    </div>
-                    <div className="flex gap-5">
-                        <span><i className="fa-brands fa-facebook text-xl" /></span>
-                        <span><i className="fa-brands fa-instagram text-xl" /></span>
-                        <span><i className="fa-brands fa-twitter text-xl" /></span>
+                    <p className="text-sm text-center lg:text-left">&copy; 2023 Krist. All Rights Reserved.</p>
+                    <div className="flex gap-4 text-xl">
+                        <a href="#"><i className="fa-brands fa-facebook"></i></a>
+                        <a href="#"><i className="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i className="fa-brands fa-twitter"></i></a>
                     </div>
                 </div>
             </div>
         </footer>
-    )
+    );
 }
 
-export default Footer
+export default Footer;

@@ -1,14 +1,12 @@
 import { add_Create, update_order } from "@/services/Order/order";
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { message } from "antd";
 type Actions = "ADD" | 'UPDATE';
 export const mutation_Order = (action: Actions) => {
     const [messageApi, contextHolder] = message.useMessage();
-
+    const queryClinet = useQueryClient();
     const { mutate, isPending } = useMutation({
         mutationFn: async (data_order: any) => {
-            console.log(data_order);
-
             switch (action) {
                 case 'ADD':
                     return await add_Create(data_order)
@@ -30,6 +28,9 @@ export const mutation_Order = (action: Actions) => {
                 default:
                     break;
             }
+            queryClinet.invalidateQueries({
+                queryKey: ['ORDER']
+            })
         }
     })
     return { mutate, contextHolder, isPending }
