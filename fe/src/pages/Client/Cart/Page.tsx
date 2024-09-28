@@ -23,8 +23,6 @@ const Page = () => {
         }))
     );
     const handleSelectProduct = (product: any, checked: boolean) => {
-        console.log(checked);
-
         const updatedProduct = {
             userId,
             cartId: product.cartId,
