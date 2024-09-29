@@ -13,20 +13,20 @@ const Page = () => {
     // const { mutate } = mutatioinCart('DELETE');
     const navi = useNavigate();
     const dataSource = data?.cart?.flatMap((cart: any) =>
-        cart.products.map((product: any) => ({
-            key: product._id,
+        cart?.products?.map((product: any) => ({
+            key: product?._id,
             ...product,
             totalPriceItem: product.total_price_item,
             quantity: product.quantity,
             status_checked: product.status_checked,
-            cartId: cart._id,
+
         }))
     );
     const handleSelectProduct = (product: any, checked: boolean) => {
         const updatedProduct = {
             userId,
             cartId: product.cartId,
-            product: product,
+            productId: product.productId,
             color: product.color,
             size: product.size,
             status_checked: checked,
@@ -34,7 +34,7 @@ const Page = () => {
         updateStatus(updatedProduct);
     };
 
-    const totalSelectedPrice = dataSource?.filter((product: any) => product.status_checked).reduce((total: any, product: any) => {
+    const totalSelectedPrice = dataSource?.filter((product: any) => product?.status_checked).reduce((total: any, product: any) => {
         return total + (product.quantity * product.totalPriceItem);
     }, 0) || 0;
 
@@ -52,6 +52,8 @@ const Page = () => {
             dataIndex: 'checkbox',
             key: 'checkbox',
             render: (_: any, product: any) => (
+                console.log(product.status_checked),
+
                 <Checkbox
                     checked={product?.status_checked}
                     onChange={(e) => handleSelectProduct(product, e.target.checked)}

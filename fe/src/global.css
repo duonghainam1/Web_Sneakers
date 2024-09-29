@@ -43,3 +43,11 @@
 .dhn-content.active {
     @apply block;
 }
+
+.hidden_scroll_x {
+    scrollbar-width: none;
+}
+
+.hidden_scroll-x_trendingproducts::-webkit-scrollbar {
+    display: none;
+}

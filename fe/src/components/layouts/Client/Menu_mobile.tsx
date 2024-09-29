@@ -1,19 +1,20 @@
 import { MenuOutlined } from '@ant-design/icons';
 import { Drawer, Space } from 'antd'
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Menu_mobile = ({ userId, user_data }: any) => {
     const [open, setOpen] = useState(false);
-
+    const location = useLocation();
     const showDrawer = () => {
         setOpen(true);
     };
-
     const onClose = () => {
         setOpen(false);
     };
-
+    useEffect(() => {
+        setOpen(false);
+    }, [location]);
     return (
         <div>
             <>

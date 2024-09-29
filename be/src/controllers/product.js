@@ -63,14 +63,16 @@ export const GetProductById = async (req, res) => {
 export const CreateProduct = async (req, res) => {
 
     try {
-        const { name, description, category, sku, status, images, attributes } = req.body;
+        const { name, description, category, sku, status, images, attributes, featured } = req.body;
+        console.log(req.body);
         const product = new Products({
             name,
             description,
             category,
             sku,
             status,
-            images
+            images,
+            featured
         });
 
         const savedProduct = await product.save();

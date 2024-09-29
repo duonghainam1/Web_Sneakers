@@ -57,7 +57,7 @@ const Page = () => {
             key: 'product',
             render: (_: any, product: any) => (
                 <div className="flex flex-col">
-                    <h1 className="font-bold">{product?.productId?.name}</h1>
+                    <h1 className="font-bold text-xs lg:text-base">{truncate(product?.productId?.name, 30)}</h1>
                     <p>{product?.color} - {product?.size}</p>
                 </div>
             ),
@@ -89,7 +89,12 @@ const Page = () => {
         key: product._id,
         ...product
     }));
-
+    const truncate = (text: string, maxLength: number) => {
+        if (text.length > maxLength) {
+            return text.slice(0, maxLength) + '...';
+        }
+        return text;
+    };
     const totalAmount = dataSource.reduce((total: any, product: any) => total + (product.quantity * product.total_price_item), 0);
     return (
         <>
@@ -118,7 +123,7 @@ const Page = () => {
                         <p className="font-bold">Đơn vị vận chuyển</p>
                         <Select
                             defaultValue="Nhanh"
-                            style={{ width: 300 }}
+                            className="w-[200px] lg:w-[300px]"
                             options={[
                                 { value: 'Cash', label: 'Nhanh' },
                                 { value: 'VNPAY', label: 'Hỏa tốc' },
@@ -136,7 +141,7 @@ const Page = () => {
                         <p className="font-bold">Phương thức thanh toán</p>
                         <Select
                             defaultValue="Thanh toán khi nhận hàng"
-                            style={{ width: 300 }}
+                            className="w-[200px] lg:w-[300px]"
                             options={[
                                 { value: 'Cash', label: 'Thanh toán khi nhận hàng' },
                                 { value: 'VNPAY', label: 'VNPAY' },

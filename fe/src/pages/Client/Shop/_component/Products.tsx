@@ -18,9 +18,7 @@ const Products = () => {
                     </span>
                 </div>
             </div>
-            <div className="mb-4 grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <Products_Item />
-            </div>
+            <Products_Item />
 
         </div>
     )

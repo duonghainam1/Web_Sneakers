@@ -30,7 +30,11 @@ const productSchema = new mongoose.Schema(
             enum: ['Available', 'Out of Stock', 'Discontinued'],
             default: 'Available',
         },
-        images: [String], // Array chứa đường dẫn ảnh
+        images: [String],
+        featured: {
+            type: Boolean,
+            default: false,
+        },
         attributes: [
             {
                 type: mongoose.Schema.Types.ObjectId,

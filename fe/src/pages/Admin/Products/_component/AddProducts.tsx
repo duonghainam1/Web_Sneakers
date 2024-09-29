@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Select, Button, Upload, Space, message } from 'antd';
+import { Form, Input, Select, Button, Upload, Space, message, Checkbox } from 'antd';
 import { UploadOutlined, PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 
 import { uploadFileCloudinary } from '@/common/lib/utils';
@@ -26,8 +26,6 @@ const AddProducts = () => {
                     stock: size.stock,
                 })),
             })));
-
-            // Prepare product data
             const productData = {
                 name: values.name,
                 description: values.description,
@@ -35,6 +33,7 @@ const AddProducts = () => {
                 images: uploadedProductImages,
                 sku: values.sku,
                 attributes: formattedAttributes,
+                featured: values.featured || false,
             };
             mutate(productData);
             form.resetFields();
@@ -47,7 +46,6 @@ const AddProducts = () => {
     const handleAddAttribute = () => {
         setAttributes([...attributes, { color: '', images: [], sizes: [{ size: '', price: '', stock: '' }] }]);
     };
-
     const handleRemoveAttribute = (index: number) => {
         const updatedAttributes = [...attributes];
         updatedAttributes.splice(index, 1);
@@ -190,7 +188,12 @@ const AddProducts = () => {
                         Thêm thuộc tính mới
                     </Button>
                 </div>
-
+                <Form.Item
+                    name="featured"
+                    valuePropName="checked"
+                >
+                    <Checkbox>Đánh dấu là sản phẩm nổi bật</Checkbox>
+                </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="w-full bg-blue-500 hover:bg-blue-600">
                         Thêm sản phẩm

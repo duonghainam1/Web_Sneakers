@@ -14,6 +14,7 @@ const Info_Products = ({ data_Detail }: any) => {
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const { mutate, contextHolder } = mutatioinCart('ADD');
+
     useEffect(() => {
         if (data_Detail?.product) {
             setLargeImage(data_Detail.product.images[0]);
@@ -25,6 +26,7 @@ const Info_Products = ({ data_Detail }: any) => {
             setMaxPrice(data_Detail.maxPrice);
         }
     }, [data_Detail]);
+
     const handleColorSelect = (color: string) => {
         setSelectedColor(color);
         const attribute = data_Detail?.attributes?.find((attr: any) => attr.color === color);
@@ -32,16 +34,19 @@ const Info_Products = ({ data_Detail }: any) => {
             setLargeImage(attribute.images[0]);
         }
     };
+
     const handleSizeSelect = (size: string) => {
         setSelectedSize(size);
     };
+
     const uniqueSizes = Array.from(
         new Set(
             data_Detail?.attributes?.flatMap((attribute: any) =>
                 attribute.sizes.map((size: any) => size.size)
             )
         )
-    );
+    ).sort((a: any, b: any) => parseFloat(a) - parseFloat(b));
+
     const handleAddToCart = () => {
         if (!userId || !data_Detail?.product?._id) {
             message.error("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng kiểm tra lại thông tin người dùng hoặc sản phẩm.");
@@ -55,8 +60,6 @@ const Info_Products = ({ data_Detail }: any) => {
         const attribute = data_Detail?.attributes?.find((attr: any) => attr.color === selectedColor);
         const sizeAttribute = attribute?.sizes.find((size: any) => size.size === selectedSize);
         const price_item = sizeAttribute?.price ?? minPrice;
-        console.log(price_item);
-
         const productData = {
             productId: data_Detail.product._id,
             userId,
@@ -67,8 +70,6 @@ const Info_Products = ({ data_Detail }: any) => {
             total_price: (price_item ?? 0) * quantity,
             status_checked: false
         };
-        console.log(productData);
-
         mutate(productData);
     };
 
@@ -147,13 +148,6 @@ const Info_Products = ({ data_Detail }: any) => {
                                 className={`hover:bg-black hover:text-white border border-black p-1 w-9 h-9 rounded text-center relative ${selectedSize === size ? 'bg-black text-white' : ''}`}
                             >
                                 {size}
-                                {/* {selectedSize === size && (
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 text-white">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                        </svg>
-                                    </div>
-                                )} */}
                             </button>
                         ))}
                     </div>

@@ -58,7 +58,7 @@ const Header = () => {
                         </li>
                         <li>
                             <Link to={`/cart`} className=' relative mr-4 lg:mr-0 hidden lg:block'>
-                                <ShoppingCartOutlined style={{ fontSize: '264x' }} />
+                                <ShoppingCartOutlined style={{ fontSize: '24px' }} />
                                 <span className='absolute -top-2 -right-3 bg-red-400 rounded-full px-[5px] text-white text-center'>{total}</span>
                             </Link>
                             <div className='lg:hidden'>

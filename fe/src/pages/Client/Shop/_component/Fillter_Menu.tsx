@@ -4,17 +4,14 @@ import { Drawer, Space } from 'antd'
 import { useState } from 'react';
 const Fillter_Menu = () => {
     const [open, setOpen] = useState(false);
-
     const showDrawer = () => {
         setOpen(true);
     };
-
     const onClose = () => {
         setOpen(false);
     };
     const [activeGroup, setActiveGroup] = useState<string | null>(null)
     const { data } = useCategory()
-
     const toggleGroup = (group: string) => {
         setActiveGroup(activeGroup === group ? null : group)
     }

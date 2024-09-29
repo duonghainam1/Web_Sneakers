@@ -36,13 +36,19 @@ const Sidebar = () => {
     }
 
     const items1: MenuItem[] = [
-        getItem(<NavLink to="/profile">Tài khoản</NavLink>, '1', <UserOutlined />, [
-            getItem(<NavLink to="/profile">Hồ sơ</NavLink>, '3'),
-            getItem(<NavLink to="/profile/address">Địa chỉ</NavLink>, '4'),
-            getItem(<NavLink to="">Đổi mật khẩu</NavLink>, '5'),
+        getItem(<NavLink to="/profile"><p className='hidden lg:block'>Tài khoản</p></NavLink>, '1', <UserOutlined />, [
+            getItem(<NavLink to="/profile"><p className='hidden lg:block'>Hồ sơ</p></NavLink>, '3'),
+            getItem(<NavLink to="/profile/address"><p className='hidden lg:block'>Địa chỉ</p></NavLink>, '4'),
+            getItem(<NavLink to=""><p className='hidden lg:block'>Đổi mật khẩu</p></NavLink>, '5'),
         ]),
-        getItem(<NavLink to="/profile/list_orders">Đơn hàng của tôi</NavLink>, '2', <TruckOutlined />),
-        getItem(<button onClick={showModal}>Đăng xuất</button>, '3', <LogoutOutlined />),
+        getItem(<NavLink to="/profile/list_orders"><p className='hidden lg:block'>Đơn hàng của tôi</p></NavLink>, '2', <TruckOutlined />),
+        getItem(
+            <button onClick={showModal} className="flex items-center space-x-2">
+                <LogoutOutlined />
+                <p className="hidden lg:block">Đăng xuất</p>
+            </button>,
+            '3'
+        ),
     ];
     return (
         <>
@@ -50,7 +56,7 @@ const Sidebar = () => {
                 mode="inline"
                 defaultSelectedKeys={['1']}
                 defaultOpenKeys={['sub1']}
-                style={{ height: '100%' }}
+                style={{ height: '100%', padding: '0 0 10px 0px' }}
                 items={items1}
             />
             <Modal
@@ -60,6 +66,7 @@ const Sidebar = () => {
                 onCancel={handleCancel}
                 okText="Đăng xuất"
                 cancelText="Trở lại"
+                className='w-10'
             >
                 <p>Tài khoản của bạn sẽ được đăng xuất</p>
             </Modal>
