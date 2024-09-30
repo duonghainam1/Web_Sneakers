@@ -9,6 +9,7 @@ const Mini_cart = () => {
     const [user] = useLocalStorage("user", {});
     const userId = user?.data?.user?._id;
     const { data, isLoading } = useCart(userId);
+    const { mutate: deleteProduct } = mutatioinCart('DELETE');
     const navi = useNavigate();
     const { mutate: updateStatus } = mutatioinCart('UPDATE_STATUS');
 
@@ -35,6 +36,16 @@ const Mini_cart = () => {
         };
         updateStatus(updatedProduct);
     };
+    const handleDeleteProduct = (product: any) => {
+        const productData = {
+            userId,
+            productId: product.productId,
+            size: product.size,
+            color: product.color,
+        };
+
+        deleteProduct(productData);
+    }
     const totalSelectedPrice = data?.cart?.reduce((total: number, product: any) => {
         const productTotal = product?.products?.reduce((subTotal: number, item: any) => {
             if (item?.status_checked) {
@@ -51,7 +62,7 @@ const Mini_cart = () => {
             return product?.products.map((item: any) => item?.status_checked)
         }
         );
-        if (selectedForPayment.length === 0) {
+        if (selectedForPayment?.length === 0) {
             message.error("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
             return;
         }
@@ -59,7 +70,7 @@ const Mini_cart = () => {
         navi(`/orders`);
     };
     const truncate = (text: string, maxLength: number) => {
-        if (text.length > maxLength) {
+        if (text?.length > maxLength) {
             return text.slice(0, maxLength) + '...';
         }
         return text;
@@ -100,7 +111,7 @@ const Mini_cart = () => {
                                             <p className="font-semibold text-lg">{cart?.total_price_item}</p>
                                         </div>
                                     </div>
-                                    <button className="text-red-500 hover:underline"><DeleteOutlined style={{ fontSize: '20px' }} /></button>
+                                    <button className="text-red-500 hover:underline" onClick={() => handleDeleteProduct(product)}><DeleteOutlined style={{ fontSize: '20px' }} /></button>
                                 </div>
                                 <div className="flex items-center justify-end space-x-2 mt-2">
                                     <Button className="bg-gray-200 hover:bg-gray-300 rounded">-</Button>

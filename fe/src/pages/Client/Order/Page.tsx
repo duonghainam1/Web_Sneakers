@@ -18,6 +18,7 @@ const Page = () => {
     const selectedProducts = data?.cart?.flatMap((cart: any) =>
         cart.products.filter((item: any) => item.status_checked)
     ) || [];
+    console.log(selectedProducts);
 
     const handleOpned = () => {
         setIsOpend(!isOpend);
@@ -31,6 +32,8 @@ const Page = () => {
             userId: userId,
             items: selectedProducts.map((product: any) => ({
                 productId: product.productId._id,
+                product_name: product.productId.name,
+                product_image: product.productId.images[0],
                 total_price_item: product.total_price_item,
                 color: product.color,
                 size: product.size,
@@ -40,6 +43,8 @@ const Page = () => {
             payment: payment,
             totalPrice: totalAmount
         }
+        console.log(orders_Data);
+
         mutate(orders_Data)
     }
     const columns = [

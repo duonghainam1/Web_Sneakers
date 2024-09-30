@@ -13,7 +13,8 @@ const Info_Products = ({ data_Detail }: any) => {
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
-    const { mutate, contextHolder } = mutatioinCart('ADD');
+    const [priceItem, setPriceItem] = useState<number | null>(null);
+    const { mutate } = mutatioinCart('ADD');
 
     useEffect(() => {
         if (data_Detail?.product) {
@@ -21,6 +22,7 @@ const Info_Products = ({ data_Detail }: any) => {
         }
         if (data_Detail?.minPrice) {
             setMinPrice(data_Detail.minPrice);
+            setPriceItem(data_Detail.minPrice);
         }
         if (data_Detail?.maxPrice) {
             setMaxPrice(data_Detail.maxPrice);
@@ -33,17 +35,23 @@ const Info_Products = ({ data_Detail }: any) => {
         if (attribute && attribute.images.length > 0) {
             setLargeImage(attribute.images[0]);
         }
+        setSelectedSize(null);
+        setPriceItem(minPrice);
     };
 
     const handleSizeSelect = (size: string) => {
         setSelectedSize(size);
+        const attribute = data_Detail?.attributes?.find((attr: any) => attr.color === selectedColor);
+        const sizeAttribute = attribute?.sizes.find((s: any) => s.size === size);
+        const price = sizeAttribute?.price ?? minPrice;
+        setPriceItem(price);
     };
 
     const uniqueSizes = Array.from(
         new Set(
-            data_Detail?.attributes?.flatMap((attribute: any) =>
-                attribute.sizes.map((size: any) => size.size)
-            )
+            data_Detail?.attributes
+                ?.filter((attr: any) => attr.color === selectedColor)
+                ?.flatMap((attribute: any) => attribute.sizes.map((size: any) => size.size))
         )
     ).sort((a: any, b: any) => parseFloat(a) - parseFloat(b));
 
@@ -57,17 +65,14 @@ const Info_Products = ({ data_Detail }: any) => {
             message.error("Vui lòng chọn màu và kích thước trước khi thêm vào giỏ hàng.");
             return;
         }
-        const attribute = data_Detail?.attributes?.find((attr: any) => attr.color === selectedColor);
-        const sizeAttribute = attribute?.sizes.find((size: any) => size.size === selectedSize);
-        const price_item = sizeAttribute?.price ?? minPrice;
         const productData = {
             productId: data_Detail.product._id,
             userId,
             quantity,
             size: selectedSize,
             color: selectedColor,
-            total_price_item: price_item,
-            total_price: (price_item ?? 0) * quantity,
+            total_price_item: priceItem,
+            total_price: (priceItem ?? 0) * quantity,
             status_checked: false
         };
         mutate(productData);
@@ -75,7 +80,6 @@ const Info_Products = ({ data_Detail }: any) => {
 
     return (
         <div className="flex flex-col lg:flex-row gap-5 mt-9">
-            {contextHolder}
             <div className="basis-1/2">
                 <Image src={largeImage} className="w-full h-auto" alt="Product Image" />
                 <div className="grid grid-cols-4 gap-4 mt-5 w-full">
@@ -113,11 +117,18 @@ const Info_Products = ({ data_Detail }: any) => {
                     <i className="fa-solid fa-star" />
                     <i className="fa-solid fa-star" />
                 </span>
+
+                {/* Hiển thị giá */}
                 <p className="text-lg font-medium my-2 flex gap-2">
-                    <span>{minPrice?.toLocaleString("vi", { style: "currency", currency: "VND" })}</span>
-                    -
-                    <span>{maxPrice?.toLocaleString("vi", { style: "currency", currency: "VND" })}</span>
+                    {selectedSize ? (
+                        <span>{priceItem?.toLocaleString("vi", { style: "currency", currency: "VND" })}</span>
+                    ) : (
+                        <span>{minPrice?.toLocaleString("vi", { style: "currency", currency: "VND" })} - {maxPrice?.toLocaleString("vi", { style: "currency", currency: "VND" })}</span>
+                    )}
                 </p>
+
+
+
                 <div className="mb-3">
                     <h3 className="font-bold mb-3">Color</h3>
                     <div className="flex gap-4">
@@ -141,15 +152,19 @@ const Info_Products = ({ data_Detail }: any) => {
                 <div>
                     <h3 className="font-bold mb-3">Size</h3>
                     <div className="flex gap-4">
-                        {uniqueSizes.map((size: any, index) => (
-                            <button
-                                key={index}
-                                onClick={() => handleSizeSelect(size)}
-                                className={`hover:bg-black hover:text-white border border-black p-1 w-9 h-9 rounded text-center relative ${selectedSize === size ? 'bg-black text-white' : ''}`}
-                            >
-                                {size}
-                            </button>
-                        ))}
+                        {uniqueSizes.length > 0 ? (
+                            uniqueSizes.map((size: any, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleSizeSelect(size)}
+                                    className={`hover:bg-black hover:text-white border border-black p-1 w-9 h-9 rounded text-center relative ${selectedSize === size ? 'bg-black text-white' : ''}`}
+                                >
+                                    {size}
+                                </button>
+                            ))
+                        ) : (
+                            <span>Chọn màu trước khi chọn size</span>
+                        )}
                     </div>
                 </div>
                 <div className="mt-5 flex gap-4">
@@ -180,6 +195,8 @@ const Info_Products = ({ data_Detail }: any) => {
                         Thêm vào giỏ hàng
                     </button>
                 </div>
+
+
             </div>
         </div>
     );

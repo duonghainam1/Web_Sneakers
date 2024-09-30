@@ -20,6 +20,16 @@ export const get_order = async () => {
 export const get_order_byId = async (id: number | string) => {
     try {
         const { data } = await instance.get(`/orders/${id}`)
+
+        return data
+    } catch (error) {
+        console.log(error);
+
+    }
+}
+export const get_order_byUser = async (userId: number | string) => {
+    try {
+        const { data } = await instance.get(`/order/${userId}`)
         return data
     } catch (error) {
         console.log(error);

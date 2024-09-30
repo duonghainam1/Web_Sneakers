@@ -29,7 +29,7 @@ export const getAll = async (req, res) => {
 };
 export const getCategoryById = async (req, res) => {
     try {
-        const products = await Product.find({ category: req.params.id });
+        // const products = await Product.find({ category: req.params.id });
         const category = await Category.findById(req.params.id);
         if (category.length === 0)
             return res
@@ -37,7 +37,7 @@ export const getCategoryById = async (req, res) => {
                 .json({ message: "Không tìm thấy sản phẩm nào!" });
         return res.status(StatusCodes.OK).json({
             category,
-            products,
+            // products,
         });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });

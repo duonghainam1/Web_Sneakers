@@ -8,5 +8,7 @@ export const useProducts = (id?: string | number) => {
             return id ? await ProductsById(id) : await Products()
         }
     })
+    console.log(data);
+
     return { data, isLoading }
 }

@@ -16,9 +16,9 @@ export const get_Cart = async (userId: string | number) => {
         console.log(error);
     }
 }
-export const delete_Cart = async (userId: string | number, productId: number | string) => {
+export const delete_Cart = async (cartData: any) => {
     try {
-        const { data } = await instance.delete(`/cart/${userId}/${productId}`)
+        const { data } = await instance.delete(`/cart/remove`, { data: cartData })
         return data
     } catch (error) {
         console.log(error);

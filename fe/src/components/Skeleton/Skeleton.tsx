@@ -7,7 +7,7 @@ const Skeleton_item = () => {
                 <Card key={index} hoverable>
                     <Skeleton
                         active
-                        paragraph={{ rows: 2 }}
+                        paragraph={{ rows: 4 }}
                         title={{ width: '0%' }}
                         style={{ height: '200px' }}
                     />

@@ -3,6 +3,8 @@ import Order from '../models/order.js';
 
 export const createOrder = async (req, res) => {
     // const { userId } = req.body;
+    console.log(req.body);
+
     try {
         const order = new Order(req.body);
         console.log(order);

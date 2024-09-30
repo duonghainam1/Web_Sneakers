@@ -1,16 +1,17 @@
 import useCart from "@/common/hooks/Cart/useCart";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Checkbox, InputNumber, message, Popconfirm, Table } from "antd";
+import { Button, Checkbox, InputNumber, message, Popconfirm, Spin, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { mutatioinCart } from "@/common/hooks/Cart/mutationCart";
+import Skeleton_item from "@/components/Skeleton/Skeleton";
 
 const Page = () => {
     const [user] = useLocalStorage("user", {});
     const userId = user?.data?.user?._id;
     const { data, isLoading } = useCart(userId);
     const { mutate: updateStatus } = mutatioinCart('UPDATE_STATUS');
-    // const { mutate } = mutatioinCart('DELETE');
+    const { mutate: deleteProduct } = mutatioinCart('DELETE');
     const navi = useNavigate();
     const dataSource = data?.cart?.flatMap((cart: any) =>
         cart?.products?.map((product: any) => ({
@@ -22,6 +23,7 @@ const Page = () => {
 
         }))
     );
+
     const handleSelectProduct = (product: any, checked: boolean) => {
         const updatedProduct = {
             userId,
@@ -33,11 +35,19 @@ const Page = () => {
         };
         updateStatus(updatedProduct);
     };
-
     const totalSelectedPrice = dataSource?.filter((product: any) => product?.status_checked).reduce((total: any, product: any) => {
         return total + (product.quantity * product.totalPriceItem);
     }, 0) || 0;
+    const handleDeleteProduct = (product: any) => {
+        const productData = {
+            userId,
+            productId: product.productId,
+            size: product.size,
+            color: product.color,
+        };
 
+        deleteProduct(productData);
+    };
     const handleProceedToCheckout = () => {
         const selectedForPayment = dataSource?.filter((product: any) => product.status_checked);
         if (selectedForPayment.length === 0) {
@@ -52,8 +62,6 @@ const Page = () => {
             dataIndex: 'checkbox',
             key: 'checkbox',
             render: (_: any, product: any) => (
-                console.log(product.status_checked),
-
                 <Checkbox
                     checked={product?.status_checked}
                     onChange={(e) => handleSelectProduct(product, e.target.checked)}
@@ -111,11 +119,11 @@ const Page = () => {
             title: '',
             dataIndex: 'action',
             key: 'action',
-            render: (_: any,) => (
+            render: (_: any, product: any) => (
                 <Popconfirm
                     title="Xóa sản phẩm"
                     description="Bạn có chắc chắn muốn xóa sản phẩm này không?"
-                    onConfirm={() => console.log('delete')}
+                    onConfirm={() => handleDeleteProduct(product)}
                     okText="Yes"
                     cancelText="No"
                 >
@@ -125,12 +133,13 @@ const Page = () => {
         },
     ];
 
-    if (isLoading) return <p>Loading...</p>;
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
 
     return (
         <>
             <div className="lg:mx-28">
                 <h1 className="text-3xl">Giỏ hàng</h1>
+                {isLoading && <Skeleton_item />}
                 <div className="flex flex-col lg:flex-row gap-6 mt-7">
                     <div className="basis-4/6">
                         <Table columns={columns} dataSource={dataSource} pagination={false} />

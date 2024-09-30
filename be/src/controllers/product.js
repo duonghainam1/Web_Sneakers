@@ -40,21 +40,24 @@ export const GetProductById = async (req, res) => {
     try {
         const productId = req.params.id;
         const product = await Products.findById(productId).populate('attributes');
-
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-
         const attributes = await Attribute.find({ productId: productId });
         const sizes = attributes.flatMap(attr => attr.sizes);
         const minPrice = Math.min(...sizes.map(size => size.price));
         const maxPrice = Math.max(...sizes.map(size => size.price));
+        const relatedProducts = await Products.find({
+            category: product.category,
+            _id: { $ne: productId }
+        }).populate('attributes')
 
         res.status(200).json({
             product,
             minPrice,
             maxPrice,
-            attributes
+            attributes,
+            relatedProducts
         });
     } catch (error) {
         res.status(500).json({ message: error.message });

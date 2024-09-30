@@ -7,6 +7,7 @@ export const mutation_Order = (action: Actions) => {
     const queryClinet = useQueryClient();
     const { mutate, isPending } = useMutation({
         mutationFn: async (data_order: any) => {
+            console.log(data_order);
             switch (action) {
                 case 'ADD':
                     return await add_Create(data_order)

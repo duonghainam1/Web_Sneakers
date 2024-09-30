@@ -5,11 +5,14 @@ import Info_Products from "./_component/Info_Products"
 import Menu_Detail from "./_component/Menu_Detail"
 import { useProducts } from "@/common/hooks/Products/useProducts"
 import { useParams } from "react-router-dom"
+import { Spin } from "antd"
 
 const Page = () => {
     const { id } = useParams()
     const { data, isLoading } = useProducts(id)
-    if (isLoading) return <div>Loading...</div>
+    console.log(data);
+
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <main>
             <div className="lg:mx-28">
@@ -17,7 +20,7 @@ const Page = () => {
                 <Info_Products data_Detail={data} />
                 <Description data_Detail={data} />
             </div>
-            <Relater_Products />
+            <Relater_Products data_Detail={data} isLoading={isLoading} />
             <Servire />
             <div className="mb-20" />
         </main>

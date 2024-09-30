@@ -2,36 +2,45 @@ import { mutation_Category } from "@/common/hooks/Category/mutation_Category";
 import { useCategory } from "@/common/hooks/Category/useCategory";
 import { uploadFileCloudinary } from "@/common/lib/utils";
 import { LeftOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, FormProps, Input, Upload } from "antd"
-import _ from "lodash";
-import { useState } from "react";
+import { Button, Form, FormProps, Input, Upload } from "antd";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+
 type FieldType = {
     category_name?: string;
-    category_image?: number;
+    category_image?: string;
 };
+
 const EditCategory = () => {
-    const { id } = useParams()
+    const { id } = useParams();
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
-    const { mutate, contextHolder } = mutation_Category('UPDATE')
+    const { mutate, contextHolder } = mutation_Category('UPDATE');
     const { data, isLoading } = useCategory(id);
+    useEffect(() => {
+        if (data && data.category) {
+            setImageUrl(data.category.category_image);
+        }
+    }, [data]);
+
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        mutate({ ...values, category_image: imageUrl });
+        mutate({ ...values, category_image: imageUrl, _id: id });
     };
+
     const handleUpload = async ({ file }: any) => {
         setLoading(true);
         const url = await uploadFileCloudinary(file);
         setImageUrl(url);
         setLoading(false);
     };
+
     const uploadButton = (
         <button style={{ border: 0, background: 'none' }} type="button">
             {loading ? <LoadingOutlined /> : <PlusOutlined />}
             <div style={{ marginTop: 8 }}>Upload</div>
         </button>
     );
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <p>Loading...</p>;
     return (
         <>
             {contextHolder}
@@ -47,7 +56,7 @@ const EditCategory = () => {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 style={{ maxWidth: 600 }}
-                initialValues={{ ...data }}
+                initialValues={{ category_name: data.category.category_name }}
                 onFinish={onFinish}
                 autoComplete="off"
             >
@@ -66,11 +75,10 @@ const EditCategory = () => {
                     <Upload
                         name="category_image"
                         listType="picture-card"
-                        // className="avatar-uploader w-full"
                         showUploadList={false}
                         customRequest={handleUpload}
                     >
-                        {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+                        {imageUrl ? <img src={imageUrl} alt="category" style={{ width: '100%' }} /> : uploadButton}
                     </Upload>
                 </Form.Item>
                 <Form.Item className="text-center mt-6">
@@ -78,9 +86,9 @@ const EditCategory = () => {
                         Cập nhật
                     </Button>
                 </Form.Item>
-            </Form >
+            </Form>
         </>
-    )
+    );
 }
 
-export default EditCategory
+export default EditCategory;
