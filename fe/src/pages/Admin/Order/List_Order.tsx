@@ -1,7 +1,6 @@
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { EllipsisOutlined } from "@ant-design/icons";
-import { Table, Tag } from "antd"
-import { random } from "lodash";
+import { Table, TableProps, Tag } from "antd"
 import { Link } from "react-router-dom";
 
 const List_Order = () => {
@@ -12,7 +11,7 @@ const List_Order = () => {
             colors[Math.floor(Math.random() * colors.length)]
         )
     };
-    const columns = [
+    const columns: TableProps<any>['columns'] = [
         {
             title: 'Mã đơn hàng',
             dataIndex: 'orderNumber',
@@ -24,7 +23,7 @@ const List_Order = () => {
             key: 'name',
             render: (_: any, order: any) => {
                 return (
-                    <p>{order.customerInfo.name}</p>
+                    <p>{order?.customerInfo?.name}</p>
                 )
             }
         },
@@ -34,7 +33,7 @@ const List_Order = () => {
             key: 'phoneNumber',
             render: (_: any, order: any) => {
                 return (
-                    <p>{order.customerInfo.phone}</p>
+                    <p>{order?.customerInfo?.phone}</p>
                 )
             }
         },
@@ -49,7 +48,7 @@ const List_Order = () => {
             key: 'status',
             render: (_: any, order: any) => {
                 return (
-                    <Tag color={ramdomColor()}>{order.status == 1 ? "Chờ xác nhận" : order.status == 2 ? 'Đang chuẩn bị hàng' : order.status == 3 ? 'Đang vận chuyển' : order.status == 4 ? 'Đã giao' : order.status == 6 ? 'Hoàn thành' : "Đã hủy"}</Tag>
+                    <Tag color={ramdomColor()}>{order?.status == 1 ? "Chờ xác nhận" : order?.status == 2 ? 'Đang chuẩn bị hàng' : order?.status == 3 ? 'Đang vận chuyển' : order?.status == 4 ? 'Đã giao' : order?.status == 6 ? 'Hoàn thành' : "Đã hủy"}</Tag>
                 )
             }
         },
@@ -61,7 +60,7 @@ const List_Order = () => {
             render: (_: any, order: any) => {
                 return (
                     <div className="flex justify-center">
-                        <Link to={`/admin/orders/${order._id}`}><EllipsisOutlined /></Link>
+                        <Link to={`/admin/orders/${order?._id}`}><EllipsisOutlined /></Link>
                     </div>
                 )
             }

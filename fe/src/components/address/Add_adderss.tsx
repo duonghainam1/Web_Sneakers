@@ -7,11 +7,9 @@ type FieldType = {
     address?: string;
     address_detail?: string;
 };
-
-
-
 const Add_adderss = ({ handleOpned, setAddress }: any) => {
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+        handleOpned()
         setAddress(values)
     };
 
@@ -55,15 +53,11 @@ const Add_adderss = ({ handleOpned, setAddress }: any) => {
                 >
                     <Input />
                 </Form.Item>
-
-
-
                 <Form.Item wrapperCol={{ span: 24 }}>
                     <Button type="primary" htmlType="submit" className="w-full">
                         Thêm
                     </Button>
                 </Form.Item>
-
             </Form>
             <Button onClick={handleOpned} className="absolute top-0 right-0 border m-3 w-8 h-8 rounded-full flex justify-center"><CloseOutlined /></Button>
         </div>

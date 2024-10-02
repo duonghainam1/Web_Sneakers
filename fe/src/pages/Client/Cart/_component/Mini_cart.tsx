@@ -12,7 +12,6 @@ const Mini_cart = () => {
     const { mutate: deleteProduct } = mutatioinCart('DELETE');
     const navi = useNavigate();
     const { mutate: updateStatus } = mutatioinCart('UPDATE_STATUS');
-
     let total = 0;
     data?.cart?.map((cart: any) => {
         total += cart.products.length;
@@ -59,9 +58,8 @@ const Mini_cart = () => {
 
     const handleProceedToCheckout = () => {
         const selectedForPayment = data?.cart?.filter((product: any) => {
-            return product?.products.map((item: any) => item?.status_checked)
-        }
-        );
+            return product?.products?.some((item: any) => item?.status_checked);
+        });
         if (selectedForPayment?.length === 0) {
             message.error("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
             return;

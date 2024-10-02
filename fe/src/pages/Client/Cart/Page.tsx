@@ -50,6 +50,8 @@ const Page = () => {
     };
     const handleProceedToCheckout = () => {
         const selectedForPayment = dataSource?.filter((product: any) => product.status_checked);
+        console.log(selectedForPayment);
+
         if (selectedForPayment.length === 0) {
             message.error("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
             return;
