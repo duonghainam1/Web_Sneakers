@@ -24,6 +24,7 @@ import Profile from "@/pages/Client/Profile/_component/Profile";
 import SignIn from "@/pages/Client/Auth/SignIn";
 import SignUp from "@/pages/Client/Auth/SignUp";
 import Mini_cart from "@/pages/Client/Cart/_component/Mini_cart";
+import ThankYou from "@/components/Items/ThankYou";
 
 const Router = () => {
     return (
@@ -42,6 +43,7 @@ const Router = () => {
                         <Route path="address" element={<List_Orders />} />
                         <Route path="list_orders/:id" element={<Order_Detail_Client />} />
                     </Route>
+                    <Route path="thank-you" element={<ThankYou />} />
                     <Route path="signin" element={<SignIn />} />
                     <Route path="signup" element={<SignUp />} />
                 </Route>

@@ -1,16 +1,23 @@
 import { StatusCodes } from 'http-status-codes';
 import Order from '../models/order.js';
+import Cart from '../models/cart.js';
 
 export const createOrder = async (req, res) => {
-    // const { userId } = req.body;
-    console.log(req.body);
-
     try {
         const order = new Order(req.body);
-        console.log(order);
-
-        // const dataCart = await Cart.findOne({ userId }).populate('products.productId').exec();
+        const dataCart = await Cart.findOne({ userId: order.userId }).populate('products.productId').exec();
+        dataCart.products = dataCart.products.filter((item_cart) => {
+            return !req.body.items.some((item_order) => {
+                if (item_cart.productId._id.toString() === item_order.productId.toString()) {
+                    if (item_cart.status_checked) {
+                        return true;
+                    }
+                    return false;
+                }
+            })
+        })
         await order.save();
+        await dataCart.save();
         res.status(201).json(order);
     } catch (error) {
         console.log(error);

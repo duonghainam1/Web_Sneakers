@@ -34,10 +34,10 @@ export const mutationAuth = (action: Action) => {
                         type: 'success',
                         content: 'Đăng nhập thành công',
                     });
-                    setTimeout(() => {
-                        naviagte(`/`);
-                    }, 100);
 
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 100);
                     break;
                 case 'SIGNUP':
                     messageApi.open({

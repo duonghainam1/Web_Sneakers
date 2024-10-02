@@ -1,10 +1,17 @@
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { EllipsisOutlined } from "@ant-design/icons";
-import { Table } from "antd"
+import { Table, Tag } from "antd"
+import { random } from "lodash";
 import { Link } from "react-router-dom";
 
 const List_Order = () => {
     const { data } = useOrder()
+    const colors = ["red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"];
+    const ramdomColor = () => {
+        return (
+            colors[Math.floor(Math.random() * colors.length)]
+        )
+    };
     const columns = [
         {
             title: 'Mã đơn hàng',
@@ -36,18 +43,13 @@ const List_Order = () => {
             dataIndex: 'createdAt',
             key: 'createdAt',
         },
-        // {
-        //     title: 'Tổng tiền',
-        //     dataIndex: 'total',
-        //     key: 'total',
-        // },
         {
             title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
             render: (_: any, order: any) => {
                 return (
-                    <p>{order.status == 1 ? "Chờ xác nhận" : order.status == 2 ? 'Đang chuẩn bị hàng' : order.status == 3 ? 'Đang vận chuyển' : order.status == 4 ? 'Đã giao' : order.status == 6 ? 'Hoàn thành' : "Đã hủy"}</p>
+                    <Tag color={ramdomColor()}>{order.status == 1 ? "Chờ xác nhận" : order.status == 2 ? 'Đang chuẩn bị hàng' : order.status == 3 ? 'Đang vận chuyển' : order.status == 4 ? 'Đã giao' : order.status == 6 ? 'Hoàn thành' : "Đã hủy"}</Tag>
                 )
             }
         },
@@ -55,6 +57,7 @@ const List_Order = () => {
             title: 'Hành động',
             dataIndex: 'action',
             key: 'action',
+            align: 'center',
             render: (_: any, order: any) => {
                 return (
                     <div className="flex justify-center">

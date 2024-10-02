@@ -141,6 +141,44 @@ const ListProducts = () => {
             )
         },
     ];
+    const list_products_attributes = (product: any) => {
+        const colors = ["red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"];
+        const ramdomColor = () => {
+            return (
+                colors[Math.floor(Math.random() * colors.length)]
+            )
+        };
+        return (
+            <div>
+                {product.attributes.map((attribute: any) => {
+                    return (
+                        <div className="flex gap-11 items-center">
+                            <img
+                                src={attribute?.images[0]}
+                                width={60}
+                                height={60}
+                                style={{ objectFit: 'cover' }}
+                                alt="Ảnh thuộc tính"
+                                className="ml-24"
+                            />
+                            <p className="w-[245px]">{attribute?.color}</p>
+                            <div>
+                                {attribute?.sizes.map((size: any) => {
+                                    return (
+                                        <div className="flex gap-4 py-1">
+                                            <Tag color={ramdomColor()}>{size.size}</Tag>
+                                            -
+                                            <Tag color={ramdomColor()}>{size.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Tag>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        )
+    }
 
     if (isLoading) return <p>Loading...</p>
     return (
@@ -154,7 +192,9 @@ const ListProducts = () => {
                     </Button>
                 </Link>
             </div>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={dataSource} columns={columns} expandable={{
+                expandedRowRender: list_products_attributes,
+            }} />
         </>
     )
 }

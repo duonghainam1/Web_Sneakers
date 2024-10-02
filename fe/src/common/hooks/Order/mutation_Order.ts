@@ -1,10 +1,12 @@
 import { add_Create, update_order } from "@/services/Order/order";
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 type Actions = "ADD" | 'UPDATE';
 export const mutation_Order = (action: Actions) => {
     const [messageApi, contextHolder] = message.useMessage();
     const queryClinet = useQueryClient();
+    const navigate = useNavigate();
     const { mutate, isPending } = useMutation({
         mutationFn: async (data_order: any) => {
             console.log(data_order);
@@ -24,6 +26,7 @@ export const mutation_Order = (action: Actions) => {
                         type: 'success',
                         content: 'Bạn đã đặt hành thành công',
                     });
+                    navigate('/thank-you')
                     break;
 
                 default:

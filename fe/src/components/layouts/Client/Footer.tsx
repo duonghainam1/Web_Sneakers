@@ -4,7 +4,7 @@ import Gpay from '../../../assets/icons/G pay.png'
 
 const Footer = () => {
     return (
-        <footer className="bg-black text-white py-4 lg:py-12">
+        <footer className=" bg-black text-white py-4 lg:py-12">
             <div className="lg:container mx-auto px-4 md:px-12">
                 {/* Logo and Contact */}
                 <div className="flex flex-col lg:flex-row justify-between border-b border-gray-600 pb-4 lg:pb-8 mb-4 lg:mb-8 gap-8">

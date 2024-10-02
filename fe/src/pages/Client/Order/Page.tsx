@@ -14,11 +14,10 @@ const Page = () => {
     const [isOpend, setIsOpend] = useState(false);
     const [address, setAddress] = useState<any>({});
     const [payment, setPayment] = useState('Cash');
-    const { mutate, contextHolder } = mutation_Order('ADD')
+    const { mutate, contextHolder, isPending } = mutation_Order('ADD')
     const selectedProducts = data?.cart?.flatMap((cart: any) =>
         cart.products.filter((item: any) => item.status_checked)
     ) || [];
-    console.log(selectedProducts);
 
     const handleOpned = () => {
         setIsOpend(!isOpend);
@@ -37,14 +36,14 @@ const Page = () => {
                 total_price_item: product.total_price_item,
                 color: product.color,
                 size: product.size,
-                quantity: product.quantity
+                quantity: product.quantity,
+                status_checked: product.status_checked,
+
             })),
             customerInfo: address,
             payment: payment,
             totalPrice: totalAmount
         }
-        console.log(orders_Data);
-
         mutate(orders_Data)
     }
     const columns = [
@@ -168,7 +167,9 @@ const Page = () => {
                     </div>
                     <div className="flex flex-col lg:flex-row justify-between items-center p-4">
                         <p>Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo Điều khoản Krist</p>
-                        <button className="bg-black text-white px-5 py-3 my-3 rounded w-full lg:w-52" onClick={handleOrders}>Đặt hàng</button>
+                        <button className="bg-black text-white px-5 py-3 my-3 rounded w-full lg:w-52" onClick={handleOrders} disabled={isPending}>
+                            {isPending ? 'Đang xử lý...' : 'Đặt hàng'}
+                        </button>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,8 @@ import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, HomeOutl
 import { Timeline } from "antd";
 
 const Status_order = ({ data_Order }: any) => {
+    console.log(data_Order);
+
     const timelineItems = [
         {
             status: "1",
