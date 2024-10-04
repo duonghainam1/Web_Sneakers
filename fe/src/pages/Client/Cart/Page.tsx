@@ -23,7 +23,6 @@ const Page = () => {
 
         }))
     );
-
     const handleSelectProduct = (product: any, checked: boolean) => {
         const updatedProduct = {
             userId,
@@ -45,13 +44,10 @@ const Page = () => {
             size: product.size,
             color: product.color,
         };
-
         deleteProduct(productData);
     };
     const handleProceedToCheckout = () => {
         const selectedForPayment = dataSource?.filter((product: any) => product.status_checked);
-        console.log(selectedForPayment);
-
         if (selectedForPayment.length === 0) {
             message.error("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
             return;

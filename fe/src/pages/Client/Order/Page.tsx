@@ -13,14 +13,11 @@ const Page = () => {
     const { data } = useCart(userId);
     const [isOpend, setIsOpend] = useState(false);
     const [address, setAddress] = useState<any>({});
-    console.log(address);
-
     const [payment, setPayment] = useState('Cash');
     const { mutate, contextHolder, isPending } = mutation_Order('ADD')
     const selectedProducts = data?.cart?.flatMap((cart: any) =>
         cart.products.filter((item: any) => item.status_checked)
     ) || [];
-
     const handleOpned = () => {
         setIsOpend(!isOpend);
     }

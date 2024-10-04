@@ -29,7 +29,7 @@ export const addCart = async (req, res) => {
         }
         let sizeAttribute = attribute.sizes.find(a => a.size === size);
         if (!sizeAttribute) {
-            return res.status(StatusCodes.NOT_FOUND).json({ message: "Kích thước không hợp lệ" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: " Kích thước không hợp lệ, số lượng sản phẩm không đủ" });
         }
         const price_item = sizeAttribute.price;
         let cart = await Cart.findOne({ userId });

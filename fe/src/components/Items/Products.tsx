@@ -39,7 +39,7 @@ const Products = () => {
                                 <Card
                                     hoverable
                                     cover={
-                                        <div className="w-full h-72 lg:h-96 overflow-hidden flex items-center justify-center">
+                                        <div className="w-full h-72 lg:h-64 overflow-hidden flex items-center justify-center">
                                             <img
                                                 alt={product?.name}
                                                 src={firstImage}

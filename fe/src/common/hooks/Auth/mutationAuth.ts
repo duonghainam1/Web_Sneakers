@@ -51,7 +51,8 @@ export const mutationAuth = (action: Action) => {
                         type: 'success',
                         content: 'Đăng xuất thành công',
                     });
-                    naviagte(`/signin`);
+                    window.location.href = '/signin';
+
                     break;
                 default:
                     break;

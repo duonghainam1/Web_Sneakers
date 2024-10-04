@@ -1,4 +1,5 @@
 // import { mutationAuth } from '@/common/hooks/Auth/mutationAuth';
+import { mutationAuth } from '@/common/hooks/Auth/mutationAuth';
 import { LogoutOutlined, TruckOutlined, UserOutlined } from '@ant-design/icons';
 import { Menu, MenuProps, Modal } from 'antd';
 import React, { useState } from 'react'
@@ -6,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 type MenuItem = Required<MenuProps>['items'][number];
 
 const Sidebar = () => {
-    // const { mutate } = mutationAuth('SIGNOUT');
+    const { mutate }: any = mutationAuth('SIGNOUT');
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
@@ -14,7 +15,7 @@ const Sidebar = () => {
     };
 
     const handleOk = () => {
-        // mutate()
+        mutate()
         setIsModalVisible(false);
     };
 

@@ -28,7 +28,7 @@ export function Convert_Color(colorItem: string) {
             color = 'bg-violet-500 border-none';
             break;
         case 'blue':
-        case 'xanh dương':
+        case 'xanh':
             color = 'bg-blue-500 border-none';
             break;
         case 'brown':

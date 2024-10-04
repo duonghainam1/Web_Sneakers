@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Convert_Color } from "@/configs/Color";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import { mutatioinCart } from "@/common/hooks/Cart/mutationCart";
-
 const Info_Products = ({ data_Detail }: any) => {
     const [user] = useLocalStorage("user", {});
     const userId = user?.data?.user?._id;
@@ -12,10 +11,10 @@ const Info_Products = ({ data_Detail }: any) => {
     const [maxPrice, setMaxPrice] = useState<number | null>(null);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
+    const [stock, setStock] = useState();
     const [quantity, setQuantity] = useState(1);
     const [priceItem, setPriceItem] = useState<number | null>(null);
     const { mutate } = mutatioinCart('ADD');
-
     useEffect(() => {
         if (data_Detail?.product) {
             setLargeImage(data_Detail.product.images[0]);
@@ -28,7 +27,6 @@ const Info_Products = ({ data_Detail }: any) => {
             setMaxPrice(data_Detail.maxPrice);
         }
     }, [data_Detail]);
-
     const handleColorSelect = (color: string) => {
         setSelectedColor(color);
         const attribute = data_Detail?.attributes?.find((attr: any) => attr.color === color);
@@ -38,15 +36,14 @@ const Info_Products = ({ data_Detail }: any) => {
         setSelectedSize(null);
         setPriceItem(minPrice);
     };
-
     const handleSizeSelect = (size: string) => {
         setSelectedSize(size);
         const attribute = data_Detail?.attributes?.find((attr: any) => attr.color === selectedColor);
         const sizeAttribute = attribute?.sizes.find((s: any) => s.size === size);
         const price = sizeAttribute?.price ?? minPrice;
         setPriceItem(price);
+        setStock(sizeAttribute?.stock ?? 0)
     };
-
     const uniqueSizes = Array.from(
         new Set(
             data_Detail?.attributes
@@ -54,7 +51,6 @@ const Info_Products = ({ data_Detail }: any) => {
                 ?.flatMap((attribute: any) => attribute.sizes.map((size: any) => size.size))
         )
     ).sort((a: any, b: any) => parseFloat(a) - parseFloat(b));
-
     const handleAddToCart = () => {
         if (!userId || !data_Detail?.product?._id) {
             message.error("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng kiểm tra lại thông tin người dùng hoặc sản phẩm.");
@@ -64,6 +60,11 @@ const Info_Products = ({ data_Detail }: any) => {
         if (!selectedColor || !selectedSize) {
             message.error("Vui lòng chọn màu và kích thước trước khi thêm vào giỏ hàng.");
             return;
+        }
+        if (quantity > (stock ?? 0)) {
+
+            message.error(`Vượt quá số lương có trong kho. Vui lòng chọn sản phẩm khác.`);
+            return
         }
         const productData = {
             productId: data_Detail.product._id,
@@ -77,11 +78,10 @@ const Info_Products = ({ data_Detail }: any) => {
         };
         mutate(productData);
     };
-
     return (
         <div className="flex flex-col lg:flex-row gap-5 mt-9">
             <div className="basis-1/2">
-                <Image src={largeImage} className="w-full h-auto" alt="Product Image" />
+                <Image src={largeImage} className="w-full h-full" alt="Product Image" />
                 <div className="grid grid-cols-4 gap-4 mt-5 w-full">
                     <div
                         className="flex justify-center items-center cursor-pointer"
@@ -117,8 +117,6 @@ const Info_Products = ({ data_Detail }: any) => {
                     <i className="fa-solid fa-star" />
                     <i className="fa-solid fa-star" />
                 </span>
-
-                {/* Hiển thị giá */}
                 <p className="text-lg font-medium my-2 flex gap-2">
                     {selectedSize ? (
                         <span>{priceItem?.toLocaleString("vi", { style: "currency", currency: "VND" })}</span>
@@ -126,9 +124,6 @@ const Info_Products = ({ data_Detail }: any) => {
                         <span>{minPrice?.toLocaleString("vi", { style: "currency", currency: "VND" })} - {maxPrice?.toLocaleString("vi", { style: "currency", currency: "VND" })}</span>
                     )}
                 </p>
-
-
-
                 <div className="mb-3">
                     <h3 className="font-bold mb-3">Color</h3>
                     <div className="flex gap-4">
@@ -151,27 +146,29 @@ const Info_Products = ({ data_Detail }: any) => {
                 </div>
                 <div>
                     <h3 className="font-bold mb-3">Size</h3>
-                    <div className="flex gap-4">
+                    <div className="flex items-center gap-4">
                         {uniqueSizes.length > 0 ? (
                             uniqueSizes.map((size: any, index) => (
                                 <button
                                     key={index}
                                     onClick={() => handleSizeSelect(size)}
-                                    className={`hover:bg-black hover:text-white border border-black p-1 w-9 h-9 rounded text-center relative ${selectedSize === size ? 'bg-black text-white' : ''}`}
+                                    className={`hover:bg-black hover:text-white border border-black px-3 py-2 rounded text-center relative ${selectedSize === size ? 'bg-black text-white' : ''}`}
                                 >
                                     {size}
                                 </button>
+
                             ))
                         ) : (
                             <span>Chọn màu trước khi chọn size</span>
                         )}
+
                     </div>
                 </div>
-                <div className="mt-5 flex gap-4">
-                    <div className="flex gap-1 justify-center items-center border-2 border-black rounded w-36">
+                <div className="mt-5 flex justify-between gap-4">
+                    <div className="flex items-center border border-black rounded w-auto h-12">
                         <button
                             onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
-                            className="w-11 h-12 hover:bg-black hover:text-white  text-2xl"
+                            className="w-11 h-12 hover:bg-black hover:text-white text-2xl"
                         >
                             -
                         </button>
@@ -187,16 +184,17 @@ const Info_Products = ({ data_Detail }: any) => {
                         >
                             +
                         </button>
+                        {selectedColor && selectedSize && stock !== null && (
+                            <p className="border-l border-black p-2">Còn lại: {stock}</p>
+                        )}
                     </div>
                     <button
                         onClick={handleAddToCart}
-                        className="bg-black text-white rounded w-full h-12"
+                        className="bg-black text-white rounded w-[50%] h-12"
                     >
                         Thêm vào giỏ hàng
                     </button>
                 </div>
-
-
             </div>
         </div>
     );

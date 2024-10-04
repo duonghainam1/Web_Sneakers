@@ -1,8 +1,8 @@
 import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useOrder } from "@/common/hooks/Order/useOrder";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, LeftOutlined } from "@ant-design/icons";
 import { Button, message, Table } from "antd";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Status_order from "./Status_order";
 import Button_Order from "./Button_Order";
 
@@ -16,17 +16,29 @@ const Order_Detail = () => {
             ...item
         }
     })
-
+    const handle_Update_Status = async (newStatus: string) => {
+        try {
+            await mutate({ id, status: newStatus });
+            message.success('Cập nhật trạng thái đơn hàng thành công!');
+        } catch (error) {
+            message.error('Có lỗi xảy ra khi cập nhật trạng thái.');
+        }
+    }
     const columns = [
         {
             title: 'Ảnh ',
             dataIndex: 'image',
             key: 'image',
+            render: (_: any, order: any) => {
+                return (
+                    <img src={order.product_image} alt="" width={100} />
+                )
+            }
         },
         {
             title: 'Tên sản phẩm',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'product_name',
+            key: 'product_name',
 
         },
         {
@@ -107,18 +119,15 @@ const Order_Detail = () => {
             address_shipper: '10 Downing Street',
         },
     ];
-    const handle_Update_Status = async (newStatus: string) => {
-        try {
-            await mutate({ id, status: newStatus });
-            message.success('Cập nhật trạng thái đơn hàng thành công!');
-        } catch (error) {
-            message.error('Có lỗi xảy ra khi cập nhật trạng thái.');
-        }
-    }
+
     if (isLoading) return <p>Loading...</p>
     return (
         <div >
-            <h1 className="text-center text-2xl pb-8 font-bold">Chi tiết đơn hàng</h1>
+            <div>
+                <Link to="/admin/orders"><LeftOutlined /> Quay lại</Link>
+                <h1 className="text-center text-2xl pb-8 font-bold">Chi tiết đơn hàng</h1>
+
+            </div>
             <div className="flex gap-8">
                 <div className="w-[68%]">
                     <div className="mb-8 px-6 py-6 border rounded shadow">
@@ -152,7 +161,6 @@ const Order_Detail = () => {
 
                     <div className="flex justify-center gap-4 mt-8">
                         <Button_Order data={data} handle_Update_Status={handle_Update_Status} />
-
                     </div>
                 </div>
                 <div className="w-[32%] border rounded shadow p-4">

@@ -1,8 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
 import Order from '../models/order.js';
 import Cart from '../models/cart.js';
+import Attribute from "../models/attribute.js";
 
 export const createOrder = async (req, res) => {
+    const { items } = req.body;
     try {
         const order = new Order(req.body);
         const dataCart = await Cart.findOne({ userId: order.userId }).populate('products.productId').exec();
@@ -16,6 +18,26 @@ export const createOrder = async (req, res) => {
                 }
             })
         })
+        for (let i of items) {
+            const attribute = await Attribute.findOne({
+                productId: i.productId,
+                color: i.color,
+                'sizes.size': i.size,
+            });
+            if (!attribute) {
+                return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tìm thấy sản phẩm" });
+            }
+            console.log();
+            for (let a of attribute.sizes) {
+                if (a.size === i.size) {
+                    if (a.stock < i.quantity) {
+                        return res.status(StatusCodes.BAD_REQUEST).json({ message: "Số lượng sản phẩm không đủ" });
+                    }
+                    a.stock -= i.quantity;
+                }
+            }
+            await attribute.save();
+        }
         await order.save();
         await dataCart.save();
         res.status(201).json(order);

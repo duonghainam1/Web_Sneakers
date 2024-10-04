@@ -4,6 +4,7 @@ import { TruckOutlined } from "@ant-design/icons";
 import { Button, Empty } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Button_orders from "./Button_orders";
 
 const List_Orders = () => {
     const [user] = useLocalStorage("user", {});
@@ -21,7 +22,7 @@ const List_Orders = () => {
     return (
         <>
             <div className="flex overflow-x-auto py-2 scrollbar-hide hidden_scroll_x">
-                {["all", "1", "2", "3", "4", "5", "6"].map((status) => (
+                {["all", "1", "2", "3", "4", "6", "5"].map((status) => (
                     <span
                         key={status}
                         onClick={() => handleClick(status)}
@@ -59,16 +60,7 @@ const List_Orders = () => {
                                 </div>
                             </div>
                             <p className="text-end text-lg font-bold my-3 px-4">Thành tiền: {order?.totalPrice?.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
-                            <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4">
-                                <p className="w-full md:w-[60%]">
-                                    Vui lòng chỉ nhấn "Đã nhận được hàng" khi đơn hàng đã được giao đến bạn và sản phẩm nhận được không có vấn đề nào.
-                                </p>
-                                <div className="flex md:flex-row gap-4 w-full md:w-[40%]">
-                                    <Button className="!bg-black !text-white p-5 w-full">Chờ xác nhận</Button>
-                                    <Button className="!bg-red-500 !text-white p-5 w-full">Đã nhận hàng</Button>
-                                    {/* <Button className="!bg-red-500 !text-white p-5 w-full">Đánh giá</Button> */}
-                                </div>
-                            </div>
+                            <Button_orders order={order} />
                         </div>
                     );
                 });

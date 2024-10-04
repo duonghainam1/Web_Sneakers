@@ -16,19 +16,15 @@ const Banner = () => {
             <Carousel autoplay arrows draggable>
                 <div>
                     <img src={banner_1} style={contentStyle} className="w-full" alt="" />
-                    {/* <h3 style={contentStyle}>1</h3> */}
                 </div>
                 <div>
                     <img src={banner_2} style={contentStyle} className="w-full" alt="" />
-                    {/* <h3 style={contentStyle}>2</h3> */}
                 </div>
                 <div>
                     <img src={banner_3} style={contentStyle} className="w-full" alt="" />
-                    {/* <h3 style={contentStyle}>3</h3> */}
                 </div>
                 <div>
                     <img src={banner_4} style={contentStyle} className="w-full" alt="" />
-                    {/* <h3 style={contentStyle}>4</h3> */}
                 </div>
             </Carousel>
         </div>

@@ -152,7 +152,7 @@ const ListProducts = () => {
             <div>
                 {product.attributes.map((attribute: any) => {
                     return (
-                        <div className="flex gap-11 items-center">
+                        <div className="flex gap-11 items-center border-b mb-6 pb-4">
                             <img
                                 src={attribute?.images[0]}
                                 width={60}
@@ -161,14 +161,24 @@ const ListProducts = () => {
                                 alt="Ảnh thuộc tính"
                                 className="ml-24"
                             />
-                            <p className="w-[245px]">{attribute?.color}</p>
+                            <p className="w-[145px]">{attribute?.color}</p>
                             <div>
                                 {attribute?.sizes.map((size: any) => {
                                     return (
-                                        <div className="flex gap-4 py-1">
-                                            <Tag color={ramdomColor()}>{size.size}</Tag>
-                                            -
-                                            <Tag color={ramdomColor()}>{size.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Tag>
+                                        <div className="flex items-center">
+                                            <div className="flex gap-4 py-2">
+                                                <Tag color={ramdomColor()}>{size.size}</Tag>
+                                                -
+                                                <Tag color={ramdomColor()}>{size.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Tag>
+                                            </div>
+                                            <div className="ml-10 flex items-center gap-8 w-[40%]">
+                                                <p>Số lượng:</p>
+                                                <Tag color={ramdomColor()}>{size.stock}</Tag>
+                                            </div>
+                                            <div className="ml-[265px] flex items-center gap-8">
+
+                                                <Tag color={ramdomColor()}>{size.stock === 0 ? "Hết hàng" : "Còn hàng"}</Tag>
+                                            </div>
                                         </div>
                                     )
                                 })}
