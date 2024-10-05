@@ -47,8 +47,21 @@ export const createOrder = async (req, res) => {
     }
 }
 export const get_order = async (req, res) => {
+    const { _page = 1, _limit = 10, _status, _search } = req.query;
     try {
-        const data = await Order.find()
+        const options = {
+            page: _page,
+            limit: _limit,
+            sort: { createdAt: -1 }
+        }
+        const query = {}
+        if (_status) {
+            query.status = _status;
+        }
+        if (_search) {
+            query.orderNumber = { $regex: _search, $options: 'i' }
+        }
+        const data = await Order.paginate(query, options)
         if (!data || data.length === 0) {
             return res.status(StatusCodes.NOT_FOUND).json({ message: "Lấy tất cả đơn hàng thành công" });
         }
@@ -61,8 +74,6 @@ export const get_order = async (req, res) => {
 export const get_order_Id = async (req, res) => {
     try {
         const data = await Order.findById(req.params.id)
-        console.log(data);
-
         if (!data || data.length === 0) {
             return res.status(StatusCodes.NOT_FOUND).json({ message: "Lấy tất cả đơn hàng thành công" });
         }
@@ -74,8 +85,18 @@ export const get_order_Id = async (req, res) => {
 }
 export const get_Order_ById = async (req, res) => {
     const { userId } = req.params
+    const { _page = 1, _limit = 10, _status } = req.query;
     try {
-        const data = await Order.find({ userId })
+        const options = {
+            page: _page,
+            limit: _limit,
+            sort: { createdAt: -1 }
+        }
+        const query = { userId }
+        if (_status) {
+            query.status = _status;
+        }
+        const data = await Order.paginate(query, options)
         if (!data || data.length === 0) {
             return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tìm thấy đơn hàng nào của người dùng" });
         }

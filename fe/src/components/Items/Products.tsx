@@ -1,11 +1,9 @@
-import { useProducts } from "@/common/hooks/Products/useProducts";
 import { Card, Empty } from "antd";
 import Meta from "antd/es/card/Meta";
 import { Link } from "react-router-dom";
 import Skeleton_item from "../Skeleton/Skeleton";
 
-const Products = () => {
-    const { data, isLoading } = useProducts();
+const Products = ({ products, isLoading }: any) => {
     const findMinMaxPrices = (attributes: any) => {
         let minPrice = Infinity;
         let maxPrice = -Infinity;
@@ -26,12 +24,12 @@ const Products = () => {
     return (
 
         <>
-            {data?.products?.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+            {products?.products?.docs?.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             {isLoading ? (
                 <Skeleton_item />
             ) : (
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
-                    {data?.products?.map((product: any) => {
+                    {products?.products?.docs?.map((product: any) => {
                         const firstImage = product.images?.[0];
                         const { minPrice, maxPrice } = findMinMaxPrices(product.attributes);
                         return (

@@ -1,5 +1,5 @@
 import { useAuth } from "@/common/hooks/Auth/useAuth"
-import { Table } from "antd"
+import { Spin, Table } from "antd"
 
 const List_Auth = () => {
     const { data, isLoading } = useAuth()
@@ -28,7 +28,7 @@ const List_Auth = () => {
             }
         )
     })
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <>
             <Table columns={colums} dataSource={dataSource} />

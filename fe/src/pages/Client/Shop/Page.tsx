@@ -1,6 +1,5 @@
 import Servire from "@/components/layouts/Client/Servire"
 import Menu_Shop from "./_component/Menu_Shop"
-import Pagination from "./_component/Pagination"
 import SideBar_shop from "./_component/SideBar_shop"
 import Products from "./_component/Products"
 
@@ -13,7 +12,6 @@ const Page = () => {
                     <SideBar_shop />
                     <Products />
                 </div>
-                <Pagination />
             </div>
             <Servire />
 

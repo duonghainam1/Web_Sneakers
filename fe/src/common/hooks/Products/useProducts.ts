@@ -1,14 +1,13 @@
 import { Products, ProductsById } from "@/services/Products/products";
 import { useQuery } from "@tanstack/react-query"
 
-export const useProducts = (id?: string | number) => {
-    const { data, isLoading } = useQuery({
-        queryKey: ['PRODUCTS', id],
+export const useProducts = (id?: string | number, page: number = 1, limit: number = 12, search: string = "") => {
+    const { data, isLoading, ...rest } = useQuery({
+        queryKey: ['PRODUCTS', id, page, limit, search],
         queryFn: async () => {
-            return id ? await ProductsById(id) : await Products()
+            return id ? await ProductsById(id) : await Products(page, limit, search)
         }
     })
-    console.log(data);
 
-    return { data, isLoading }
+    return { data, totalDocs: data?.products?.totalDocs, isLoading, ...rest }
 }

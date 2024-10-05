@@ -9,9 +9,10 @@ export const add_Create = async (data_order: any) => {
 
     }
 }
-export const get_order = async () => {
+export const get_order = async (page: Number, limit: Number, status: Number | null, search: String) => {
     try {
-        const data = await instance.get(`/order`)
+        const statusParam = status !== null ? `&_status=${status}` : '';
+        const data = await instance.get(`/order?_page=${page}&_limit=${limit}${statusParam}&_search=${search}`);
         return data
     } catch (error) {
         console.log(error);
@@ -20,16 +21,14 @@ export const get_order = async () => {
 export const get_order_byId = async (id: number | string) => {
     try {
         const { data } = await instance.get(`/orders/${id}`)
-
         return data
     } catch (error) {
         console.log(error);
-
     }
 }
-export const get_order_byUser = async (userId: number | string) => {
+export const get_order_byUser = async (userId: number | string, page: number, limit: number) => {
     try {
-        const { data } = await instance.get(`/order/${userId}`)
+        const { data } = await instance.get(`/order/${userId}?_page=${page}&_limit=${limit}`)
         return data
     } catch (error) {
         console.log(error);

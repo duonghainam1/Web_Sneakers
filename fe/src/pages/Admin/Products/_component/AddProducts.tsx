@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Select, Button, Upload, Space, message, Checkbox } from 'antd';
+import { Form, Input, Select, Button, Upload, Space, message, Checkbox, Spin } from 'antd';
 import { UploadOutlined, PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 
 import { uploadFileCloudinary } from '@/common/lib/utils';
@@ -51,7 +51,7 @@ const AddProducts = () => {
         updatedAttributes.splice(index, 1);
         setAttributes(updatedAttributes);
     };
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <div className="max-w-4xl mx-auto bg-white p-8 shadow-md">
             {contextHolder}

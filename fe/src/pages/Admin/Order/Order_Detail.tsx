@@ -1,7 +1,7 @@
 import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { CheckOutlined, CloseOutlined, LeftOutlined } from "@ant-design/icons";
-import { Button, message, Table } from "antd";
+import { Button, message, Spin, Table } from "antd";
 import { Link, useParams } from "react-router-dom";
 import Status_order from "./Status_order";
 import Button_Order from "./Button_Order";
@@ -120,7 +120,7 @@ const Order_Detail = () => {
         },
     ];
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <div >
             <div>

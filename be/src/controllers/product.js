@@ -2,18 +2,23 @@ import { StatusCodes } from "http-status-codes";
 import Products from "../models/product.js";
 import Attribute from "../models/attribute.js";
 export const GetAllProduct = async (req, res) => {
+    const { _page = 1, _limit = 12, _search } = req.query;
     try {
-        const products = await Products.find()
-            .populate({
-                path: 'attributes',
-                populate: {
-                    path: 'sizes'
-                }
-            });
+        const options = {
+            page: _page,
+            limit: _limit,
+            populate: { path: 'attributes', populate: { path: 'sizes' } },
+            sort: { createdAt: -1 }
+        }
+        const query = {}
+        if (_search) {
+            query.name = { $regex: _search, $options: 'i' }
+        }
+        const products = await Products.paginate(query, options)
         if (!products) {
             return res.status(StatusCodes.NOT_FOUND).json({ message: "Không có sản phẩm nào" });
         }
-        products.forEach(product => {
+        products.docs.forEach(product => {
             let totalStock = 0;
             product.attributes.forEach(attribute => {
                 attribute.sizes.forEach(size => {
@@ -29,7 +34,6 @@ export const GetAllProduct = async (req, res) => {
                 product.status = 'Available';
             }
         });
-
         return res.status(StatusCodes.OK).json({ products });
     } catch (error) {
         console.log(error);

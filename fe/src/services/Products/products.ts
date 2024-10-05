@@ -1,12 +1,10 @@
 import instance from "@/configs/axios";
-
-export const Products = async () => {
+export const Products = async (page: number, limit: number, search: string) => {
     try {
-        const { data } = await instance.get('/products')
+        const { data } = await instance.get(`/products?_page=${page}&_limit=${limit}&_search=${search}`)
         return data;
     } catch (error) {
         console.log(error)
-
     }
 }
 export const ProductsById = async (id: string | number) => {

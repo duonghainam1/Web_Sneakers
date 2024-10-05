@@ -1,7 +1,7 @@
 import { mutation_Category } from "@/common/hooks/Category/mutation_Category";
 import { useCategory } from "@/common/hooks/Category/useCategory";
 import { PlusCircleFilled } from "@ant-design/icons";
-import { Button, Popconfirm, Space, Table } from "antd";
+import { Button, Popconfirm, Space, Spin, Table } from "antd";
 import { Link } from "react-router-dom";
 
 const ListCategory = () => {
@@ -51,7 +51,7 @@ const ListCategory = () => {
             )
         },
     ];
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <>
             {contextHolder}

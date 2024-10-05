@@ -1,6 +1,12 @@
 import Products_Item from "@/components/Items/Products"
 import Fillter_Menu from "./Fillter_Menu"
+import { useState } from "react";
+import { useProducts } from "@/common/hooks/Products/useProducts";
+import { Pagination } from "antd";
 const Products = () => {
+    const [currenPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(12);
+    const { data, isLoading, totalDocs } = useProducts(undefined, currenPage, pageSize, '');
     return (
         <div className="basis-4/5">
             <div className="mb-3 flex justify-between items-center">
@@ -18,8 +24,19 @@ const Products = () => {
                     </span>
                 </div>
             </div>
-            <Products_Item />
-
+            <Products_Item products={data} isLoading={isLoading} />
+            <Pagination
+                current={currenPage}
+                total={totalDocs}
+                pageSize={pageSize}
+                showSizeChanger
+                onChange={(page, pageSize) => {
+                    setCurrentPage(page);
+                    setPageSize(pageSize);
+                }}
+                align="center"
+                className="my-4"
+            />
         </div>
     )
 }

@@ -1,24 +1,41 @@
 import { useOrderById } from "@/common/hooks/Order/useOrder";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import { TruckOutlined } from "@ant-design/icons";
-import { Button, Empty } from "antd";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Button, Empty, Pagination, Spin } from "antd";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import Button_orders from "./Button_orders";
 
 const List_Orders = () => {
     const [user] = useLocalStorage("user", {});
     const userId = user?.data?.user?._id;
+    const [searchParmas, setSearchParams] = useSearchParams();
+    const currenPageUrl = searchParmas.get('page') ? Number(searchParmas.get('page')) : 1;
+    const pageSizeUrl = searchParmas.get('pageSize') ? Number(searchParmas.get('pageSize')) : 10;
+    const [currenPage, setCurrentPage] = useState(currenPageUrl);
+    const [pageSize, setPageSize] = useState(pageSizeUrl);
     const [selectedStatus, setSelectedStatus] = useState("all");
-    const { data, isLoading } = useOrderById(userId);
+    const { data, isLoading, totalDocs } = useOrderById(userId, currenPage, pageSize);
+
+    useEffect(() => {
+        const params: any = {}
+        if (currenPage !== 1) {
+            params["page"] = currenPage;
+        }
+        if (pageSize !== 10) {
+            params["pageSize"] = pageSize;
+        }
+        setSearchParams(params);
+    }, [currenPage, pageSize, setSearchParams]);
     const handleClick = (status: any) => {
         setSelectedStatus(status);
     };
-    if (isLoading) return <p>Loading...</p>;
-    const filteredOrders = data?.data?.filter((order: any) => {
+
+    const filteredOrders = data?.data?.docs?.filter((order: any) => {
         if (selectedStatus === "all") return true;
         return order.status === selectedStatus;
     });
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <>
             <div className="flex overflow-x-auto py-2 scrollbar-hide hidden_scroll_x">
@@ -65,6 +82,16 @@ const List_Orders = () => {
                     );
                 });
             })}
+            <Pagination
+                current={currenPage}
+                total={totalDocs}
+                pageSize={pageSize}
+                onChange={(page) => setCurrentPage(page)}
+                showSizeChanger
+                onShowSizeChange={(_, size) => setPageSize(size)}
+                align="center"
+                className="my-8"
+            />
         </>
     );
 };

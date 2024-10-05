@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import mongoosePaginate from 'mongoose-paginate-v2';
 const orderSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -70,5 +70,6 @@ orderSchema.pre('save', function (next) {
         this.orderNumber = `ORD-${timestamp}-${random}`;
     }
     next();
-});;
+});
+orderSchema.plugin(mongoosePaginate)
 export default mongoose.model("Orders", orderSchema);

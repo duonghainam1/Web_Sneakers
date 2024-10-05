@@ -1,15 +1,33 @@
 import { mutation_Products } from "@/common/hooks/Products/mutation_Products";
 import { useProducts } from "@/common/hooks/Products/useProducts";
 import { DeleteOutlined, EditOutlined, PlusCircleFilled } from "@ant-design/icons";
-import { Button, Checkbox, Popconfirm, Space, Table, Tag } from "antd";
-import { Link } from "react-router-dom";
+import { Button, Checkbox, Popconfirm, Space, Spin, Table, Tag } from "antd";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 
 const ListProducts = () => {
-    const { data, isLoading } = useProducts()
-    console.log(data);
-
+    const [searchParmas, setSearchParams] = useSearchParams()
+    const currentPageUrl = searchParmas.get('page') ? Number(searchParmas.get('page')) : 1;
+    const pageSizeUrl = searchParmas.get('pageSize') ? Number(searchParmas.get('pageSize')) : 10;
+    const [currenPage, setCurrentPage] = useState(currentPageUrl);
+    const [pageSize, setPageSize] = useState(pageSizeUrl);
+    const { data, isLoading, totalDocs } = useProducts(undefined, currenPage, pageSize, '');
     const { mutate, contextHolder } = mutation_Products('DELETE')
-    const dataSource = data?.products?.map((product: any) => {
+    useEffect(() => {
+        const params: any = {}
+        if (currenPage !== 1) {
+            params['page'] = currenPage;
+        }
+        if (pageSize !== 4) {
+            params['pageSize'] = pageSize;
+        }
+        setSearchParams(params)
+    }, [
+        currenPage,
+        pageSize,
+        setSearchParams
+    ])
+    const dataSource = data?.products?.docs?.map((product: any) => {
         return {
             key: product._id,
             ...product
@@ -190,7 +208,7 @@ const ListProducts = () => {
         )
     }
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <>
             {contextHolder}
@@ -202,9 +220,24 @@ const ListProducts = () => {
                     </Button>
                 </Link>
             </div>
-            <Table dataSource={dataSource} columns={columns} expandable={{
-                expandedRowRender: list_products_attributes,
-            }} />
+            <Table dataSource={dataSource} columns={columns}
+                pagination={{
+                    current: currenPage,
+                    pageSize: pageSize,
+                    total: totalDocs,
+                    showSizeChanger: true,
+                    onChange: (page, pageSize) => {
+                        setCurrentPage(page);
+                        setPageSize(pageSize);
+                    },
+                    onShowSizeChange: (current, size) => {
+                        setCurrentPage(current);
+                        setPageSize(size);
+                    }
+                }}
+                expandable={{
+                    expandedRowRender: list_products_attributes,
+                }} />
         </>
     )
 }

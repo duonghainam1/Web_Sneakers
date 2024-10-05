@@ -6,7 +6,7 @@ const LayOutClient = () => {
     return (
         <div className="conten-wrapper max-w-screen-2xl text-base mx-auto h-auto px-2">
             <Header />
-            <div>
+            <div className="mt-24">
                 <Outlet />
             </div>
             <Footer />

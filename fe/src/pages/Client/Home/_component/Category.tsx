@@ -30,11 +30,11 @@ const Category = () => {
 
             {isLoading ? (
                 <Skeleton_item />
-            ) : data?.products?.length === 0 ? (
+            ) : data?.products?.docs?.length === 0 ? (
                 <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             ) : (
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
-                    {data.products.map((product: any) => {
+                    {data?.products?.docs?.map((product: any) => {
                         if (!product.featured) return null;
 
                         const firstImage = product.images?.[0];
