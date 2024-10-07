@@ -1,8 +1,14 @@
-import { Card, Col, Row, Statistic, Table } from "antd";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { Table } from "antd";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Col_Revenue_By_Day } from "./_component/Col_Revenue_By_Day";
+import { useDashboard_month } from "@/common/hooks/Dashboard/useDashboard";
 
 const Page = () => {
+    const { data: month } = useDashboard_month()
+    const revenueData = month?.data?.map((item: any) => ({
+        name: item.month,
+        revenue: item.totalRevenue
+    })) || [];
     const columns = [
         {
             title: 'Order ID',
@@ -41,31 +47,13 @@ const Page = () => {
             total: '$150',
             status: 'Pending',
         },
-        // Add more data as needed
     ];
-
-    const revenueData = [
-        { name: 'Jan', revenue: 4000 },
-        { name: 'Feb', revenue: 3000 },
-        { name: 'Mar', revenue: 2000 },
-        { name: 'Apr', revenue: 2780 },
-        { name: 'May', revenue: 1890 },
-        { name: 'Jun', revenue: 2390 },
-        { name: 'Jul', revenue: 3490 },
-        { name: 'Aug', revenue: 2000 },
-        { name: 'Sep', revenue: 2780 },
-        { name: 'Oct', revenue: 1890 },
-        { name: 'Nov', revenue: 2390 },
-        { name: 'Dec', revenue: 3490 },
-    ];
-
     const topProducts = [
         { key: '1', name: 'Product A', sales: 120 },
         { key: '2', name: 'Product B', sales: 98 },
         { key: '3', name: 'Product C', sales: 75 },
         { key: '4', name: 'Product D', sales: 60 },
         { key: '5', name: 'Product E', sales: 45 },
-        // Add more products as needed
     ];
 
     const topProductsColumns = [
@@ -84,42 +72,8 @@ const Page = () => {
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
             <h1 className="text-3xl font-semibold mb-6">Thống kê</h1>
-            <Row gutter={16}>
-                <Col span={8}>
-                    <Card>
-                        <Statistic
-                            title="Tổng doanh số"
-                            value={112893}
-                            precision={2}
-                            valueStyle={{ color: '#3f8600' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="$"
-                        />
-                    </Card>
-                </Col>
-                <Col span={8}>
-                    <Card>
-                        <Statistic
-                            title="Tổng số đơn hàng"
-                            value={93}
-                            precision={0}
-                            valueStyle={{ color: '#cf1322' }}
-                            prefix={<ArrowDownOutlined />}
-                        />
-                    </Card>
-                </Col>
-                <Col span={8}>
-                    <Card>
-                        <Statistic
-                            title="Tổng số khách hàng"
-                            value={1128}
-                            precision={0}
-                            valueStyle={{ color: '#3f8600' }}
-                            prefix={<ArrowUpOutlined />}
-                        />
-                    </Card>
-                </Col>
-            </Row>
+
+            <Col_Revenue_By_Day />
             <div className="mt-6">
                 <h2 className="text-2xl font-semibold mb-4">Biểu đồ doanh thu</h2>
                 <ResponsiveContainer width="100%" height={400}>

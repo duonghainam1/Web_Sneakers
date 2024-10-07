@@ -25,6 +25,7 @@ import SignIn from "@/pages/Client/Auth/SignIn";
 import SignUp from "@/pages/Client/Auth/SignUp";
 import Mini_cart from "@/pages/Client/Cart/_component/Mini_cart";
 import ThankYou from "@/components/Items/ThankYou";
+import Counter_Sales from "@/pages/Admin/Counter_Sales/Page"
 
 const Router = () => {
     return (
@@ -49,6 +50,7 @@ const Router = () => {
                 </Route>
                 <Route path="/admin" element={<LayOutAdmin />}>
                     <Route index element={<Page_Admin />} />
+                    <Route path="counter-sales" element={<Counter_Sales />} />
                     {/* Products */}
                     <Route path="products" element={<ListProducts />} />
                     <Route path="products/add" element={<AddProducts />} />

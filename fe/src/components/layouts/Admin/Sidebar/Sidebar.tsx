@@ -1,4 +1,5 @@
 import {
+    DollarOutlined,
     FileTextOutlined,
     PieChartOutlined,
     TeamOutlined,
@@ -27,6 +28,7 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem(<NavLink to="/admin">Thống kê</NavLink>, '1', <PieChartOutlined />),
+    getItem(<NavLink to="/admin/counter-sales">Bán hàng tại quầy</NavLink>, '2', <DollarOutlined />),
     getItem(<NavLink to="/admin/products">Sản phẩm</NavLink>, 'sub1', <FileTextOutlined />, [
         getItem(<NavLink to="/admin/products">Sản phẩm</NavLink>, '3'),
         getItem(<NavLink to="/admin/categori">Danh mục</NavLink>, '4'),

@@ -26,16 +26,16 @@ const orderSchema = new mongoose.Schema({
 
         address: {
             type: String,
-            require: true
+            required: true
         },
         address_detail: {
             type: String,
-            require: true
+            required: true
         }
     },
     payment: {
         type: String,
-        require: true
+        required: true
     },
     status: {
         type: String,

@@ -10,6 +10,7 @@ import productRouter from "./routers/product.js";
 import categoryRouter from "./routers/category.js";
 import attributeRouter from "./routers/attribute.js";
 import Router_order from "./routers/order.js";
+import Router_Dashboard from "./routers/dashboard.js";
 
 
 const app = express();
@@ -29,6 +30,8 @@ app.use("/api/v1", cartRouter);
 app.use("/api/v1", categoryRouter);
 app.use("/api/v1", attributeRouter);
 app.use("/api/v1", Router_order)
+app.use("/api/v1", Router_Dashboard)
+
 
 
 app.listen(process.env.PORT, () => {
