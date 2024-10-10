@@ -18,16 +18,16 @@ export const getRevenueStatisticsByDay = async (req, res) => {
         const revenueByDay = {};
 
         order.forEach((item) => {
-            const orderDate = new Date(item.createdAt).toLocaleDateString();
+            const orderDate = new Date(item.createdAt).toISOString().split('T')[0];
             if (!revenueByDay[orderDate]) {
                 revenueByDay[orderDate] = {
                     total: 0,
                     totalOrder: 0
-                }
+                };
             }
             revenueByDay[orderDate].total += item.totalPrice;
             revenueByDay[orderDate].totalOrder += 1;
-        })
+        });
         return res.status(StatusCodes.OK).json({
             message: "Thống kê doanh thu thành công",
             revenueByDay,

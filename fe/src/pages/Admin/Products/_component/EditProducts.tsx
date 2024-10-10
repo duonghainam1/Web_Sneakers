@@ -1,22 +1,20 @@
 import { useState } from 'react';
-import { Form, Input, Select, Button, Upload, Space, message } from 'antd';
+import { Form, Input, Select, Button, Upload, Space, message, Checkbox, Spin } from 'antd';
 import { UploadOutlined, PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { uploadFileCloudinary } from '@/common/lib/utils';
 import { useCategory } from '@/common/hooks/Category/useCategory';
 import { mutation_Products } from '@/common/hooks/Products/mutation_Products';
-import { useParams } from 'react-router-dom';
 import { useProducts } from '@/common/hooks/Products/useProducts';
+import { useParams } from 'react-router-dom';
 const { Option } = Select;
 
 const EditProducts = () => {
-    const { id } = useParams()
-    const { data: product, isLoading: loadingProduct } = useProducts(id)
-    console.log(product);
-
+    const { id } = useParams();
     const [form] = Form.useForm();
+    const { data: productData, isLoading: a } = useProducts(id);
     const [attributes, setAttributes] = useState([{ color: '', images: [], sizes: [{ size: '', price: '', stock: '' }] }]);
     const { data, isLoading } = useCategory();
-    const { mutate, contextHolder } = mutation_Products(`ADD`)
+    const { mutate, contextHolder } = mutation_Products(`UPDATE`);
     const onFinish = async (values: any) => {
         try {
             const uploadedProductImages = await Promise.all(values.images.map((file: any) => uploadFileCloudinary(file.originFileObj)));
@@ -30,13 +28,16 @@ const EditProducts = () => {
                 })),
             })));
             const productData = {
+                id: id,
                 name: values.name,
                 description: values.description,
                 category: values.category,
                 images: uploadedProductImages,
                 sku: values.sku,
                 attributes: formattedAttributes,
+                featured: values.featured || false,
             };
+
             mutate(productData);
             form.resetFields();
         } catch (error) {
@@ -54,11 +55,9 @@ const EditProducts = () => {
         updatedAttributes.splice(index, 1);
         setAttributes(updatedAttributes);
     };
-    if (isLoading) return <p>Loading...</p>
-    if (loadingProduct) {
-        return <p>Loading...</p>
 
-    }
+    if (isLoading || a) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
+
     return (
         <div className="max-w-4xl mx-auto bg-white p-8 shadow-md">
             {contextHolder}
@@ -66,10 +65,19 @@ const EditProducts = () => {
             <Form
                 form={form}
                 layout="vertical"
-                initialValues={{ ...product }}
                 onFinish={onFinish}
+                initialValues={{
+                    name: productData?.product?.name,
+                    description: productData?.product?.description,
+                    category: productData?.product?.category,
+                    images: productData?.product?.images,
+                    sku: productData?.product?.sku,
+                    featured: productData?.product?.featured,
+                    attributes: productData?.product?.attributes || [],
+                }}
                 className="space-y-4"
             >
+
                 <Form.Item
                     name="name"
                     label="Tên sản phẩm"
@@ -85,6 +93,7 @@ const EditProducts = () => {
                 >
                     <Input.TextArea rows={4} placeholder="Nhập mô tả sản phẩm" className="p-2" />
                 </Form.Item>
+
                 <Form.Item
                     name="category"
                     label="Danh mục"
@@ -103,7 +112,17 @@ const EditProducts = () => {
                     valuePropName="fileList"
                     getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
                 >
-                    <Upload name="images" listType="picture" multiple>
+                    <Upload
+                        name="images"
+                        listType="picture"
+                        multiple
+                        defaultFileList={productData?.product?.images.map((image: string) => ({
+                            uid: image,
+                            name: image,
+                            status: 'done',
+                            url: image,
+                        }))}
+                    >
                         <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
                     </Upload>
                 </Form.Item>
@@ -114,8 +133,9 @@ const EditProducts = () => {
                 >
                     <Input placeholder="Nhập SKU" className="p-2" />
                 </Form.Item>
+
                 <div className="space-y-6">
-                    {attributes.map((_, index) => (
+                    {attributes.map((attribute, index) => (
                         <div key={index} className="border p-4 rounded-md space-y-4">
                             <div className="flex justify-between items-center">
                                 <h2 className="font-semibold">Thuộc tính {index + 1}</h2>
@@ -140,7 +160,17 @@ const EditProducts = () => {
                                 valuePropName="fileList"
                                 getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
                             >
-                                <Upload name="images" listType="picture" multiple>
+                                <Upload
+                                    name="images"
+                                    listType="picture"
+                                    multiple
+                                    defaultFileList={attribute.images.map((image: string) => ({
+                                        uid: image,
+                                        name: image,
+                                        status: 'done',
+                                        url: image,
+                                    }))}
+                                >
                                     <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
                                 </Upload>
                             </Form.Item>
@@ -197,9 +227,16 @@ const EditProducts = () => {
                     </Button>
                 </div>
 
+                <Form.Item
+                    name="featured"
+                    valuePropName="checked"
+                >
+                    <Checkbox>Đánh dấu là sản phẩm nổi bật</Checkbox>
+                </Form.Item>
+
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" className="w-full bg-blue-500 hover:bg-blue-600">
-                        Thêm sản phẩm
+                    <Button type="primary" htmlType="submit">
+                        Cập nhật sản phẩm
                     </Button>
                 </Form.Item>
             </Form>

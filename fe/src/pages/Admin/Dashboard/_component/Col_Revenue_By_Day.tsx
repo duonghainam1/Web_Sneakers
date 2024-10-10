@@ -1,19 +1,20 @@
 import { useAuth } from "@/common/hooks/Auth/useAuth"
 import { useDashboard } from "@/common/hooks/Dashboard/useDashboard"
+import { useOrder } from "@/common/hooks/Order/useOrder"
 import { ArrowUpOutlined } from "@ant-design/icons"
 import { Card, Col, Row, Statistic } from "antd"
 
 export const Col_Revenue_By_Day = () => {
     const { data } = useDashboard()
     const { data: auth } = useAuth()
-    const totalRevenue: any = Object.values(data?.revenueByDay || {}).reduce(
-        (acc, day: any) => acc + day.total,
-        0
-    );
+    const { data: orders } = useOrder();
+    const currenDate = new Date().toISOString().split('T')[0];
+    const totalRevenue = data?.revenueByDay?.[currenDate] || { total: 0, totalOrder: 0 };
     const formattedRevenue = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
-    }).format(totalRevenue);
+    }).format(totalRevenue.total);
+
     return (
         <div>
             <Row gutter={16}>
@@ -46,12 +47,12 @@ export const Col_Revenue_By_Day = () => {
                                     <span>
                                         Tổng số đơn hàng
                                     </span>
-                                    <span>
+                                    {/* <span>
                                         Ngày: {new Date().toLocaleDateString()}
-                                    </span>
+                                    </span> */}
                                 </div>
                             }
-                            value={data?.totalOrder}
+                            value={orders?.data?.totalDocs}
                             precision={0}
                             valueStyle={{ color: '#cf1322' }}
                             prefix={<ArrowUpOutlined />}

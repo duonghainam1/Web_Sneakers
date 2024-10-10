@@ -163,7 +163,7 @@ const Order_Detail = () => {
                         <Button_Order data={data} handle_Update_Status={handle_Update_Status} />
                     </div>
                 </div>
-                <div className="w-[32%] border rounded shadow p-4">
+                <div className="w-[32%] h-1/2 border rounded shadow p-4">
                     <p className="text-center pb-8 text-lg font-bold">Trạng thái</p>
                     <Status_order data_Order={data} />
                     <div>

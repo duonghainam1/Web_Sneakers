@@ -3,12 +3,7 @@ import { Button, message } from "antd"
 
 const Button_orders = (order: any) => {
     const { mutate: Update } = mutation_Order('UPDATE')
-    // const { mutate, contextHolder, isPending } = mutation_Order('ADD')
-    console.log(order);
-
     const handle_Update_Status = async (newStatus: string) => {
-        console.log(newStatus);
-
         try {
             await Update({ id: order.order._id, status: newStatus });
             message.success('Cập nhật trạng thái đơn hàng thành công!');
@@ -16,19 +11,6 @@ const Button_orders = (order: any) => {
             message.error('Có lỗi xảy ra khi cập nhật trạng thái.');
         }
     }
-    // const handleAddToCart = () => {
-    //     const productData = {
-    //         productId: data_Detail.product._id,
-    //         userId: order?.order.userId
-    //         quantity,
-    //         size: selectedSize,
-    //         color: selectedColor,
-    //         total_price_item: priceItem,
-    //         total_price: (priceItem ?? 0) * quantity,
-    //         status_checked: false
-    //     };
-    //     mutate(productData);
-    // };
     return (
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-4">
             <p className="w-full md:w-[60%]">
@@ -56,7 +38,7 @@ const Button_orders = (order: any) => {
                 <>
                     <div className="flex md:flex-row gap-4 w-full md:w-[40%]">
                         <Button className="!bg-red-500 !text-white p-5 w-full cursor-default" disabled>Đã giao</Button>
-                        <Button className="!bg-red-500 !text-white p-5 w-full">Đã nhận hàng</Button>
+                        <Button className="!bg-red-500 !text-white p-5 w-full" onClick={() => handle_Update_Status('6')}>Đã nhận hàng</Button>
                     </div>
                 </>
             ) : order?.order?.status === "6" ? (

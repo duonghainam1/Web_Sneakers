@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { CreateProduct, DeleteProduct, GetAllProduct, GetProductById, UpdateProduct } from '../controllers/product.js';
+// import { checkAuth } from '../middleware/checkAuth.js';
 const Router_Product = Router();
 Router_Product.post('/products', CreateProduct);
 Router_Product.get('/products', GetAllProduct);

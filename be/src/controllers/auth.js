@@ -20,6 +20,18 @@ export const getAuth = async (req, res) => {
 
     }
 }
+export const getAuthById = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tìm thấy user" });
+        }
+        return res.status(StatusCodes.OK).json({ user });
+    } catch (error) {
+        return req.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra" });
+    }
+}
 export const signup = async (req, res) => {
     const { email, password, name, avatar } = req.body;
     const { error } = signupSchema.validate(req.body, { abortEarly: false });
@@ -65,7 +77,7 @@ export const signin = async (req, res) => {
             messages: ["Mật khẩu không chính xác"],
         });
     }
-    const token = jwt.sign({ userId: user._id }, "123456", {
+    const token = jwt.sign({ userId: user._id, role: user.role }, "123456", {
         expiresIn: "7d",
     });
     return res.status(StatusCodes.OK).json({
@@ -86,3 +98,16 @@ export const logout = async (req, res) => {
         res.status(500).json({ message: 'Đã xảy ra lỗi khi đăng xuất.' });
     }
 };
+export const updateRole = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findByIdAndUpdate(userId, { role: req.body.role, }, { new: true });
+        if (!user) {
+            return res.status(404).json({ message: 'Không tìm thấy user' });
+        }
+        return res.status(200).json({ user });
+    }
+    catch (error) {
+        return req.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra" });
+    }
+}

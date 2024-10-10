@@ -1,36 +1,12 @@
-import { Button, Spin, Table, message } from 'antd';
-import { useState } from 'react';
+import { Button, Spin, Table } from 'antd';
 import { useProducts } from '@/common/hooks/Products/useProducts';
 
-const List_order_counter = ({ onSelectProduct }: any) => {
+const List_order_counter = () => {
     const { data, isLoading } = useProducts();
-    const [selectedAttributes, setSelectedAttributes] = useState<{ [key: string]: { color?: string; size?: string } }>({});
-
-    const handleSelectAttribute = (productId: string, key: string, value: string) => {
-        setSelectedAttributes((prev) => ({
-            ...prev,
-            [productId]: {
-                ...prev[productId],
-                [key]: value
-            }
-        }));
-    };
-
-    const handleAddToOrder = (product: any) => {
-        const selected = selectedAttributes[product._id];
-        if (!selected || !selected.color || !selected.size) {
-            message.warning("Vui lòng chọn màu sắc và kích thước trước khi thêm vào giỏ hàng!");
-            return;
-        }
-        onSelectProduct({ ...product, selected });
-    };
-
-    const dataSource = data?.products?.docs?.map((item: any) => {
-        return {
-            key: item._id,
-            ...item
-        };
-    });
+    const dataSource = data?.products?.docs?.map((item: any) => ({
+        key: item._id,
+        ...item
+    }));
 
     const columns = [
         {
@@ -85,8 +61,7 @@ const List_order_counter = ({ onSelectProduct }: any) => {
                     {product.attributes.map((item: any) => (
                         <button
                             key={item.color}
-                            className={`border p-2 ${selectedAttributes[product._id]?.color === item.color ? 'border-blue-500' : 'border-gray-300'}`}
-                            onClick={() => handleSelectAttribute(product._id, 'color', item.color)}
+                            className={`border p-2 `}
                         >
                             {item.color}
                         </button>
@@ -104,8 +79,7 @@ const List_order_counter = ({ onSelectProduct }: any) => {
                         item.sizes.map((size: any) => (
                             <button
                                 key={size.size}
-                                className={`border p-2 ${selectedAttributes[product._id]?.size === size.size ? 'border-blue-500' : 'border-gray-300'}`}
-                                onClick={() => handleSelectAttribute(product._id, 'size', size.size)}
+                                className={`border p-2`}
                             >
                                 {size.size}
                             </button>
@@ -114,16 +88,6 @@ const List_order_counter = ({ onSelectProduct }: any) => {
                 </div>
             )
         },
-        {
-            title: 'Hành động',
-            dataIndex: 'action',
-            key: 'action',
-            render: (_: any, product: any) => (
-                <Button type="primary" onClick={() => handleAddToOrder(product)}>
-                    Thêm vào đơn hàng
-                </Button>
-            )
-        }
     ];
 
     return (
@@ -131,7 +95,15 @@ const List_order_counter = ({ onSelectProduct }: any) => {
             {isLoading ? (
                 <div className="text-center"><Spin /></div>
             ) : (
-                <Table dataSource={dataSource} columns={columns} pagination={false} rowKey="id" />
+                <div className='flex flex-col justify-center items-center'>
+                    <Table dataSource={dataSource} columns={columns} pagination={false} rowKey="key" />
+                    <Button
+                        type="primary"
+                        className='my-4 py-5'
+                    >
+                        Thêm vào đơn hàng
+                    </Button>
+                </div>
             )}
         </>
     );

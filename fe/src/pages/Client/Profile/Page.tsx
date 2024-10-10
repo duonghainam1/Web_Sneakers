@@ -14,7 +14,7 @@ const Page = () => {
     const [collapsed, setCollapsed] = useState(true);
 
     return (
-        <Layout className="bg-white">
+        <Layout className="bg-white min-h-96">
             <Content style={{ padding: '0' }}>
                 <Layout className="bg-white p-0">
                     <Sider

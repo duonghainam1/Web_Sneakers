@@ -1,7 +1,17 @@
 import { Button, Result } from "antd"
-import { Link } from "react-router-dom"
+import { useEffect } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
 const ThankYou = () => {
+    const navigate = useNavigate()
+    useEffect(() => {
+        const time = setTimeout(() => {
+            navigate('/profile/list_orders')
+        }, 3000)
+        return () => {
+            clearTimeout(time)
+        }
+    }, [navigate])
     return (
         <Result
             status="success"

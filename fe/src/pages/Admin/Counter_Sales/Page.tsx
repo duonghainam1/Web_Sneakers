@@ -7,15 +7,11 @@ import Add_adderss from "@/components/address/Add_adderss";
 const { Option } = Select;
 const Page = () => {
     const [orders, setOrders] = useState<any>([]);
-    console.log(orders);
-
     const [orderCount, setOrderCount] = useState(1);
     const [isOpened, setIsOpened] = useState(false);
     const [isAddressOpened, setIsAddressOpened] = useState(false);
     const [isOrderCreated, setIsOrderCreated] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState<any>(null);
-    console.log(selectedOrder);
-
     const [address, setAddress] = useState<any>({});
     const createOrder = () => {
         if (orders.length >= 10) {
@@ -45,45 +41,6 @@ const Page = () => {
             setIsOrderCreated(false);
         }
     };
-
-    const handleAddProduct = (product: any) => {
-        if (!selectedOrder) return;
-        const updatedOrder = {
-            ...selectedOrder,
-            items: [
-                ...selectedOrder.items,
-                {
-                    product_name: product.name,
-                    quantity: 1,
-                    total_price_item: product?.attributes?.flatMap((attr: any) =>
-                        attr?.sizes?.map((size: any) => {
-                            if (product.selected.color === attr.color && product.selected.size === size.size) {
-                                return size.price;
-                            }
-                            return null;
-                        })
-                    ).filter((price: any) => price !== null),
-
-                    product_image: product.images[0],
-                    selected_color: product.selected.color,
-                    selected_size: product.selected.size
-                }
-            ]
-        };
-
-        const updatedOrders = orders.map((order: any) => {
-            if (order.id === selectedOrder.id) {
-                return updatedOrder;
-            }
-            return order;
-        });
-
-        setOrders(updatedOrders);
-        setSelectedOrder(updatedOrder);
-        setIsOpened(false);
-    };
-
-
     const handleOpen = () => {
         setIsOpened(true);
     };
@@ -244,7 +201,9 @@ const Page = () => {
                                 </div>
                             </div>
                         )}
-                        <Button type="primary" className="mt-5">Đặt hàng</Button>
+                        <div className="flex justify-center">
+                            <Button type="primary" className="mt-5">Đặt hàng</Button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -255,7 +214,7 @@ const Page = () => {
                 footer={null}
                 width={1200}
             >
-                <List_order_counter onSelectProduct={handleAddProduct} />
+                <List_order_counter />
             </Modal>
             {isAddressOpened &&
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -26,6 +26,8 @@ import SignUp from "@/pages/Client/Auth/SignUp";
 import Mini_cart from "@/pages/Client/Cart/_component/Mini_cart";
 import ThankYou from "@/components/Items/ThankYou";
 import Counter_Sales from "@/pages/Admin/Counter_Sales/Page"
+import PrivateRoute from "./PrivateRoute";
+import List_address from "@/components/address/List_address";
 
 const Router = () => {
     return (
@@ -41,14 +43,19 @@ const Router = () => {
                     <Route path="profile" element={<Page_Profile />}>
                         <Route index element={<Profile />} />
                         <Route path="list_orders" element={<List_Orders />} />
-                        <Route path="address" element={<List_Orders />} />
+                        <Route path="address" element={<List_address />} />
                         <Route path="list_orders/:id" element={<Order_Detail_Client />} />
                     </Route>
                     <Route path="thank-you" element={<ThankYou />} />
                     <Route path="signin" element={<SignIn />} />
                     <Route path="signup" element={<SignUp />} />
                 </Route>
-                <Route path="/admin" element={<LayOutAdmin />}>
+                <Route path="/admin" element={
+                    <PrivateRoute>
+                        <LayOutAdmin />
+                    </PrivateRoute>
+
+                }>
                     <Route index element={<Page_Admin />} />
                     <Route path="counter-sales" element={<Counter_Sales />} />
                     {/* Products */}
