@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
     },
     customerInfo: {
-        name: {
+        userName: {
             type: String,
             required: true,
         },

@@ -118,44 +118,50 @@ export const DeleteProduct = async (req, res) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
 }
-export const UpdateProduct = async (req, res) => {
+export const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, description, category, sku, status, images, attributes } = req.body;
-        const updateProduct = await Products.findOneAndUpdate(id,
-            { name, description, category, sku, status, images },
+        const { name, description, category, sku, status, images, attributes, featured } = req.body;
+        const updatedProduct = await Products.findByIdAndUpdate(
+            id,
+            { name, description, category, sku, status, images, featured },
             { new: true, runValidators: true }
-        )
-        if (!updateProduct) {
-            return res.status(404).json({ message: "Sản phẩm không tồn tại." });
+        );
+
+        if (!updatedProduct) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Sản phẩm không tồn tại." });
         }
+
         let attributeIds = [];
         for (let attr of attributes) {
-            let savedAttribute
+            let savedAttribute;
             if (attr._id) {
-                savedAttribute = await Attribute.findByIdAndUpdate(attr._id,
+                savedAttribute = await Attribute.findByIdAndUpdate(
+                    attr._id,
                     { color: attr.color, images: attr.images, sizes: attr.sizes },
                     { new: true, runValidators: true }
-                )
+                );
             } else {
                 const newAttr = new Attribute({
                     productId: id,
                     color: attr.color,
                     images: attr.images,
                     sizes: attr.sizes
-                })
+                });
                 savedAttribute = await newAttr.save();
             }
             attributeIds.push(savedAttribute._id);
         }
-        const deleteAttr = await Attribute.deleteMany({
+        await Attribute.deleteMany({
             _id: { $nin: attributeIds },
-            productId: updateProduct._id
-        })
-        updateProduct.attributes = attributeIds;
-        await updateProduct.save();
-        return res.status(StatusCodes.CREATED).json(data);
+            productId: updatedProduct._id
+        });
+        updatedProduct.attributes = attributeIds;
+
+        await updatedProduct.save();
+
+        return res.status(StatusCodes.OK).json(updatedProduct);
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
-}
+};

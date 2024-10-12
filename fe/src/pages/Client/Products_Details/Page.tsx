@@ -10,8 +10,6 @@ import { Spin } from "antd"
 const Page = () => {
     const { id } = useParams()
     const { data, isLoading } = useProducts(id)
-    console.log(data);
-
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <main>

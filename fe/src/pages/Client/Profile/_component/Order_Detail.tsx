@@ -86,14 +86,14 @@ const Order_Detail = () => {
                     <Link to="/profile/list_orders">
                         <Button><BackwardOutlined /></Button>
                     </Link>
-                    <h1 className="mx-auto text-center text-lg font-semibold">Chi tiết đơn hàng</h1>
+                    <h1 className="mx-auto text-center text-lg font-semibold">Chi tiết đơn hàng: {data?.orderNumber}</h1>
                 </div>
             } bordered={false}>
                 <Descriptions bordered column={1}>
                     <Descriptions.Item label="Mã đơn hàng">{data?.orderNumber}</Descriptions.Item>
-                    <Descriptions.Item label="Tên khách hàng">{data?.customerInfo?.name}</Descriptions.Item>
+                    <Descriptions.Item label="Tên khách hàng">{data?.customerInfo?.userName}</Descriptions.Item>
                     <Descriptions.Item label="Số điện thoại">{data?.customerInfo?.phone}</Descriptions.Item>
-                    <Descriptions.Item label="Ngày đặt hàng">{data?.createdAt}</Descriptions.Item>
+                    <Descriptions.Item label="Ngày đặt hàng">  {new Date(data?.createdAt).toLocaleString('vi-VN')}</Descriptions.Item>
                     <Descriptions.Item label="Địa chỉ giao hàng">
                         {data?.customerInfo?.address_detail} - {data?.customerInfo?.address}
                     </Descriptions.Item>
@@ -137,7 +137,6 @@ const Order_Detail = () => {
                     </Descriptions.Item>
                 </Descriptions>
             </Card>
-
             <Card title="Danh sách sản phẩm" bordered={false} style={{ marginTop: "20px" }}>
                 <Table dataSource={dataSource} columns={columns} pagination={false} />
             </Card>

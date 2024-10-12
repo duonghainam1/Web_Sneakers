@@ -29,7 +29,7 @@ export const getAuthById = async (req, res) => {
         }
         return res.status(StatusCodes.OK).json({ user });
     } catch (error) {
-        return req.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra" });
     }
 }
 export const signup = async (req, res) => {
@@ -108,6 +108,6 @@ export const updateRole = async (req, res) => {
         return res.status(200).json({ user });
     }
     catch (error) {
-        return req.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra" });
     }
 }

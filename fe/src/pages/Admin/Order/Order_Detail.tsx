@@ -175,7 +175,7 @@ const Order_Detail = () => {
                                 <p>Địa chỉ:</p>
                             </div>
                             <div>
-                                <p>{data?.customerInfo?.name}</p>
+                                <p>{data?.customerInfo?.userName}</p>
                                 <p className="py-2">{data?.customerInfo?.phone}</p>
                                 <p>{data?.customerInfo?.address_detail} - {data?.customerInfo?.address}</p>
                             </div>

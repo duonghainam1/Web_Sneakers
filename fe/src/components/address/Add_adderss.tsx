@@ -1,19 +1,32 @@
+import { mutationAuth } from "@/common/hooks/Auth/mutationAuth";
+import { useLocalStorage } from "@/common/hooks/useStorage";
 import { CloseOutlined } from "@ant-design/icons";
-import { Button, Form, FormProps, Input } from "antd";
+import { Button, Checkbox, Form, FormProps, Input } from "antd";
 
 type FieldType = {
-    name?: string;
-    phone?: string;
-    address?: string;
-    address_detail?: string;
+    userName?: String;
+    phone?: String;
+    address?: String;
+    address_detail?: String;
+    checked?: boolean;
 };
-const Add_adderss = ({ handleOpned, setAddress }: any) => {
+const Add_adderss = ({ handleOpned }: any) => {
+    const [user] = useLocalStorage("user", {});
+    const userId = user?.data?.user?._id;
+    const { mutate } = mutationAuth('ADD_ADDRESS')
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
         handleOpned()
-        setAddress(values)
+        const data_form = {
+            userId: userId,
+            newAddress: [values],
+            setDefault: values.checked
+        };
+        mutate(data_form)
+
     };
 
     return (
+
         <div className="relative bg-white w-full max-w-sm md:max-w-md lg:max-w-xl p-5 rounded shadow-md flex flex-col">
             <Form
                 name="basic"
@@ -26,7 +39,7 @@ const Add_adderss = ({ handleOpned, setAddress }: any) => {
             >
                 <Form.Item<FieldType>
                     label="Tên người mua"
-                    name="name"
+                    name="userName"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
                     <Input />
@@ -52,6 +65,12 @@ const Add_adderss = ({ handleOpned, setAddress }: any) => {
                     rules={[{ required: true, message: 'Please input your password!' }]}
                 >
                     <Input />
+                </Form.Item>
+                <Form.Item
+                    name="checked"
+                    valuePropName="checked"
+                >
+                    <Checkbox>Đặt làm mặc định</Checkbox>
                 </Form.Item>
                 <Form.Item wrapperCol={{ span: 24 }}>
                     <Button type="primary" htmlType="submit" className="w-full">

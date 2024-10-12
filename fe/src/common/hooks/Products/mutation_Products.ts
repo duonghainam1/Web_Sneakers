@@ -12,7 +12,7 @@ export const mutation_Products = (action: Action) => {
                 case 'ADD':
                     return await Add_Products(product)
                 case 'UPDATE':
-                    return await Update_Products(product._id)
+                    return await Update_Products(product)
                 case 'DELETE':
                     return await Detele_Products(product)
                 default:

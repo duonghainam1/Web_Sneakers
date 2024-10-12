@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Input, Select, Button, Upload, Space, message, Checkbox, Spin } from 'antd';
 import { UploadOutlined, PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { uploadFileCloudinary } from '@/common/lib/utils';
@@ -6,29 +6,77 @@ import { useCategory } from '@/common/hooks/Category/useCategory';
 import { mutation_Products } from '@/common/hooks/Products/mutation_Products';
 import { useProducts } from '@/common/hooks/Products/useProducts';
 import { useParams } from 'react-router-dom';
+
 const { Option } = Select;
 
 const EditProducts = () => {
     const { id } = useParams();
     const [form] = Form.useForm();
     const { data: productData, isLoading: a } = useProducts(id);
-    const [attributes, setAttributes] = useState([{ color: '', images: [], sizes: [{ size: '', price: '', stock: '' }] }]);
+    const [attributes, setAttributes] = useState<any>([]);
     const { data, isLoading } = useCategory();
     const { mutate, contextHolder } = mutation_Products(`UPDATE`);
+
+    useEffect(() => {
+        if (productData) {
+            const initialAttributes = productData.product.attributes.map((attribute: any) => ({
+                color: attribute.color,
+                images: attribute.images.map((image: any) => ({
+                    uid: image,
+                    name: image,
+                    status: 'done',
+                    url: image,
+                })),
+                sizes: attribute.sizes,
+            }));
+            setAttributes(initialAttributes);
+            form.setFieldsValue({
+                name: productData.product.name,
+                description: productData.product.description,
+                category: productData.product.category,
+                images: productData.product.images.map((image: any) => ({
+                    uid: image,
+                    name: image,
+                    status: 'done',
+                    url: image,
+                })),
+                sku: productData.product.sku,
+                featured: productData.product.featured,
+                attributes: initialAttributes,
+            });
+        }
+    }, [productData, form]);
+
     const onFinish = async (values: any) => {
         try {
-            const uploadedProductImages = await Promise.all(values.images.map((file: any) => uploadFileCloudinary(file.originFileObj)));
-            const formattedAttributes = await Promise.all(values.attributes.map(async (attribute: any) => ({
-                color: attribute.color,
-                images: await Promise.all(attribute.images.map((file: any) => uploadFileCloudinary(file.originFileObj))),
-                sizes: attribute.sizes.map((size: any) => ({
-                    size: size.size,
-                    price: size.price,
-                    stock: size.stock,
-                })),
-            })));
+            const uploadedProductImages = await Promise.all(
+                values.images.map((file: any) => {
+                    if (file.originFileObj) {
+                        return uploadFileCloudinary(file.originFileObj);
+                    }
+                    return file.url;
+                })
+            );
+
+            const formattedAttributes = await Promise.all(
+                values.attributes.map(async (attribute: any) => ({
+                    color: attribute.color,
+                    images: await Promise.all(attribute.images.map((file: any) => {
+                        if (file.originFileObj) {
+                            return uploadFileCloudinary(file.originFileObj);
+                        }
+                        return file.url;
+                    })),
+                    sizes: attribute.sizes.map((size: any) => ({
+                        size: size.size,
+                        price: size.price,
+                        stock: size.stock,
+                    })),
+                }))
+            );
+
             const productData = {
-                id: id,
+                _id: id,
                 name: values.name,
                 description: values.description,
                 category: values.category,
@@ -45,12 +93,11 @@ const EditProducts = () => {
             message.error('Có lỗi xảy ra khi xử lý dữ liệu.');
         }
     };
-
     const handleAddAttribute = () => {
         setAttributes([...attributes, { color: '', images: [], sizes: [{ size: '', price: '', stock: '' }] }]);
     };
 
-    const handleRemoveAttribute = (index: number) => {
+    const handleRemoveAttribute = (index: any) => {
         const updatedAttributes = [...attributes];
         updatedAttributes.splice(index, 1);
         setAttributes(updatedAttributes);
@@ -66,15 +113,6 @@ const EditProducts = () => {
                 form={form}
                 layout="vertical"
                 onFinish={onFinish}
-                initialValues={{
-                    name: productData?.product?.name,
-                    description: productData?.product?.description,
-                    category: productData?.product?.category,
-                    images: productData?.product?.images,
-                    sku: productData?.product?.sku,
-                    featured: productData?.product?.featured,
-                    attributes: productData?.product?.attributes || [],
-                }}
                 className="space-y-4"
             >
 
@@ -116,12 +154,6 @@ const EditProducts = () => {
                         name="images"
                         listType="picture"
                         multiple
-                        defaultFileList={productData?.product?.images.map((image: string) => ({
-                            uid: image,
-                            name: image,
-                            status: 'done',
-                            url: image,
-                        }))}
                     >
                         <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
                     </Upload>
@@ -135,7 +167,7 @@ const EditProducts = () => {
                 </Form.Item>
 
                 <div className="space-y-6">
-                    {attributes.map((attribute, index) => (
+                    {attributes.map((attribute: any, index: any) => (
                         <div key={index} className="border p-4 rounded-md space-y-4">
                             <div className="flex justify-between items-center">
                                 <h2 className="font-semibold">Thuộc tính {index + 1}</h2>
@@ -164,12 +196,7 @@ const EditProducts = () => {
                                     name="images"
                                     listType="picture"
                                     multiple
-                                    defaultFileList={attribute.images.map((image: string) => ({
-                                        uid: image,
-                                        name: image,
-                                        status: 'done',
-                                        url: image,
-                                    }))}
+                                    defaultFileList={attribute.images}
                                 >
                                     <Button icon={<UploadOutlined />}>Tải ảnh lên</Button>
                                 </Upload>

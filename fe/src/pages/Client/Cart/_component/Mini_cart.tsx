@@ -2,7 +2,7 @@ import { mutatioinCart } from '@/common/hooks/Cart/mutationCart';
 import useCart from '@/common/hooks/Cart/useCart';
 import { useLocalStorage } from '@/common/hooks/useStorage';
 import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Drawer, Empty, message, Space } from 'antd'
+import { Button, Checkbox, Drawer, Empty, message, Space, Spin } from 'antd'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Mini_cart = () => {
@@ -73,7 +73,7 @@ const Mini_cart = () => {
         }
         return text;
     };
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <Spin />
     return (
         <>
             <Space>

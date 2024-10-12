@@ -33,8 +33,10 @@ export const Detele_Products = async (id: string | number) => {
     }
 }
 export const Update_Products = async (products: any) => {
+    console.log(products);
+
     try {
-        const { data } = await instance.put(`/products/${products._id}`, products)
+        const { data } = await instance.patch(`/products/${products._id}`, products)
         return data;
     } catch (error) {
         console.log(error)

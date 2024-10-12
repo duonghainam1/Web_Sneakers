@@ -1,25 +1,35 @@
+import { useAuth } from "@/common/hooks/Auth/useAuth";
 import useCart from "@/common/hooks/Cart/useCart";
 import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useLocalStorage } from "@/common/hooks/useStorage";
-import Add_adderss from "@/components/address/Add_adderss";
+import List_address from "@/components/address/List_address";
 import { EnvironmentOutlined, } from "@ant-design/icons";
-import { Select, Table } from "antd";
-import { useState } from "react";
+import { Select, Spin, Table } from "antd";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Page = () => {
     const [user] = useLocalStorage("user", {});
     const userId = user?.data?.user?._id;
     const { data } = useCart(userId);
-    const [isOpend, setIsOpend] = useState(false);
+    const { data: dataUser } = useAuth(userId);
+    const [isOpendList, setIsOpendList] = useState(false);
     const [address, setAddress] = useState<any>({});
     const [payment, setPayment] = useState('Cash');
     const { mutate, contextHolder, isPending } = mutation_Order('ADD')
     const selectedProducts = data?.cart?.flatMap((cart: any) =>
         cart.products.filter((item: any) => item.status_checked)
     ) || [];
-    const handleOpned = () => {
-        setIsOpend(!isOpend);
+    useEffect(() => {
+        if (dataUser?.user?.address?.length) {
+            const checked = dataUser?.user?.address?.find((item: any) => item?.isDefault);
+            if (checked) {
+                setAddress(checked)
+            }
+        }
+    }, [dataUser])
+    const handleOpnedPay = () => {
+        setIsOpendList(!isOpendList);
     }
     const handleOrders = async () => {
         if (Object.keys(address).length === 0) {
@@ -43,6 +53,8 @@ const Page = () => {
             payment: payment,
             totalPrice: totalAmount
         }
+        console.log(orders_Data);
+
         mutate(orders_Data)
     }
     const columns = [
@@ -104,6 +116,11 @@ const Page = () => {
             <div className="lg:mx-28">
                 {contextHolder}
                 <h1 className="text-3xl">Thanh toán</h1>
+                {isPending && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="text-white text-lg"><Spin size="large" /></div>
+                    </div>
+                )}
                 <div className="my-3 p-4 rounded bg-stone-50">
                     <p className="font-bold"><EnvironmentOutlined /> Địa chỉ nhận hàng:</p>
                     <div className="pt-3 flex gap-3">
@@ -111,12 +128,12 @@ const Page = () => {
                             <p>Chưa có địa chỉ</p>
                         ) : (
                             <div className="flex gap-3">
-                                <span className="font-bold">{address.name}</span>
+                                <span className="font-bold">{address.userName}</span>
                                 <span className="font-bold">{address.phone}</span>
                                 <span>{address.address_detail} - {address.address}</span>
                             </div>
                         )}
-                        <button className="ml-7 underline text-blue-300" onClick={handleOpned}>Thay đổi</button>
+                        <button className="ml-7 underline text-blue-300" onClick={handleOpnedPay}>Thay đổi</button>
                     </div>
                 </div>
 
@@ -174,7 +191,7 @@ const Page = () => {
             </div>
 
             <div className="mb-20" />
-            {isOpend && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"><Add_adderss handleOpned={handleOpned} setAddress={setAddress} /></div>}
+            {isOpendList && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"><List_address handleOpnedPay={handleOpnedPay} setAddress={setAddress} /></div>}
         </>
     );
 }

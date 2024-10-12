@@ -27,7 +27,7 @@ import Mini_cart from "@/pages/Client/Cart/_component/Mini_cart";
 import ThankYou from "@/components/Items/ThankYou";
 import Counter_Sales from "@/pages/Admin/Counter_Sales/Page"
 import PrivateRoute from "./PrivateRoute";
-import List_address from "@/components/address/List_address";
+import List_address from "@/pages/Client/Profile/_component/List_address";
 
 const Router = () => {
     return (

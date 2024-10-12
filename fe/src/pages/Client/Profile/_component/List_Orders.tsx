@@ -35,6 +35,8 @@ const List_Orders = () => {
         if (selectedStatus === "all") return true;
         return order.status === selectedStatus;
     });
+    console.log(filteredOrders);
+
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <>
@@ -56,32 +58,31 @@ const List_Orders = () => {
                 ))}
             </div>
             {filteredOrders?.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-            {filteredOrders?.map((order: any) => {
-                return order?.items?.map((item: any, index: any) => {
-                    return (
-                        <div className="border rounded mb-6" key={index}>
-                            <div className="border-b flex justify-between p-4">
-                                <Link to={`/profile/list_orders/${order._id}`}><Button>Xem Ngay</Button></Link>
-                                <p className="text-end text-lg">
-                                    <TruckOutlined /> {order.status === "1" ? "Chờ xác nhận" : order.status === "2" ? "Đang xử lý" : order.status === "3" ? "Đang giao" : order.status === "4" ? "Đã giao" : order.status === "6" ? "Hoàn thành" : "Đã hủy"}
-                                </p>
-                            </div>
-                            <div className="border-b">
-                                <div className="flex gap-4 md:flex-row justify-between items-center border-b p-4">
-                                    <img src={item.product_image} className="w-[100px] mb-4 md:mb-0" alt="" />
-                                    <div className="w-full md:w-[60%]">
-                                        <h1 className="font-bold">{item?.product_name}</h1>
-                                        <p>{item?.color} - {item?.size} <span className="ml-2">X1</span></p>
-                                    </div>
-                                    <p className="text-end mt-2 md:mt-0">{item?.total_price_item?.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
+            {filteredOrders?.map((order: any, index: any) => (
+                <div className="border rounded mb-6" key={index}>
+                    <div className="border-b flex justify-between p-4">
+                        <Link to={`/profile/list_orders/${order._id}`}><Button>Xem Ngay</Button></Link>
+                        <p className="text-end text-lg">
+                            <TruckOutlined /> {order.status === "1" ? "Chờ xác nhận" : order.status === "2" ? "Đang xử lý" : order.status === "3" ? "Đang giao" : order.status === "4" ? "Đã giao" : order.status === "6" ? "Hoàn thành" : "Đã hủy"}
+                        </p>
+                    </div>
+                    {order?.items?.map((item: any, index: any) => (
+                        <div className="border-b" key={index}>
+                            <div className="flex gap-4 md:flex-row justify-between items-center border-b p-4">
+                                <img src={item.product_image} className="w-[100px] mb-4 md:mb-0" alt="" />
+                                <div className="w-full md:w-[60%]">
+                                    <h1 className="font-bold">{item?.product_name}</h1>
+                                    <p>{item?.color} - {item?.size} <span className="ml-2">X1</span></p>
                                 </div>
+                                <p className="text-end mt-2 md:mt-0">{item?.total_price_item?.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
                             </div>
-                            <p className="text-end text-lg font-bold my-3 px-4">Thành tiền: {order?.totalPrice?.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
-                            <Button_orders order={order} />
                         </div>
-                    );
-                });
-            })}
+                    ))}
+
+                    <p className="text-end text-lg font-bold my-3 px-4">Thành tiền: {order?.totalPrice?.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
+                    <Button_orders order={order} />
+                </div>
+            ))}
             <Pagination
                 current={currenPage}
                 total={totalDocs}

@@ -46,7 +46,7 @@ const List_Order = () => {
             key: 'name',
             render: (_: any, order: any) => {
                 return (
-                    <p>{order?.customerInfo?.name}</p>
+                    <p>{order?.customerInfo?.userName}</p>
                 )
             }
         },
@@ -66,7 +66,7 @@ const List_Order = () => {
             key: 'createdAt',
             render: (_: any, order: any) => {
                 return (
-                    <p>{new Date(order?.createdAt).toLocaleDateString()}</p>
+                    <p> {new Date(order?.createdAt).toLocaleString('vi-VN')}</p>
                 )
             }
         },

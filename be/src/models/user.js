@@ -20,7 +20,15 @@ const userSchema = new Schema(
         phone: {
             type: String,
         },
-        address: [String],
+        address: [
+            {
+                userName: { type: String, required: true },
+                phone: { type: String, required: true },
+                address: { type: String, required: true },
+                address_detail: { type: String, required: true },
+                isDefault: { type: Boolean, default: false },
+            }
+        ],
         role: {
             type: String,
             enum: ["user", "admin", "staff"],
