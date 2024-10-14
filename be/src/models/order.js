@@ -35,7 +35,7 @@ const orderSchema = new mongoose.Schema({
     },
     payment: {
         type: String,
-        required: true
+        // required: true
     },
     status: {
         type: String,
@@ -57,7 +57,7 @@ const orderSchema = new mongoose.Schema({
     ],
     totalPrice: {
         type: Number,
-        required: true,
+        // required: true,
     },
 
 

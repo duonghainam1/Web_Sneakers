@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 type Actions = "ADD" | 'UPDATE';
-export const mutation_Order = (action: Actions) => {
+export const mutation_Order = (action: Actions, userRole: String) => {
     const [messageApi, contextHolder] = message.useMessage();
     const queryClinet = useQueryClient();
     const navigate = useNavigate();
@@ -25,7 +25,11 @@ export const mutation_Order = (action: Actions) => {
                         type: 'success',
                         content: 'Bạn đã đặt hành thành công',
                     });
-                    navigate('/thank-you')
+                    if (userRole === "admin || staff") {
+                        return
+                    } else {
+                        navigate('/thank-you')
+                    }
                     break;
 
                 default:

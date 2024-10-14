@@ -16,7 +16,7 @@ const Page = () => {
     const [isOpendList, setIsOpendList] = useState(false);
     const [address, setAddress] = useState<any>({});
     const [payment, setPayment] = useState('Cash');
-    const { mutate, contextHolder, isPending } = mutation_Order('ADD')
+    const { mutate, contextHolder, isPending } = mutation_Order('ADD', 'user');
     const selectedProducts = data?.cart?.flatMap((cart: any) =>
         cart.products.filter((item: any) => item.status_checked)
     ) || [];

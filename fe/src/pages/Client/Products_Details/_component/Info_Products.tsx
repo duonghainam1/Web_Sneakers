@@ -27,6 +27,7 @@ const Info_Products = ({ data_Detail }: any) => {
             setMaxPrice(data_Detail.maxPrice);
         }
     }, [data_Detail]);
+
     const handleColorSelect = (color: string) => {
         setSelectedColor(color);
         const attribute = data_Detail?.attributes?.find((attr: any) => attr.color === color);
@@ -85,10 +86,10 @@ const Info_Products = ({ data_Detail }: any) => {
                 <div className="grid grid-cols-4 gap-4 mt-5 w-full">
                     <div
                         className="flex justify-center items-center cursor-pointer"
-                        onClick={() => setLargeImage(data_Detail.product.images[0])}
+                        onClick={() => setLargeImage(data_Detail?.product?.images[0])}
                     >
                         <img
-                            src={data_Detail.product.images[0]}
+                            src={data_Detail?.product?.images[0]}
                             className="w-full h-auto max-w-xs border border-black"
                             alt="Product Thumbnail"
                         />

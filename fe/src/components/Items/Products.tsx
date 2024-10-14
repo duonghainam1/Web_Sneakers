@@ -2,8 +2,11 @@ import { Card, Empty } from "antd";
 import Meta from "antd/es/card/Meta";
 import { Link } from "react-router-dom";
 import Skeleton_item from "../Skeleton/Skeleton";
+import ScrollTop from "../layouts/ScrollTop";
 
 const Products = ({ products, isLoading }: any) => {
+    console.log(products);
+
     const findMinMaxPrices = (attributes: any) => {
         let minPrice = Infinity;
         let maxPrice = -Infinity;
@@ -30,39 +33,50 @@ const Products = ({ products, isLoading }: any) => {
             ) : (
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
                     {products?.products?.docs?.map((product: any) => {
+                        console.log(product.status);
+
                         const firstImage = product.images?.[0];
                         const { minPrice, maxPrice } = findMinMaxPrices(product.attributes);
                         return (
-                            <Link to={`/shops/${product._id}`} key={product._id}>
-                                <Card
-                                    hoverable
-                                    cover={
-                                        <div className="w-full h-72 lg:h-64 overflow-hidden flex items-center justify-center">
-                                            <img
-                                                alt={product?.name}
-                                                src={firstImage}
-                                                className="object-cover w-full h-full"
+                            <>
+                                {product.status === "Out of Stock" ? (
+                                    ''
+                                ) : (
+                                    <Link to={`/shops/${product._id}`} key={product._id}
+                                        onClick={ScrollTop}>
+                                        <Card
+                                            hoverable
+                                            cover={
+                                                <div className="w-full h-72 lg:h-64 overflow-hidden flex items-center justify-center">
+                                                    <img
+                                                        alt={product?.name}
+                                                        src={firstImage}
+                                                        className="object-cover w-full h-full"
+                                                    />
+                                                </div>
+                                            }
+                                            className="product-card"
+                                        >
+                                            <Meta
+                                                title={product?.name}
+                                                description={
+                                                    <div className="flex gap-1">
+                                                        <p>
+                                                            {minPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}
+                                                        </p>
+                                                        -
+                                                        <p>
+                                                            {maxPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}
+                                                        </p>
+                                                    </div>
+                                                }
                                             />
-                                        </div>
-                                    }
-                                    className="product-card"
-                                >
-                                    <Meta
-                                        title={product?.name}
-                                        description={
-                                            <div className="flex gap-1">
-                                                <p>
-                                                    {minPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}
-                                                </p>
-                                                -
-                                                <p>
-                                                    {maxPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}
-                                                </p>
-                                            </div>
-                                        }
-                                    />
-                                </Card>
-                            </Link>
+                                        </Card>
+                                    </Link>
+                                )}
+
+                            </>
+
                         );
                     })}
                 </div>

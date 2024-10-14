@@ -47,7 +47,11 @@ export const GetProductById = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        const attributes = await Attribute.find({ productId: productId });
+        let attributes = await Attribute.find({ productId: productId });
+        attributes = attributes.map(attr => {
+            const check_stock = attr.sizes.filter(size => size.stock > 0);
+            return check_stock.length > 0 ? { ...attr._doc, sizes: check_stock } : null;
+        }).filter(attr => attr !== null);
         const sizes = attributes.flatMap(attr => attr.sizes);
         const minPrice = Math.min(...sizes.map(size => size.price));
         const maxPrice = Math.max(...sizes.map(size => size.price));

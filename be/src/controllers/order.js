@@ -5,19 +5,23 @@ import Attribute from "../models/attribute.js";
 
 export const createOrder = async (req, res) => {
     const { items } = req.body;
+    const isadmin = req.body.role == 'admin || staff';
     try {
         const order = new Order(req.body);
         const dataCart = await Cart.findOne({ userId: order.userId }).populate('products.productId').exec();
-        dataCart.products = dataCart.products.filter((item_cart) => {
-            return !req.body.items.some((item_order) => {
-                if (item_cart.productId._id.toString() === item_order.productId.toString()) {
-                    if (item_cart.status_checked) {
-                        return true;
+        if (!isadmin) {
+            dataCart.products = dataCart.products.filter((item_cart) => {
+                return !req.body.items.some((item_order) => {
+                    if (item_cart.productId._id.toString() === item_order.productId.toString()) {
+                        if (item_cart.status_checked) {
+                            return true;
+                        }
+                        return false;
                     }
-                    return false;
-                }
+                })
             })
-        })
+        }
+
         for (let i of items) {
             const attribute = await Attribute.findOne({
                 productId: i.productId,
@@ -39,7 +43,9 @@ export const createOrder = async (req, res) => {
             await attribute.save();
         }
         await order.save();
-        await dataCart.save();
+        if (!isadmin) {
+            await dataCart.save();
+        }
         res.status(201).json(order);
     } catch (error) {
         console.log(error);

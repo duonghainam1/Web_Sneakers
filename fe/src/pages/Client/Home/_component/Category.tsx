@@ -1,4 +1,5 @@
 import { useProducts } from "@/common/hooks/Products/useProducts";
+import ScrollTop from "@/components/layouts/ScrollTop";
 import Skeleton_item from "@/components/Skeleton/Skeleton";
 import { Card, Empty } from "antd";
 import Meta from "antd/es/card/Meta";
@@ -36,41 +37,48 @@ const Category = () => {
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
                     {data?.products?.docs?.map((product: any) => {
                         if (!product.featured) return null;
-
                         const firstImage = product.images?.[0];
                         const { minPrice, maxPrice } = findMinMaxPrices(product.attributes);
-
                         return (
-                            <Link to={`/shops/${product._id}`} key={product._id}>
-                                <Card
-                                    hoverable
-                                    cover={
-                                        <div className="w-full h-72 lg:h-96 overflow-hidden flex items-center justify-center">
-                                            <img
-                                                alt={product?.name}
-                                                src={firstImage}
-                                                className="object-cover w-full h-full"
+                            <>
+                                {product.status === "Out of Stock" ? (
+                                    ''
+                                ) : (
+                                    <Link to={`/shops/${product._id}`} key={product._id}
+                                        onClick={ScrollTop}>
+                                        <Card
+                                            hoverable
+                                            cover={
+                                                <div className="w-full h-72 lg:h-96 overflow-hidden flex items-center justify-center">
+                                                    <img
+                                                        alt={product?.name}
+                                                        src={firstImage}
+                                                        className="object-cover w-full h-full"
+                                                    />
+                                                </div>
+                                            }
+                                            className="product-card"
+                                        >
+                                            <Meta
+                                                title={product?.name}
+                                                description={
+                                                    <div className="flex gap-1">
+                                                        <p>
+                                                            {minPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}
+                                                        </p>
+                                                        -
+                                                        <p>
+                                                            {maxPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}
+                                                        </p>
+                                                    </div>
+                                                }
                                             />
-                                        </div>
-                                    }
-                                    className="product-card"
-                                >
-                                    <Meta
-                                        title={product?.name}
-                                        description={
-                                            <div className="flex gap-1">
-                                                <p>
-                                                    {minPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}
-                                                </p>
-                                                -
-                                                <p>
-                                                    {maxPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}
-                                                </p>
-                                            </div>
-                                        }
-                                    />
-                                </Card>
-                            </Link>
+                                        </Card>
+                                    </Link>
+                                )}
+
+                            </>
+
                         );
                     })}
                 </div>
