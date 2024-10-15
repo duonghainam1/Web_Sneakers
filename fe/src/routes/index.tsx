@@ -54,7 +54,6 @@ const Router = () => {
                     <PrivateRoute>
                         <LayOutAdmin />
                     </PrivateRoute>
-
                 }>
                     <Route index element={<Page_Admin />} />
                     <Route path="counter-sales" element={<Counter_Sales />} />

@@ -9,7 +9,7 @@ import Button_Order from "./Button_Order";
 const Order_Detail = () => {
     const { id } = useParams()
     const { data, isLoading } = useOrder(id)
-    const { mutate } = mutation_Order('UPDATE')
+    const { mutate } = mutation_Order('UPDATE',)
     const dataSource = data?.items?.map((item: any) => {
         return {
             key: item._id,
