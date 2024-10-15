@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getAuth, getAuthById, logout, signin, signup, updateRole } from '../controllers/auth.js';
 import { createAddress, deleteAddress, updateIsDefault } from '../controllers/address.js';
+import { checkAuth } from '../middleware/checkAuth.js';
 
 const Router_auth = Router();
 Router_auth.get('/auth', getAuth)

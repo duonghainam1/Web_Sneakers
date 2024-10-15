@@ -5,8 +5,6 @@ import Skeleton_item from "../Skeleton/Skeleton";
 import ScrollTop from "../layouts/ScrollTop";
 
 const Products = ({ products, isLoading }: any) => {
-    console.log(products);
-
     const findMinMaxPrices = (attributes: any) => {
         let minPrice = Infinity;
         let maxPrice = -Infinity;
@@ -33,8 +31,6 @@ const Products = ({ products, isLoading }: any) => {
             ) : (
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
                     {products?.products?.docs?.map((product: any) => {
-                        console.log(product.status);
-
                         const firstImage = product.images?.[0];
                         const { minPrice, maxPrice } = findMinMaxPrices(product.attributes);
                         return (
@@ -47,7 +43,7 @@ const Products = ({ products, isLoading }: any) => {
                                         <Card
                                             hoverable
                                             cover={
-                                                <div className="w-full h-72 lg:h-64 overflow-hidden flex items-center justify-center">
+                                                <div className="w-full h-72 overflow-hidden flex items-center justify-center">
                                                     <img
                                                         alt={product?.name}
                                                         src={firstImage}

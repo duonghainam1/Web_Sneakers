@@ -237,7 +237,8 @@ const ListProducts = () => {
                 }}
                 expandable={{
                     expandedRowRender: list_products_attributes,
-                }} />
+                }}
+                scroll={{ x: 1000 }} />
         </>
     )
 }

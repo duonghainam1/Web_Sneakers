@@ -240,11 +240,11 @@ const Page = () => {
                             <Button type="primary" onClick={handleOpen}>Thêm</Button>
                         </div>
                         <div>
-                            <Table columns={columns} dataSource={dataa} pagination={false} />
+                            <Table columns={columns} dataSource={dataa} pagination={false} scroll={{ x: 1000 }} />
                         </div>
                         {selectedOrder && (
                             <div className="mt-5">
-                                <div className="flex justify-between my-4">
+                                <div className="flex flex-wrap lg:flex-nowrap justify-between my-4 ">
                                     <div className="flex gap-10">
                                         <div className="text-lg">
                                             <p>Tên người mua: <strong>{selectedOrder.address.userName}</strong> </p>

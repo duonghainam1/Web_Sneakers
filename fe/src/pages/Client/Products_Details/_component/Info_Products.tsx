@@ -166,7 +166,7 @@ const Info_Products = ({ data_Detail }: any) => {
                     </div>
                 </div>
                 <div className="mt-5 flex justify-between gap-4">
-                    <div className="flex items-center border border-black rounded w-auto h-12">
+                    <div className="flex items-center border border-black rounded w-auto h-12 pr-2">
                         <button
                             onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
                             className="w-11 h-12 hover:bg-black hover:text-white text-2xl"
@@ -186,12 +186,12 @@ const Info_Products = ({ data_Detail }: any) => {
                             +
                         </button>
                         {selectedColor && selectedSize && stock !== null && (
-                            <p className="border-l border-black p-2">Còn lại: {stock}</p>
+                            <p className="border-l border-black pl-1 lg:p-2 text-sm">Còn lại: {stock}</p>
                         )}
                     </div>
                     <button
                         onClick={handleAddToCart}
-                        className="bg-black text-white rounded w-[50%] h-12"
+                        className="bg-black text-white rounded w-[45%] h-12"
                     >
                         Thêm vào giỏ hàng
                     </button>

@@ -37,9 +37,9 @@ const AddCategory = () => {
             <div className="flex items-center justify-between mb-10 relative">
                 <Link to="/admin/categori" className="flex items-center gap-2 text-[#1B7EE2]">
                     <LeftOutlined />
-                    <span>Quay lại</span>
+                    <span className="hidden lg:block">Quay lại</span>
                 </Link>
-                <h1 className="text-2xl font-semibold absolute left-1/2 transform -translate-x-1/2">Thêm danh mục</h1>
+                <h1 className=" text-lg lg:text-2xl font-semibold absolute left-1/2 transform -translate-x-1/2">Thêm danh mục</h1>
 
             </div>
             <Form

@@ -1,7 +1,7 @@
 import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useOrder } from "@/common/hooks/Order/useOrder";
-import { CheckOutlined, CloseOutlined, LeftOutlined } from "@ant-design/icons";
-import { Button, message, Spin, Table } from "antd";
+import { LeftOutlined } from "@ant-design/icons";
+import { message, Spin, Table } from "antd";
 import { Link, useParams } from "react-router-dom";
 import Status_order from "./Status_order";
 import Button_Order from "./Button_Order";
@@ -9,7 +9,7 @@ import Button_Order from "./Button_Order";
 const Order_Detail = () => {
     const { id } = useParams()
     const { data, isLoading } = useOrder(id)
-    const { mutate } = mutation_Order('UPDATE',)
+    const { mutate } = mutation_Order('UPDATE')
     const dataSource = data?.items?.map((item: any) => {
         return {
             key: item._id,
@@ -68,82 +68,84 @@ const Order_Detail = () => {
 
         },
     ];
-    const columns_shipper = [
-        {
-            title: 'Ảnh đại diện',
-            dataIndex: 'image_shipper',
-            key: 'image_shipper',
-            render: (image: any) => <img src={image} className="w-12 h-12 rounded-full" />,
-        },
-        {
-            title: 'Tên người giao',
-            dataIndex: 'name_shipper',
-            key: 'name',
-        },
-        {
-            title: 'Số điện thoại',
-            dataIndex: 'phone_shipper',
-            key: 'age',
-        },
-        {
-            title: 'Địa chỉ',
-            dataIndex: 'address_shipper',
-            key: 'address_shipper',
-        },
-        {
-            title: '',
-            dataIndex: 'action',
-            render: (_: any,) => {
-                return (
-                    <div className="flex gap-4">
-                        <Button className="!bg-green-500 !text-white !border-none"><CheckOutlined /></Button>
-                        <Button className="!bg-red-500 !text-white !border-none"><CloseOutlined /></Button>
-                    </div>
-                )
-            }
-        },
-    ];
-    const dataShipper = [
-        {
-            key: '1',
-            image_shipper: 'https://picsum.photos/300/300',
-            name_shipper: 'Mike',
-            phone_shipper: 32,
-            address_shipper: '10 Downing Street',
-        },
-        {
-            key: '2',
-            image_shipper: 'https://picsum.photos/300/300',
-            name_shipper: 'Mike',
-            phone_shipper: 32,
-            address_shipper: '10 Downing Street',
-        },
-    ];
+    // const columns_shipper = [
+    //     {
+    //         title: 'Ảnh đại diện',
+    //         dataIndex: 'image_shipper',
+    //         key: 'image_shipper',
+    //         render: (image: any) => <img src={image} className="w-12 h-12 rounded-full" />,
+    //     },
+    //     {
+    //         title: 'Tên người giao',
+    //         dataIndex: 'name_shipper',
+    //         key: 'name',
+    //     },
+    //     {
+    //         title: 'Số điện thoại',
+    //         dataIndex: 'phone_shipper',
+    //         key: 'age',
+    //     },
+    //     {
+    //         title: 'Địa chỉ',
+    //         dataIndex: 'address_shipper',
+    //         key: 'address_shipper',
+    //     },
+    //     {
+    //         title: '',
+    //         dataIndex: 'action',
+    //         render: (_: any,) => {
+    //             return (
+    //                 <div className="flex gap-4">
+    //                     <Button className="!bg-green-500 !text-white !border-none"><CheckOutlined /></Button>
+    //                     <Button className="!bg-red-500 !text-white !border-none"><CloseOutlined /></Button>
+    //                 </div>
+    //             )
+    //         }
+    //     },
+    // ];
+    // const dataShipper = [
+    //     {
+    //         key: '1',
+    //         image_shipper: 'https://picsum.photos/300/300',
+    //         name_shipper: 'Mike',
+    //         phone_shipper: 32,
+    //         address_shipper: '10 Downing Street',
+    //     },
+    //     {
+    //         key: '2',
+    //         image_shipper: 'https://picsum.photos/300/300',
+    //         name_shipper: 'Mike',
+    //         phone_shipper: 32,
+    //         address_shipper: '10 Downing Street',
+    //     },
+    // ];
 
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <div >
-            <div>
-                <Link to="/admin/orders"><LeftOutlined /> Quay lại</Link>
-                <h1 className="text-center text-2xl pb-8 font-bold">Chi tiết đơn hàng</h1>
-
+            <div className="relative flex items-center justify-between my-4">
+                <Link to="/admin/orders" className="flex items-center gap-2"><LeftOutlined /><p className="hidden lg:block">Quay lại</p></Link>
+                <h1 className="absolute left-1/2 transform -translate-x-1/2 text-lg lg:text-2xl font-bold">
+                    Chi tiết đơn hàng
+                </h1>
             </div>
-            <div className="flex gap-8">
-                <div className="w-[68%]">
-                    <div className="mb-8 px-6 py-6 border rounded shadow">
+
+            <div className="flex flex-wrap lg:flex-nowrap gap-8">
+                <div className="w-full lg:w-[68%] order-1">
+                    {/* <div className="mb-8 px-6 py-6 border rounded shadow">
                         <p className="pb-8 text-lg font-bold">Người giao</p>
                         <Table dataSource={dataShipper} columns={columns_shipper} pagination={false} />
 
-                    </div>
-                    <div className="mb-8 px-6 py-6 border rounded shadow">
-                        <p className="pb-8 text-lg font-bold">Sản phẩm</p>
-                        <Table dataSource={dataSource} columns={columns} pagination={false} />
+                    </div> */}
+                    <div className=" mb-8 px-2 lg:px-6 py-6 border rounded shadow">
+                        <p className="pb-6 text-lg font-bold">Sản phẩm</p>
+                        <Table dataSource={dataSource} columns={columns} pagination={false} scroll={{ x: 1000 }} />
 
                     </div>
-                    <div className="border rounded shadow px-6 py-6 mt-8 bg-white">
-                        <div className="flex items-center gap-4 pb-4 border-b border-gray-300">
-                            <p className="text-lg font-semibold text-gray-800">Phương thức thanh toán:</p>
-                            <span className="border text-gray-700 p-2 rounded">Thanh toán khi nhận hàng</span>
+                    <div className="border rounded shadow px-2   lg:px-6 py-6 mt-8 bg-white">
+                        <div className="flex flex-wrap lg:flex-nowrap items-center gap-4 pb-4 border-b border-gray-300">
+                            <p className="lg:text-lg font-semibold text-gray-800 order-1">Phương thức thanh toán:</p>
+                            <span className="border text-gray-700 p-2 rounded order-2">Thanh toán khi nhận hàng</span>
                         </div>
                         <div className="flex justify-between mt-4">
                             <div>
@@ -158,12 +160,8 @@ const Order_Detail = () => {
                             </div>
                         </div>
                     </div>
-
-                    <div className="flex justify-center gap-4 mt-8">
-                        <Button_Order data={data} handle_Update_Status={handle_Update_Status} />
-                    </div>
                 </div>
-                <div className="w-[32%] h-1/2 border rounded shadow p-4">
+                <div className="w-full lg:w-[32%] h-1/2 border rounded shadow p-2 lg:p-4 order-2">
                     <p className="text-center pb-8 text-lg font-bold">Trạng thái</p>
                     <Status_order data_Order={data} />
                     <div>
@@ -182,8 +180,11 @@ const Order_Detail = () => {
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
+            <div className="flex justify-center gap-4 mt-8 ">
+                <Button_Order data={data} handle_Update_Status={handle_Update_Status} />
+            </div>
         </div>
     )
 }

@@ -48,7 +48,7 @@ const List_Auth = () => {
     return (
         <>
             {contextHolder}
-            <Table columns={colums} dataSource={dataSource} />
+            <Table columns={colums} dataSource={dataSource} scroll={{ x: 1000 }} />
         </>
     )
 }

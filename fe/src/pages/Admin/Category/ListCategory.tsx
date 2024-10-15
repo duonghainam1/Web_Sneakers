@@ -56,14 +56,14 @@ const ListCategory = () => {
         <>
             {contextHolder}
             <div className="flex justify-between items-center mb-6">
-                <h1 className="font-bold text-2xl">Danh sách danh mục</h1>
+                <h1 className="font-bold text-lg lg:text-2xl">Danh sách danh mục</h1>
                 <Link to="/admin/categori/add">
                     <Button type="primary" icon={<PlusCircleFilled />}>
                         Thêm
                     </Button>
                 </Link>
             </div>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={dataSource} columns={columns} scroll={{ x: 1000 }} />
         </>
     )
 }

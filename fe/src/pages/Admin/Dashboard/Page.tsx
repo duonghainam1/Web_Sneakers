@@ -70,35 +70,38 @@ const Page = () => {
     ];
 
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="p-2 lg:p-6 bg-gray-100 min-h-screen">
             <h1 className="text-3xl font-semibold mb-6">Thống kê</h1>
 
             <Col_Revenue_By_Day />
             <div className="mt-6">
-                <h2 className="text-2xl font-semibold mb-4">Biểu đồ doanh thu</h2>
-                <ResponsiveContainer width="100%" height={400}>
-                    <LineChart
-                        data={revenueData}
-                        margin={{
-                            top: 5, right: 30, left: 20, bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Line type="monotone" dataKey="revenue" stroke="#8884d8" activeDot={{ r: 8 }} />
-                    </LineChart>
-                </ResponsiveContainer>
+                <h2 className="text-lg sm:text-2xl font-semibold mb-4">Biểu đồ doanh thu</h2>
+                <div className="w-full">
+                    <ResponsiveContainer width="100%" height={window.innerWidth < 640 ? 250 : 400}>
+                        <LineChart
+                            data={revenueData}
+                            margin={{
+                                top: 5, right: 30, left: 20, bottom: 5,
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="revenue" stroke="#8884d8" activeDot={{ r: 8 }} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
             </div>
+
             <div className="mt-6">
                 <h2 className="text-2xl font-semibold mb-4">Đơn hàng gần đây</h2>
-                <Table columns={columns} dataSource={data} />
+                <Table columns={columns} dataSource={data} scroll={{ x: 1000 }} />
             </div>
             <div className="mt-6">
                 <h2 className="text-2xl font-semibold mb-4">Sản phẩm bán chạy nhất</h2>
-                <Table columns={topProductsColumns} dataSource={topProducts} />
+                <Table columns={topProductsColumns} dataSource={topProducts} scroll={{ x: 1000 }} />
             </div>
         </div>
     );

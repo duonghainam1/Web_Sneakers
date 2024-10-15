@@ -1,13 +1,12 @@
 
 import { CloseOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, FormProps, Input } from "antd";
+import { Button, Form, FormProps, Input } from "antd";
 
 type FieldType = {
     userName?: String;
     phone?: String;
     address?: String;
     address_detail?: String;
-    checked?: boolean;
 };
 const Address_form = ({ handleOpned, setAddress }: any) => {
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
@@ -56,12 +55,12 @@ const Address_form = ({ handleOpned, setAddress }: any) => {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
                     name="checked"
                     valuePropName="checked"
                 >
                     <Checkbox>Đặt làm mặc định</Checkbox>
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item wrapperCol={{ span: 24 }}>
                     <Button type="primary" htmlType="submit" className="w-full">
                         Thêm

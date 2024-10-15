@@ -85,6 +85,8 @@ const List_Order = () => {
             dataIndex: 'action',
             key: 'action',
             align: 'center',
+            // fixed: 'right',
+            width: 100,
             render: (_: any, order: any) => {
                 return (
                     <div className="flex justify-center">
@@ -103,9 +105,13 @@ const List_Order = () => {
     if (isLoading) return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
     return (
         <>
-            <div className="flex justify-between">
-                <Title level={2}>Danh sách đơn hàng</Title>
-                <Select style={{ width: "200px" }} defaultValue={status} onChange={(value: number | null) => setStatus(value)}>
+            <div className="flex flex-wrap lg:flex-nowrap justify-between items-center mb-4">
+                <Title level={3} className="mb-2 lg:mb-0">Danh sách đơn hàng</Title>
+                <Select
+                    className="w-full lg:w-64"
+                    defaultValue={status}
+                    onChange={(value: number | null) => setStatus(value)}
+                >
                     <Select.Option value={null}>Tất cả</Select.Option>
                     <Select.Option value={1}>Chờ xác nhận</Select.Option>
                     <Select.Option value={2}>Đang chuẩn bị hàng</Select.Option>
@@ -115,7 +121,8 @@ const List_Order = () => {
                     <Select.Option value={5}>Đã hủy</Select.Option>
                 </Select>
             </div>
-            <Table columns={columns} dataSource={dataSource} pagination={{
+
+            <Table scroll={{ x: 1000 }} columns={columns} dataSource={dataSource} pagination={{
                 current: currentPage,
                 pageSize: pageSize,
                 total: totalDocs,

@@ -17,8 +17,8 @@ export const Col_Revenue_By_Day = () => {
 
     return (
         <div>
-            <Row gutter={16}>
-                <Col span={8}>
+            <Row gutter={[16, 16]}>
+                <Col xs={24} sm={12} md={8} lg={8}>
                     <Card>
                         <Statistic
                             title={
@@ -39,7 +39,7 @@ export const Col_Revenue_By_Day = () => {
                         />
                     </Card>
                 </Col>
-                <Col span={8}>
+                <Col xs={24} sm={12} md={8} lg={8}>
                     <Card>
                         <Statistic
                             title={
@@ -59,7 +59,7 @@ export const Col_Revenue_By_Day = () => {
                         />
                     </Card>
                 </Col>
-                <Col span={8}>
+                <Col xs={24} sm={12} md={8} lg={8}>
                     <Card>
                         <Statistic
                             title="Tổng số khách hàng"

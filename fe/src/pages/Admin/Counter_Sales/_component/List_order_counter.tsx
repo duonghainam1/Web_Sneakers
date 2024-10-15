@@ -243,7 +243,7 @@ const List_order_counter = ({ handle_pay, handleClose }: any) => {
             ) : (
                 <div className='flex flex-col justify-center items-center'>
 
-                    <Table dataSource={dataSource} columns={columns} pagination={false} rowKey="key" />
+                    <Table dataSource={dataSource} columns={columns} pagination={false} rowKey="key" scroll={{ x: 1000 }} />
                     <div className="my-4">
                         {cart?.length > 0 && (
                             <Button
