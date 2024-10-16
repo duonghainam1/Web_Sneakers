@@ -36,8 +36,8 @@ app.use("/api/v1", Router_Voucher)
 
 
 
-// app.listen(process.env.PORT, () => {
-//     console.log(`Server is running on port ${process.env.PORT}`);
-// })
-export const viteNodeApp = app;
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
+})
+// export const viteNodeApp = app;
 
