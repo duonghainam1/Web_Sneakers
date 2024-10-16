@@ -1,4 +1,4 @@
-import Voucher from "../../models/voucher";
+import Voucher from "../../models/voucher.js";
 import { StatusCodes } from "http-status-codes";
 
 export const delete_voucher = async (req, res) => {

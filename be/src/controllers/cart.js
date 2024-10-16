@@ -1,7 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import Cart from '../models/cart.js';
 import Attribute from '../models/attribute.js';
-import Product from '../models/product.js';
 export const getCart = async (req, res) => {
     const { userId } = req.params;
     try {
