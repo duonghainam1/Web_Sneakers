@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Products_Type } from "@/common/types/products";
 import ScrollTop from "@/components/layouts/ScrollTop";
 import Skeleton_item from "@/components/Skeleton/Skeleton";
 import { Card, Empty } from "antd";
@@ -27,7 +29,7 @@ const Relater_Products = ({ data_Detail, isLoading }: any) => {
                 <Skeleton_item />
             ) : (
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
-                    {data_Detail?.relatedProducts?.map((product: any) => {
+                    {data_Detail?.relatedProducts?.map((product: Products_Type) => {
                         const firstImage = product.images?.[0];
                         const { minPrice, maxPrice } = findMinMaxPrices(product?.attributes);
                         return (

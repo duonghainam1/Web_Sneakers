@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { Select, Spin, Table, TableProps, Tag } from "antd"

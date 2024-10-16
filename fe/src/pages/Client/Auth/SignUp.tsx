@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from "react-router-dom"
 import { Form, Input, Button, Checkbox } from 'antd';
 import { mutationAuth } from "@/common/hooks/Auth/mutationAuth";

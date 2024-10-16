@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { mutation_Category } from "@/common/hooks/Category/mutation_Category";
 import { uploadFileCloudinary } from "@/common/lib/utils";
 import { LeftOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";

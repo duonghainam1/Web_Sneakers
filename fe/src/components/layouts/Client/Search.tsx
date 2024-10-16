@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Input, Button, List, Spin, Empty } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';

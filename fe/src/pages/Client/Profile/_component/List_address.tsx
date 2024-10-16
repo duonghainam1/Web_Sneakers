@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { mutationAuth } from '@/common/hooks/Auth/mutationAuth';
 import { useAuth } from '@/common/hooks/Auth/useAuth';
 import { useLocalStorage } from '@/common/hooks/useStorage';

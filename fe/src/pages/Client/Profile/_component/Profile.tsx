@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Form, Typography } from "antd";

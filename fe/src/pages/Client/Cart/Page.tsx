@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import useCart from "@/common/hooks/Cart/useCart";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import { DeleteOutlined } from "@ant-design/icons";

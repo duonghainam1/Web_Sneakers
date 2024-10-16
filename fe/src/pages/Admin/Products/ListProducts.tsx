@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { mutation_Products } from "@/common/hooks/Products/mutation_Products";
 import { useProducts } from "@/common/hooks/Products/useProducts";
 import { DeleteOutlined, EditOutlined, PlusCircleFilled } from "@ant-design/icons";

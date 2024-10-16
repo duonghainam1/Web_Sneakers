@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, Empty } from "antd";
 import Meta from "antd/es/card/Meta";
 import { Link } from "react-router-dom";
 import Skeleton_item from "../Skeleton/Skeleton";
 import ScrollTop from "../layouts/ScrollTop";
+import { Products_Type } from "@/common/types/products";
 
 const Products = ({ products, isLoading }: any) => {
     const findMinMaxPrices = (attributes: any) => {
@@ -30,7 +32,7 @@ const Products = ({ products, isLoading }: any) => {
                 <Skeleton_item />
             ) : (
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
-                    {products?.products?.docs?.map((product: any) => {
+                    {products?.products?.docs?.map((product: Products_Type) => {
                         const firstImage = product.images?.[0];
                         const { minPrice, maxPrice } = findMinMaxPrices(product.attributes);
                         return (

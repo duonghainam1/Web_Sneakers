@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, InputNumber, message, Spin, Table } from 'antd';
 import { useState } from 'react';
 import { useProducts } from '@/common/hooks/Products/useProducts';

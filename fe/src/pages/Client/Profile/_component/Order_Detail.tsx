@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { BackwardOutlined } from "@ant-design/icons";
 import { Button, Card, Descriptions, Spin, Table, Tag, Timeline } from "antd";

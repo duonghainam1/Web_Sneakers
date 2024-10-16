@@ -4,9 +4,10 @@ import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import List_address from "@/components/address/List_address";
 import { EnvironmentOutlined, } from "@ant-design/icons";
-import { Select, Spin, Table } from "antd";
+import { Modal, Select, Spin, Table } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Voucher from "./_component/Voucher";
 
 const Page = () => {
     const [user] = useLocalStorage("user", {});
@@ -14,6 +15,7 @@ const Page = () => {
     const { data } = useCart(userId);
     const { data: dataUser } = useAuth(userId);
     const [isOpendList, setIsOpendList] = useState(false);
+    const [isOpendVoucher, setIsOpendVoucher] = useState(false);
     const [address, setAddress] = useState<any>({});
     const [payment, setPayment] = useState('Cash');
     const { mutate, contextHolder, isPending } = mutation_Order('ADD', 'user');
@@ -30,6 +32,9 @@ const Page = () => {
     }, [dataUser])
     const handleOpnedPay = () => {
         setIsOpendList(!isOpendList);
+    }
+    const handleOpnedVoucher = () => {
+        setIsOpendVoucher(!isOpendVoucher);
     }
     const handleOrders = async () => {
         if (Object.keys(address).length === 0) {
@@ -57,6 +62,7 @@ const Page = () => {
 
         mutate(orders_Data)
     }
+
     const columns = [
         {
             title: 'Ảnh',
@@ -153,7 +159,7 @@ const Page = () => {
                     </div>
                     <div className="flex justify-between border-t p-4">
                         <p className="font-bold">Voucher</p>
-                        <span className="underline text-blue-300 cursor-pointer">Chọn Voucher</span>
+                        <span className="underline text-blue-300 cursor-pointer" onClick={handleOpnedVoucher}>Chọn Voucher</span>
                     </div>
                 </div>
                 <div className="rounded bg-stone-50">
@@ -191,6 +197,15 @@ const Page = () => {
             </div>
 
             <div className="mb-20" />
+            <Modal
+                title="Chọn Voucher"
+                visible={isOpendVoucher}
+                onCancel={handleOpnedVoucher}
+                footer={null}
+                width={1200}
+            >
+                <Voucher />
+            </Modal>
             {isOpendList && <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"><List_address handleOpnedPay={handleOpnedPay} setAddress={setAddress} /></div>}
         </>
     );

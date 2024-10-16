@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useProducts } from "@/common/hooks/Products/useProducts";
+import { Products_Type } from "@/common/types/products";
 import ScrollTop from "@/components/layouts/ScrollTop";
 import Skeleton_item from "@/components/Skeleton/Skeleton";
 import { Card, Empty } from "antd";
@@ -35,7 +37,7 @@ const Category = () => {
                 <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
             ) : (
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
-                    {data?.products?.docs?.map((product: any) => {
+                    {data?.products?.docs?.map((product: Products_Type) => {
                         if (!product.featured) return null;
                         const firstImage = product.images?.[0];
                         const { minPrice, maxPrice } = findMinMaxPrices(product.attributes);

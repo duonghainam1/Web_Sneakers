@@ -36,7 +36,7 @@ const items: MenuItem[] = [
 
     getItem(<NavLink to="/admin/orders">Đơn hàng</NavLink>, '5', <TruckOutlined />),
     getItem(<NavLink to="/admin/auth">Tài khoản</NavLink>, '6', <TeamOutlined />),
-    getItem(<NavLink to="/admin/orders">Giảm giá</NavLink>, '7', <TransactionOutlined />),
+    getItem(<NavLink to="/admin/voucher">Giảm giá</NavLink>, '7', <TransactionOutlined />),
 ];
 const Sidebar = () => {
     const [collapsed, setCollapsed] = useState(false);

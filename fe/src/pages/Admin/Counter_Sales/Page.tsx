@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CloseCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, message, Table, Modal, Select, Input } from "antd";
 import { useState } from "react";

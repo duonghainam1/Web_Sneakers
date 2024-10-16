@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Image, message } from "antd";
 import { useEffect, useState } from "react";
 import { Convert_Color } from "@/configs/Color";

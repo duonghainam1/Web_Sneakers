@@ -28,6 +28,9 @@ import ThankYou from "@/components/Items/ThankYou";
 import Counter_Sales from "@/pages/Admin/Counter_Sales/Page"
 import PrivateRoute from "./PrivateRoute";
 import List_address from "@/pages/Client/Profile/_component/List_address";
+import List_voucher from "@/pages/Admin/Voucher/List_voucher";
+import Edit_voucher from "@/pages/Admin/Voucher/_component/Edit_voucher";
+import Add_voucher from "@/pages/Admin/Voucher/_component/Add_voucher";
 
 const Router = () => {
     return (
@@ -70,6 +73,10 @@ const Router = () => {
                     <Route path="orders/:id" element={<Order_Detail />} />
                     {/* Auth */}
                     <Route path="auth" element={<List_Auth />} />
+                    {/* Voucher */}
+                    <Route path="voucher" element={<List_voucher />} />
+                    <Route path="voucher/add" element={<Add_voucher />} />
+                    <Route path="voucher/:id" element={<Edit_voucher />} />
                 </Route>
             </Routes>
         </>

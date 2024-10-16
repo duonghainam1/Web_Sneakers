@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import { mutationAuth } from '@/common/hooks/Auth/mutationAuth';
 import { mutationAuth } from '@/common/hooks/Auth/mutationAuth';
 import { LogoutOutlined, TruckOutlined, UserOutlined } from '@ant-design/icons';

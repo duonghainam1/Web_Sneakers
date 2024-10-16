@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { mutatioinCart } from '@/common/hooks/Cart/mutationCart';
 import useCart from '@/common/hooks/Cart/useCart';
 import { useLocalStorage } from '@/common/hooks/useStorage';

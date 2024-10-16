@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useOrderById } from "@/common/hooks/Order/useOrder";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import { TruckOutlined } from "@ant-design/icons";

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from 'react-router-dom';
 import logo from '../../../assets/icons/Group 56.svg';
 import { useLocalStorage } from '@/common/hooks/useStorage';

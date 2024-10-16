@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { Button, message } from "antd"
 

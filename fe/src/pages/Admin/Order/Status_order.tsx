@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, HomeOutlined, LoadingOutlined, TruckOutlined } from "@ant-design/icons";
 import { Timeline } from "antd";
 

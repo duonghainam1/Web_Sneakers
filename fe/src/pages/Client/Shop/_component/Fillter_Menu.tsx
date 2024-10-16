@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCategory } from '@/common/hooks/Category/useCategory';
 import { MenuOutlined } from '@ant-design/icons';
 import { Drawer, Space } from 'antd'

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MenuOutlined } from '@ant-design/icons';
 import { Drawer, Space } from 'antd'
 import { useEffect, useState } from 'react';
