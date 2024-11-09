@@ -31,7 +31,6 @@ export const createOrder = async (req, res) => {
             if (!attribute) {
                 return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tìm thấy sản phẩm" });
             }
-            console.log();
             for (let a of attribute.sizes) {
                 if (a.size === i.size) {
                     if (a.stock < i.quantity) {
@@ -125,14 +124,30 @@ export const update_status = async (req, res) => {
         if (!validStatuses.includes(status)) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: `Trạng thái không hợp lệ. Các trạng thái hợp lệ: ${validStatuses.join(", ")}` });
         }
+        if (status === '5' && order.status !== '5') {
+            for (let item of order.items) {
+                const attribute = await Attribute.findOne({
+                    productId: item.productId,
+                    color: item.color,
+                    'sizes.size': item.size,
+                });
+
+                if (attribute) {
+                    for (let size of attribute.sizes) {
+                        if (size.size === item.size) {
+                            size.stock += item.quantity;
+                        }
+                    }
+                    await attribute.save();
+                }
+            }
+        }
         order.status = status;
         order.statusHistory.push({
             status,
             time: new Date()
         });
-
         await order.save();
-
         return res.status(StatusCodes.OK).json({ message: "Cập nhật trạng thái đơn hàng thành công", order });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

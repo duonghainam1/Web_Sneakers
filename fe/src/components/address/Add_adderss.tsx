@@ -40,7 +40,10 @@ const Add_adderss = ({ handleOpned }: any) => {
                 <Form.Item<FieldType>
                     label="Tên người mua"
                     name="userName"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
+                    rules={[
+                        { required: true, message: 'Please input your username!' },
+                        { min: 2, message: 'Tên người mua phải lớn hơn 2 ký tự' },
+                    ]}
                 >
                     <Input />
                 </Form.Item>
@@ -48,7 +51,9 @@ const Add_adderss = ({ handleOpned }: any) => {
                 <Form.Item<FieldType>
                     label="Số điện thoại"
                     name="phone"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
+                    rules={[{ required: true, message: 'Please input your password!' },
+                    { pattern: /(84|0[3|5|7|8|9])+([0-9]{8})\b/, message: 'Số điện thoại không hợp lệ' }
+                    ]}
                 >
                     <Input />
                 </Form.Item>

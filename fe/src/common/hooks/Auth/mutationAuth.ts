@@ -1,4 +1,4 @@
-import { signIn, signUp, updateRole } from "@/services/Auth/auth";
+import { signIn, signUp, updateInforUser, updateRole } from "@/services/Auth/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { message } from "antd";
 import { useLocalStorage } from "../useStorage";
@@ -20,6 +20,8 @@ export const mutationAuth = (action: Action) => {
                         return await signUp(user);
                     case 'SIGNOUT':
                         return localStorage.removeItem("user");
+                    case 'UPDATE_ACCOUNT':
+                        return await updateInforUser(user.userId, user.data);
                     case "UPDATE_ROLE":
                         return await updateRole(user.id, user.role);
                     case "ADD_ADDRESS":
@@ -53,6 +55,15 @@ export const mutationAuth = (action: Action) => {
                         content: 'Đăng ký thành công',
                     });
                     naviagte(`/signin`);
+                    break;
+                case 'UPDATE_ACCOUNT':
+                    messageApi.open({
+                        type: 'success',
+                        content: 'Cập nhật thông tin thành công',
+                    });
+                    queryClient.invalidateQueries(
+                        { queryKey: ['AUTH'] }
+                    )
                     break;
                 case 'UPDATE_ROLE':
                     messageApi.open({

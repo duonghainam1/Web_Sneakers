@@ -4,6 +4,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Input, Form, Typography } from "antd";
 import { useAuth } from "@/common/hooks/Auth/useAuth";
 import { useLocalStorage } from "@/common/hooks/useStorage";
+import { mutationAuth } from "@/common/hooks/Auth/mutationAuth";
 const { Title, Text } = Typography;
 
 const Profile = () => {
@@ -11,6 +12,7 @@ const Profile = () => {
     const userId = user?.data?.user?._id;
     const [form] = Form.useForm();
     const [avatar, setAvatar] = useState<any>(null);
+    const { mutate } = mutationAuth('UPDATE_ACCOUNT');
     const { data } = useAuth(userId)
     useEffect(() => {
         if (data) {
@@ -33,7 +35,8 @@ const Profile = () => {
     };
 
     const handleSubmit = (values: any) => {
-        console.log(values);
+        mutate({ userId: userId, data: values });
+        // console.log(values);
     };
 
     return (
@@ -48,10 +51,16 @@ const Profile = () => {
                         <Form.Item label="Tên" name="name" rules={[{ required: true, message: "Vui lòng nhập tên!" }]}>
                             <Input placeholder="Nhập tên của bạn" className="w-[400px]" />
                         </Form.Item>
-                        <Form.Item label="Email" name="email" rules={[{ required: true, message: "Vui lòng nhập email!" }]}>
+                        <Form.Item label="Email" name="email" rules={[{ required: true, message: "Vui lòng nhập email!" },
+                        { type: 'email', message: 'Email không hợp lệ' }]}>
+
                             <Input type="email" placeholder="Nhập email của bạn" className="w-[400px]" />
                         </Form.Item>
-                        <Form.Item label="Số điện thoại" name="phone">
+                        <Form.Item label="Số điện thoại" name="phone"
+                            rules={[
+                                { required: true, message: 'Vui lòng nhập số điện thoại!' },
+                                { pattern: /(84|0[3|5|7|8|9])+([0-9]{8})\b/, message: 'Số điện thoại không hợp lệ' }
+                            ]}>
                             <Input placeholder="Nhập số điện thoại của bạn" className="w-[400px]" />
                         </Form.Item>
                         <Form.Item>

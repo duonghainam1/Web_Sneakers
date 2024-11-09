@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { mutation_Products } from "@/common/hooks/Products/mutation_Products";
 import { useProducts } from "@/common/hooks/Products/useProducts";
+import { Convert_Color } from "@/configs/Color";
 import { DeleteOutlined, EditOutlined, PlusCircleFilled } from "@ant-design/icons";
 import { Button, Checkbox, Popconfirm, Space, Spin, Table, Tag } from "antd";
 import { useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const ListProducts = () => {
         }
 
     });
-    const columns = [
+    const columns: any = [
         {
             title: (
                 <Checkbox
@@ -44,6 +44,7 @@ const ListProducts = () => {
                 />
             ),
             dataIndex: 'Checkbox',
+            className: 'w-[50px]',
             render: (_: any, product: any) => (
                 <Checkbox
                     // checked={isChecked}
@@ -54,10 +55,11 @@ const ListProducts = () => {
         {
             title: 'Ảnh',
             dataIndex: 'images',
+            className: 'w-[100px]',
             render: (_: any, product: any) => {
                 const firstImage = product?.images?.[0];
                 if (firstImage) {
-                    return <img src={firstImage} alt={product.product_name} style={{ width: "100px" }} />
+                    return <img src={firstImage} alt={product.product_name} className="w-[50px] rounded-full" />
                 }
                 return null;
             }
@@ -115,6 +117,8 @@ const ListProducts = () => {
         {
             title: 'Trạng thái',
             dataIndex: 'status',
+            align: 'center',
+
             render: (_: any, product: any) => {
                 let color;
                 let statusText;
@@ -139,8 +143,11 @@ const ListProducts = () => {
             },
         },
         {
-            title: '',
+            title: 'Hành động',
             dataIndex: 'action',
+            align: 'center',
+            fixed: 'right',
+            className: 'w-[130px]',
             render: (_: any, product: any) => (
                 <Space>
                     <Popconfirm
@@ -174,13 +181,13 @@ const ListProducts = () => {
                         <div className="flex gap-11 items-center border-b mb-6 pb-4">
                             <img
                                 src={attribute?.images[0]}
-                                width={60}
-                                height={60}
                                 style={{ objectFit: 'cover' }}
                                 alt="Ảnh thuộc tính"
-                                className="ml-24"
+                                className="w-[50px] rounded-full ml-24"
                             />
-                            <p className="w-[145px]">{attribute?.color}</p>
+                            <p className={`w-[30px] h-[30px] rounded-full mr-24 ${Convert_Color(attribute?.color)}`}>
+
+                            </p>
                             <div>
                                 {attribute?.sizes.map((size: any) => {
                                     return (

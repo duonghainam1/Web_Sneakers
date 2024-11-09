@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useProducts } from "@/common/hooks/Products/useProducts";
 import { mutation_Voucher } from "@/common/hooks/Voucher/mutation_Voucher";
 import { Products_Type } from "@/common/types/products";
@@ -95,22 +94,22 @@ const Add_voucher = () => {
                                 <InputNumber min={1} className="w-full" />
                             </Form.Item>
 
-                            <Form.Item
+                            {/* <Form.Item
                                 label="Gía trị tối thiểu"
                                 name="minimumOrderValue_voucher"
                                 rules={[{ required: true, message: 'Vui lòng nhập giá trị đơn hàng tối thiểu!' }]}
                                 className="w-full"
                             >
                                 <InputNumber min={0} className="w-full" />
-                            </Form.Item>
+                            </Form.Item> */}
 
-                            <Form.Item
+                            {/* <Form.Item
                                 label="Giảm Giá Tối Đa"
                                 name="maximumDiscount_voucher"
                                 className="w-full"
                             >
                                 <InputNumber min={0} className="w-full" />
-                            </Form.Item>
+                            </Form.Item> */}
                         </div>
                         <Form.Item
                             label="Sản Phẩm Áp Dụng"

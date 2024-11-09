@@ -32,3 +32,19 @@ export const update_Cart_status = async (cart: any) => {
         console.log(error);
     }
 }
+export const increase_Quantity = async (cart: any) => {
+    try {
+        const data = await instance.post(`/cart/increase`, cart)
+        return data
+    } catch (error) {
+        console.log(error);
+    }
+}
+export const decrease_Quantity = async (cart: any) => {
+    try {
+        const data = await instance.post(`/cart/reduce`, cart)
+        return data
+    } catch (error) {
+        console.log(error);
+    }
+}

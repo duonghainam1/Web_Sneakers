@@ -83,3 +83,13 @@ export const getUserById = async (userId: string) => {
         throw error;
     }
 }
+
+export const updateInforUser = async (userId: string, user: any) => {
+    try {
+        const data = await instance.put(`/auth/${userId}/updateInfor`, user);
+        return data;
+    } catch (error) {
+        console.log(error);
+
+    }
+}

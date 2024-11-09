@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { mutation_Category } from "@/common/hooks/Category/mutation_Category";
 import { useCategory } from "@/common/hooks/Category/useCategory";
-import { PlusCircleFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusCircleFilled } from "@ant-design/icons";
 import { Button, Popconfirm, Space, Spin, Table } from "antd";
 import { Link } from "react-router-dom";
 
@@ -14,13 +14,14 @@ const ListCategory = () => {
             ...category
         }
     })
-    const columns = [
+    const columns: any = [
         {
             title: 'Ảnh danh mục',
             dataIndex: 'category_image',
             key: 'category_image',
+            width: 200,
             render: (_: any, category: any) => (
-                <img src={category?.category_image} alt={category?.category_name} style={{ width: 100 }} />
+                <img src={category?.category_image} alt={category?.category_name} className="rounded-full w-[50px]" />
             )
         },
         {
@@ -32,6 +33,8 @@ const ListCategory = () => {
         {
             title: 'Thao tác',
             dataIndex: 'action',
+            fixed: 'right',
+            className: 'w-[100px]',
             render: (_: any, category: any) => (
                 <Space>
                     <Popconfirm
@@ -42,11 +45,11 @@ const ListCategory = () => {
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button danger className="mr-2">Xóa</Button>
+                        <DeleteOutlined style={{ fontSize: "20px" }} />
                     </Popconfirm>
 
                     <Link to={`/admin/categori/${category._id}`}>
-                        <Button type="primary">Sửa</Button>
+                        <EditOutlined style={{ fontSize: "20px" }} />
                     </Link>
                 </Space>
             )

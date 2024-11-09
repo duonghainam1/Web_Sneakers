@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { EllipsisOutlined } from "@ant-design/icons";
 import { Select, Spin, Table, TableProps, Tag } from "antd"
@@ -86,8 +85,8 @@ const List_Order = () => {
             dataIndex: 'action',
             key: 'action',
             align: 'center',
-            // fixed: 'right',
-            width: 100,
+            fixed: 'right',
+            className: 'w-[110px]',
             render: (_: any, order: any) => {
                 return (
                     <div className="flex justify-center">

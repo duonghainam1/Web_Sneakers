@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Popconfirm } from "antd"
-
 const Button_Order = ({ data, handle_Update_Status }: any) => {
     return (
         <div className="flex gap-4">
@@ -8,8 +6,8 @@ const Button_Order = ({ data, handle_Update_Status }: any) => {
                 <>
                     <Button className="py-5 !bg-blue-500 !text-white !border-none" onClick={() => handle_Update_Status("2")}>Xác nhận</Button>
                     <Popconfirm
-                        title="Delete the task"
-                        description="Are you sure to delete this task?"
+                        title="Hủy đơn hàng"
+                        description="Bạn có chắc chắn muốn hủy đơn hàng này không?"
                         onConfirm={() => handle_Update_Status("5")}
                         // onCancel={cancel}
                         okText="Yes"

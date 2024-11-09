@@ -6,6 +6,7 @@ import List_order_counter from "./_component/List_order_counter";
 import Address_form from "./_component/Address_form";
 import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useLocalStorage } from "@/common/hooks/useStorage";
+import { useVoucher } from "@/common/hooks/Voucher/useVoucher";
 
 const { Option } = Select;
 const Page = () => {
@@ -16,8 +17,11 @@ const Page = () => {
     const [isOpened, setIsOpened] = useState(false);
     const [isAddressOpened, setIsAddressOpened] = useState(false);
     const [isOrderCreated, setIsOrderCreated] = useState(false);
+    const [payment, setPayment] = useState('Cash');
     const [selectedOrder, setSelectedOrder] = useState<any>(null);
     const { mutate, contextHolder } = mutation_Order('ADD', 'admin || staff');
+    const { data: voucher } = useVoucher();
+    console.log(voucher);
 
     const handle_Pay = (cart: any) => {
         const updatedOrder = {
@@ -39,8 +43,8 @@ const Page = () => {
         ...item
     }));
     const createOrder = () => {
-        if (orders.length >= 10) {
-            message.warning("Bạn không thể tạo thêm đơn hàng, tối đa là 10 đơn.");
+        if (orders.length >= 8) {
+            message.warning("Bạn không thể tạo thêm đơn hàng, tối đa là 8 đơn.");
             return;
         }
         const newOrder = {
@@ -89,7 +93,7 @@ const Page = () => {
 
             })),
             customerInfo: selectedOrder.address,
-            // payment: payment,
+            payment: payment,
             totalPrice: totalAmount
         }
         mutate(orders_Data, {
@@ -220,8 +224,6 @@ const Page = () => {
                 <div>
                     <ul className="flex items-center gap-6 border-b">
                         {orders.map((order: any) => (
-                            console.log(order.id),
-
                             <li key={order.id} className={`p-2 ${selectedOrder === order ? 'border-b-2 border-blue-500' : 'border-b-2 border-transparent'}`}
                                 onClick={() => setSelectedOrder(order)}>
                                 {order.name}
@@ -235,7 +237,6 @@ const Page = () => {
 
                     <div>
                         <h1 className="font-bold text-lg my-4">Thông tin đơn hàng: {selectedOrder?.name}</h1>
-
                         <div className="flex justify-between my-3">
                             <h1 className="font-bold text-lg">Sản phẩm</h1>
                             <Button type="primary" onClick={handleOpen}>Thêm</Button>
@@ -261,12 +262,28 @@ const Page = () => {
                                                     ?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                                             </span>
                                         </p>
+                                        <div className="">
+                                            <p className="text-lg font-bold">Phương thức thanh toán:</p>
+                                            <Select
+                                                defaultValue="Thanh toán khi nhận hàng"
+                                                className="w-[150px] lg:w-[250px]"
+                                                options={[
+                                                    { value: 'Cash', label: 'Thanh toán khi nhận hàng' },
+                                                    { value: 'VNPAY', label: 'VNPAY' },
+                                                ]}
+                                                onChange={(value) => setPayment(value)}
+                                            />
+                                        </div>
                                         <p className="text-lg">
                                             Mã giảm giá:
-                                            <Select className="w-[200px] ml-2">
-                                                <Option value="01">MÃ 001</Option>
-                                                <Option value="02">MÃ 003</Option>
-                                                <Option value="03">MÃ 002</Option>
+                                            <Select className="w-[200px] ml-2" placeholder='Voucher'>
+                                                {voucher?.voucher?.map((item: any) => (
+                                                    <>
+
+                                                        <Option key={item.code_voucher} value={item.code_voucher}>{item.code_voucher}</Option>
+                                                    </>
+
+                                                ))}
                                             </Select>
                                         </p>
                                         <p className="text-lg">Phí vận chuyển:

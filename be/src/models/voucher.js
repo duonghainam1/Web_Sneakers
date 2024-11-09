@@ -18,10 +18,10 @@ const voucherSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    appliedProducts_voucher: {
+    appliedProducts_voucher: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Products",
-    },
+    }],
     startDate_voucher: {
         type: Date,
         required: true,
@@ -33,13 +33,13 @@ const voucherSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    minimumOrderValue_voucher: {
-        type: Number,
-        default: 0,
-    },
-    maximumDiscount_voucher: {
-        type: Number,
-    },
+    // minimumOrderValue_voucher: {
+    //     type: Number,
+    //     default: 0,
+    // },
+    // maximumDiscount_voucher: {
+    //     type: Number,
+    // },
     status_voucher: {
         type: Boolean,
         required: true,

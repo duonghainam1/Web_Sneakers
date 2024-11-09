@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect } from 'react'; // Thêm useState và useEffect
 import useCart from "@/common/hooks/Cart/useCart";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Button, Checkbox, InputNumber, message, Popconfirm, Spin, Table } from "antd";
+import { Button, Checkbox, InputNumber, message, Modal, Popconfirm, Spin, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { mutatioinCart } from "@/common/hooks/Cart/mutationCart";
 import Skeleton_item from "@/components/Skeleton/Skeleton";
@@ -13,21 +13,25 @@ const Page = () => {
     const { data, isLoading } = useCart(userId);
     const { mutate: updateStatus } = mutatioinCart('UPDATE_STATUS');
     const { mutate: deleteProduct } = mutatioinCart('DELETE');
+    const { mutate: increaseQuantity } = mutatioinCart('INCREASE');
+    const { mutate: decreaseQuantity } = mutatioinCart('REDUCE');
     const navi = useNavigate();
-    const dataSource = data?.cart?.flatMap((cart: any) =>
-        cart?.products?.map((product: any) => ({
-            key: product?._id,
-            ...product,
-            totalPriceItem: product.total_price_item,
-            quantity: product.quantity,
-            status_checked: product.status_checked,
+    const [localDataSource, setLocalDataSource] = useState<any>([]);
+    useEffect(() => {
+        if (data?.cart) {
+            const updatedData = data.cart.flatMap((cart: any) =>
+                cart.products.map((product: any) => ({
+                    ...product,
+                    totalPriceItem: product.total_price_item,
+                }))
+            );
+            setLocalDataSource(updatedData);
+        }
+    }, [data]);
 
-        }))
-    );
     const handleSelectProduct = (product: any, checked: boolean) => {
         const updatedProduct = {
             userId,
-            cartId: product.cartId,
             productId: product.productId,
             color: product.color,
             size: product.size,
@@ -35,9 +39,66 @@ const Page = () => {
         };
         updateStatus(updatedProduct);
     };
-    const totalSelectedPrice = dataSource?.filter((product: any) => product?.status_checked).reduce((total: any, product: any) => {
+
+    const handleIncreaseQuantity = (product: any) => {
+        const updatedProduct = {
+            userId,
+            productId: product.productId._id,
+            color: product.color,
+            size: product.size,
+            checked: product.status_checked,
+        };
+        setLocalDataSource((prev: any) =>
+            prev.map((item: any) =>
+                item.productId._id === product.productId._id &&
+                    item.color === product.color && item.size === product.size
+                    ? { ...item, quantity: item.quantity + 1 }
+                    : item
+            )
+        );
+        increaseQuantity(updatedProduct);
+    };
+
+
+    const handleDecreaseQuantity = (product: any) => {
+        const updatedProduct = {
+            userId,
+            productId: product.productId._id,
+            color: product.color,
+            size: product.size,
+            checked: product.status_checked,
+        };
+
+        if (product.quantity <= 1) {
+            Modal.confirm({
+                title: "Xác nhận xóa sản phẩm",
+                content: "Bạn có muốn xóa sản phẩm này không?",
+                onOk: () => {
+                    setLocalDataSource((prev: any) =>
+                        prev.filter((item: any) => item.productId._id !== product.productId._id)
+                    );
+                    decreaseQuantity(updatedProduct);
+
+                },
+            });
+            return;
+        }
+        setLocalDataSource((prev: any) =>
+            prev.map((item: any) =>
+                item.productId._id === product.productId._id &&
+                    item.color === product.color && item.size === product.size
+                    ? { ...item, quantity: item.quantity - 1 }
+                    : item
+            )
+        );
+        decreaseQuantity(updatedProduct);
+    };
+
+
+    const totalSelectedPrice = localDataSource.filter((product: any) => product?.status_checked).reduce((total: any, product: any) => {
         return total + (product.quantity * product.totalPriceItem);
     }, 0) || 0;
+
     const handleDeleteProduct = (product: any) => {
         const productData = {
             userId,
@@ -47,14 +108,16 @@ const Page = () => {
         };
         deleteProduct(productData);
     };
+
     const handleProceedToCheckout = () => {
-        const selectedForPayment = dataSource?.filter((product: any) => product.status_checked);
+        const selectedForPayment = localDataSource.filter((product: any) => product.status_checked);
         if (selectedForPayment.length === 0) {
             message.error("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
             return;
         }
         navi(`/orders`);
     };
+
     const columns = [
         {
             title: (<Checkbox />),
@@ -100,9 +163,9 @@ const Page = () => {
             key: 'quantity',
             render: (_: any, product: any) => (
                 <div className="flex items-center">
-                    <Button>-</Button>
-                    <InputNumber min={1} defaultValue={product.quantity} style={{ margin: '0 10px', width: '60px' }} />
-                    <Button>+</Button>
+                    <Button onClick={() => handleDecreaseQuantity(product)}>-</Button>
+                    <InputNumber value={product?.quantity} style={{ margin: '0 10px', width: '60px' }} readOnly />
+                    <Button onClick={() => handleIncreaseQuantity(product)}>+</Button>
                 </div>
             ),
         },
@@ -141,9 +204,9 @@ const Page = () => {
                 {isLoading && <Skeleton_item />}
                 <div className="flex flex-col lg:flex-row gap-6 mt-7">
                     <div className="basis-4/6">
-                        <Table columns={columns} dataSource={dataSource} pagination={false} />
+                        <Table columns={columns} dataSource={localDataSource} pagination={false} />
                     </div>
-                    <div className="border basis-2/6 p-[20px] h-[362px] rounded-md shadow-md">
+                    <div className="border basis-2/6 p-[20px] h-[362px] rounded shadow mb-6">
                         <div className="flex justify-between font-bold p-[10px] border-b">
                             <p>Tổng tiền</p>
                             <p>{totalSelectedPrice?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
@@ -164,13 +227,10 @@ const Page = () => {
                             <p>Tổng cộng</p>
                             <p>{totalSelectedPrice?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                         </div>
-
-                        <button onClick={handleProceedToCheckout} className="bg-black text-white w-full h-[55px] my-3 rounded">Tiến hành thanh toán</button>
-
+                        <Button className="w-full h-14 !bg-black border-none !text-white font-bold text-lg" onClick={handleProceedToCheckout}>Thanh toán</Button>
                     </div>
                 </div>
             </div>
-            <div className="mb-20" />
         </>
     );
 };

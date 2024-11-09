@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useOrder } from "@/common/hooks/Order/useOrder";
 import { LeftOutlined } from "@ant-design/icons";

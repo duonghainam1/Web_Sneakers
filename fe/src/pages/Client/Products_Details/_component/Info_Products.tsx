@@ -56,7 +56,6 @@ const Info_Products = ({ data_Detail }: any) => {
     const handleAddToCart = () => {
         if (!userId || !data_Detail?.product?._id) {
             message.error("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng kiểm tra lại thông tin người dùng hoặc sản phẩm.");
-            console.error("Lỗi: Không có ID người dùng hoặc ID sản phẩm.");
             return;
         }
         if (!selectedColor || !selectedSize) {

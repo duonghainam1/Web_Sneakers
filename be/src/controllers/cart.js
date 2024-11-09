@@ -135,3 +135,99 @@ export async function update_status_checked(req, res) {
     }
 }
 
+export async function increase_Quantity(req, res) {
+    const { userId, productId, color, size } = req.body;
+    try {
+        const data_cart = await Cart.findOne({ userId });
+        if (!data_cart) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: "Giỏ hàng không tìm thấy!"
+            });
+        }
+        let updated = false;
+        for (let item of data_cart.products) {
+
+            if (item.productId && productId) {
+                if (item.productId.toString() === productId.toString()) {
+                    if ((color && size && item.color === color && item.size === size) ||
+                        (color && !size && item.color === color) ||
+                        (!color && size && item.size === size)) {
+                        item.quantity += 1;
+                        updated = true; // Set updated to true
+                        break;
+                    }
+                }
+            }
+
+        }
+        if (updated) {
+            await data_cart.save();
+            return res.status(StatusCodes.OK).json({
+                message: "Cập nhật số lượng thành công!",
+                data_cart
+            });
+        } else {
+            return res.status(StatusCodes.NOT_MODIFIED).json({
+                message: "Không có thay đổi nào được thực hiện!"
+            });
+        }
+
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: error.message || "Lỗi xảy ra, vui lòng thử lại!"
+        });
+    }
+}
+
+export const reduce_Quantity = async (req, res) => {
+    const { userId, productId, color, size } = req.body;
+    try {
+        const data_cart = await Cart.findOne({ userId });
+
+        if (!data_cart) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: "Giỏ hàng không tìm thấy!"
+            });
+        }
+        let updated = false;
+        for (let item of data_cart.products) {
+            if (item.productId && productId) {
+                if (item.productId.toString() === productId.toString()) {
+                    if ((color && size && item.color === color && item.size === size) ||
+                        (color && !size && item.color === color) ||
+                        (!color && size && item.size === size)) {
+                        if (item.quantity >= 0) {
+                            item.quantity -= 1;
+                            if (item.quantity === 0) {
+                                data_cart.products = data_cart.products.filter(p =>
+                                    !(p.productId.toString() === productId.toString() &&
+                                        p.color === color &&
+                                        p.size === size)
+                                );
+                            }
+
+                            updated = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (updated) {
+            await data_cart.save();
+            return res.status(StatusCodes.OK).json({
+                message: "Cập nhật số lượng thành công!",
+                data_cart
+            });
+        } else {
+            return res.status(StatusCodes.NOT_MODIFIED).json({
+                message: "Không có thay đổi nào được thực hiện!"
+            });
+        }
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: error.message || "Lỗi xảy ra, vui lòng thử lại!"
+        });
+    }
+}
+

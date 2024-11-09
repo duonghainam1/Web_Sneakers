@@ -47,21 +47,22 @@ const List_order_counter = ({ handle_pay, handleClose }: any) => {
     };
 
     const handleColorSelect = (productId: string, color: string) => {
-        setSelectedAttributes((prevState: any) => ({
-            ...prevState,
+        setSelectedAttributes((prev: any) => ({
+            ...prev,
             [productId]: {
-                ...prevState[productId],
-                color
+                ...prev[productId],
+                color: prev[productId]?.color === color ? undefined : color,
+                size: undefined
             }
         }));
     };
 
     const handleSizeSelect = (productId: string, size: string) => {
-        setSelectedAttributes((prevState: any) => ({
-            ...prevState,
+        setSelectedAttributes((prev: any) => ({
+            ...prev,
             [productId]: {
-                ...prevState[productId],
-                size
+                ...prev[productId],
+                size: prev[productId]?.size === size ? undefined : size
             }
         }));
     };
@@ -149,29 +150,31 @@ const List_order_counter = ({ handle_pay, handleClose }: any) => {
                 )
             }
         },
+
+        // Cột hiển thị kích thước
         {
             title: 'Kích thước',
-            dataIndex: 'name',
-            key: 'name',
             render: (_: any, product: any) => {
-                if (product.status === 'Out of Stock') {
+                const selectedColor = selectedAttributes[product._id]?.color;
+                if (product.status === 'Out of Stock' || !selectedColor) {
                     return null;
                 }
+
+                const selectedColorAttributes = product.attributes.find((attr: any) => attr.color === selectedColor);
+
                 return (
                     <div className="flex space-x-2">
-                        {product.attributes.map((item: any) =>
-                            item.sizes.map((size: any) => (
-                                <button
-                                    key={size.size}
-                                    className={`border p-2 ${selectedAttributes[product._id]?.size === size.size ? 'bg-blue-500 text-white' : ''}`}
-                                    onClick={() => handleSizeSelect(product._id, size.size)}
-                                >
-                                    {size.size}
-                                </button>
-                            ))
-                        )}
+                        {selectedColorAttributes?.sizes.map((size: any) => (
+                            <button
+                                key={size.size}
+                                className={`border p-2 ${selectedAttributes[product._id]?.size === size.size ? 'bg-blue-500 text-white' : ''}`}
+                                onClick={() => handleSizeSelect(product._id, size.size)}
+                            >
+                                {size.size}
+                            </button>
+                        ))}
                     </div>
-                )
+                );
             }
         },
         {

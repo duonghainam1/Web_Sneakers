@@ -111,3 +111,17 @@ export const updateRole = async (req, res) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra" });
     }
 }
+export const updateUserInfo = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await User.findByIdAndUpdate(userId, req.body, { new: true });
+        if (!user) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tìm thấy user" });
+        }
+        return res.status(StatusCodes.OK).json({ user });
+
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra lỗi" });
+    }
+
+}
