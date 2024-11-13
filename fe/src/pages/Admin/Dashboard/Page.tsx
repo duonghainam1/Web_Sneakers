@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Col_Revenue_By_Day } from "./_component/Col_Revenue_By_Day";
-import { useDashboard_month } from "@/common/hooks/Dashboard/useDashboard";
+import { useDashboard_month, useDashboard_order_limit } from "@/common/hooks/Dashboard/useDashboard";
 
 const Page = () => {
     const { data: month } = useDashboard_month()
@@ -10,43 +9,53 @@ const Page = () => {
         name: item.month,
         revenue: item.totalRevenue
     })) || [];
+    const { data: limit } = useDashboard_order_limit()
+    const data_limit = limit?.map((order: any) => {
+        return {
+            key: order?._id,
+            ...order
+        }
+    })
+    const colors = ["red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"];
+    const ramdomColor = () => {
+        return (
+            colors[Math.floor(Math.random() * colors.length)]
+        )
+    };
     const columns = [
         {
-            title: 'Order ID',
-            dataIndex: 'orderId',
-            key: 'orderId',
+            title: 'Mã đơn hàng',
+            dataIndex: 'orderNumber',
+            key: 'orderNumber',
+            render: (_: any, order: any) => {
+                return <a href={`/admin/orders/${order._id}`}>{order.orderNumber}</a>
+            }
         },
         {
-            title: 'Customer',
+            title: 'Người mua',
             dataIndex: 'customer',
             key: 'customer',
+            render: (_: any, order: any) => {
+                return order.customerInfo?.userName
+            }
         },
         {
-            title: 'Total',
+            title: 'Tổng tiền',
             dataIndex: 'total',
             key: 'total',
+            render: (_: any, order: any) => {
+                return order.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+            }
         },
         {
-            title: 'Status',
+            title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
-        },
-    ];
-
-    const data = [
-        {
-            key: '1',
-            orderId: '12345',
-            customer: 'John Doe',
-            total: '$100',
-            status: 'Completed',
-        },
-        {
-            key: '2',
-            orderId: '12346',
-            customer: 'Jane Smith',
-            total: '$150',
-            status: 'Pending',
+            render: (_: any, order: any) => {
+                return (
+                    <Tag color={ramdomColor()}>{order?.status == 1 ? "Chờ xác nhận" : order?.status == 2 ? 'Đang chuẩn bị hàng' : order?.status == 3 ? 'Đang vận chuyển' : order?.status == 4 ? 'Đã giao' : order?.status == 6 ? 'Hoàn thành' : "Đã hủy"}</Tag>
+                )
+            }
         },
     ];
     const topProducts = [
@@ -98,7 +107,7 @@ const Page = () => {
 
             <div className="mt-6">
                 <h2 className="text-2xl font-semibold mb-4">Đơn hàng gần đây</h2>
-                <Table columns={columns} dataSource={data} scroll={{ x: 1000 }} />
+                <Table columns={columns} dataSource={data_limit} scroll={{ x: 1000 }} pagination={false} />
             </div>
             <div className="mt-6">
                 <h2 className="text-2xl font-semibold mb-4">Sản phẩm bán chạy nhất</h2>

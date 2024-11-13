@@ -69,3 +69,14 @@ export const getMonthlyRevenueStatistics = async (req, res) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
 }
+export const get_order_limit_5 = async (req, res) => {
+    try {
+        const data = await Order.find().limit(5).sort({ createdAt: -1 })
+        if (!data || data.length === 0) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Lấy tất cả đơn hàng thành công" });
+        }
+        return res.status(StatusCodes.CREATED).json(data);
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
+}

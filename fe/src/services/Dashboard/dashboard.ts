@@ -18,3 +18,12 @@ export const getRevenueStatisticsByMonth = async () => {
 
     }
 }
+export const get_order_limit = async () => {
+    try {
+        const { data } = await instance.get('/dashboard/get_order_limit');
+        return data;
+    } catch (error) {
+        console.log('Failed to fetch order limit: ', error);
+
+    }
+}
