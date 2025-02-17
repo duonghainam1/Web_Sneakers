@@ -39,6 +39,11 @@ const List_Order = () => {
             title: 'Mã đơn hàng',
             dataIndex: 'orderNumber',
             key: 'orderNumber',
+            render: (_: any, order: any) => {
+                return (
+                    <Link to={`/admin/orders/${order?._id}`}><p className="text-black"><Tag color={ramdomColor()}>{order?.orderNumber}</Tag></p></Link>
+                )
+            }
         },
         {
             title: 'Người mua',

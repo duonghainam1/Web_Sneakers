@@ -35,6 +35,12 @@ const ListProducts = () => {
         }
 
     });
+    const colors = ["red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"];
+    const ramdomColor = () => {
+        return (
+            colors[Math.floor(Math.random() * colors.length)]
+        )
+    };
     const columns: any = [
         {
             title: (
@@ -99,7 +105,12 @@ const ListProducts = () => {
                 if (minPrice === Infinity || maxPrice === -Infinity) {
                     return 'N/A';
                 }
-                return `${minPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} - ${maxPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}`;
+                return (
+                    <div className="flex gap-2">
+                        <Tag color={ramdomColor()}>{minPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Tag>-
+                        <Tag color={ramdomColor()}>{maxPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Tag>
+                    </div>
+                );
             }
         },
 
@@ -120,26 +131,21 @@ const ListProducts = () => {
             align: 'center',
 
             render: (_: any, product: any) => {
-                let color;
                 let statusText;
                 switch (product?.status) {
                     case 'Available':
-                        color = 'green';
                         statusText = 'Còn hàng';
                         break;
                     case 'Out of Stock':
-                        color = 'red';
                         statusText = 'Hết hàng';
                         break;
                     case 'Discontinued':
-                        color = 'gray';
                         statusText = 'Ngừng bán';
                         break;
                     default:
-                        color = 'default';
                         statusText = 'Không xác định';
                 }
-                return <Tag color={color}>{statusText}</Tag>;
+                return <Tag color={ramdomColor()}>{statusText}</Tag>;
             },
         },
         {
@@ -168,12 +174,6 @@ const ListProducts = () => {
         },
     ];
     const list_products_attributes = (product: any) => {
-        const colors = ["red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"];
-        const ramdomColor = () => {
-            return (
-                colors[Math.floor(Math.random() * colors.length)]
-            )
-        };
         return (
             <div>
                 {product.attributes.map((attribute: any) => {

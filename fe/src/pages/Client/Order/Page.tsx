@@ -4,10 +4,13 @@ import { mutation_Order } from "@/common/hooks/Order/mutation_Order";
 import { useLocalStorage } from "@/common/hooks/useStorage";
 import List_address from "@/components/address/List_address";
 import { EnvironmentOutlined, } from "@ant-design/icons";
-import { Modal, Select, Spin, Table } from "antd";
+import { message, Modal, Select, Spin, Table } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Voucher from "./_component/Voucher";
+import instance from "@/configs/axios";
+import { nanoid } from "nanoid";
+
 
 const Page = () => {
     const [user] = useLocalStorage("user", {});
@@ -58,9 +61,37 @@ const Page = () => {
             payment: payment,
             totalPrice: totalAmount
         }
-        console.log(orders_Data);
+        if (payment === "VNPAY") {
+            try {
+                const response = await instance.post('/createPayment', {
+                    userId: userId,
+                    orderId: nanoid(24),
+                    items: selectedProducts.map((product: any) => ({
+                        productId: product.productId._id,
+                        product_name: product.productId.name,
+                        product_image: product.productId.images[0],
+                        total_price_item: product.total_price_item,
+                        color: product.color,
+                        size: product.size,
+                        quantity: product.quantity,
+                        status_checked: product.status_checked,
 
-        mutate(orders_Data)
+                    })),
+                    customerInfo: address,
+                    payment: payment,
+                    totalPrice: totalAmount
+                });
+                if (response.data.paymentUrl) {
+                    window.location.href = response.data.paymentUrl;
+                }
+            } catch (error) {
+                message.error("Có lỗi xảy ra. Vui lòng thử lại.");
+            }
+        }
+        else {
+            // mutate(orders_Data)
+        }
+        // mutate(orders_Data)
     }
 
     const columns = [

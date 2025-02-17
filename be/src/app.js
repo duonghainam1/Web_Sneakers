@@ -12,6 +12,7 @@ import attributeRouter from "./routers/attribute.js";
 import Router_order from "./routers/order.js";
 import Router_Dashboard from "./routers/dashboard.js";
 import Router_Voucher from "./routers/voucher.js";
+import Router_OnlPayment from "./routers/paymentOnl.js";
 
 
 const app = express();
@@ -33,11 +34,11 @@ app.use("/api/v1", attributeRouter);
 app.use("/api/v1", Router_order)
 app.use("/api/v1", Router_Dashboard)
 app.use("/api/v1", Router_Voucher)
+app.use("/api/v1", Router_OnlPayment)
 
 
-
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
-})
-// export const viteNodeApp = app;
+// app.listen(process.env.PORT, () => {
+//     console.log(`Server is running on port ${process.env.PORT}`);
+// })
+export const viteNodeApp = app;
 

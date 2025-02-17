@@ -2,6 +2,7 @@ import { Table, Tag } from "antd";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Col_Revenue_By_Day } from "./_component/Col_Revenue_By_Day";
 import { useDashboard_month, useDashboard_order_limit } from "@/common/hooks/Dashboard/useDashboard";
+import { Link } from "react-router-dom";
 
 const Page = () => {
     const { data: month } = useDashboard_month()
@@ -28,7 +29,7 @@ const Page = () => {
             dataIndex: 'orderNumber',
             key: 'orderNumber',
             render: (_: any, order: any) => {
-                return <a href={`/admin/orders/${order._id}`}>{order.orderNumber}</a>
+                return <Link to={`/admin/orders/${order._id}`}><Tag color={ramdomColor()}>{order.orderNumber}</Tag></Link>
             }
         },
         {

@@ -50,6 +50,7 @@ const Router = () => {
                         <Route path="list_orders/:id" element={<Order_Detail_Client />} />
                     </Route>
                     <Route path="thank-you" element={<ThankYou />} />
+                    <Route path="that_bai" element={<SignIn />} />
                     <Route path="signin" element={<SignIn />} />
                     <Route path="signup" element={<SignUp />} />
                 </Route>
