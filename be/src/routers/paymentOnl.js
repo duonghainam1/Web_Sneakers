@@ -1,5 +1,5 @@
 import express from 'express';
-import { createPaymentUrl, returnUrll } from '../controllers/onlineCheckoutController';
+import { createPaymentUrl, returnUrll } from '../controllers/onlineCheckoutController.js';
 
 const Router_OnlPayment = express.Router();
 
