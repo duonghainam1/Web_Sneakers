@@ -6,8 +6,8 @@ import Order from "../models/order.js";
 import Cart from '../models/cart.js';
 import Attribute from "../models/attribute.js";
 const app = express();
-const tmnCode = "76Q18QBZ";
-const secretKey = "CMFMW4TMIB2BSOILMO4FLWA1PILU718G";
+const tmnCode = "BVI51IVB";
+const secretKey = "GPZ2KEJMX6LNLRBK4DRRQXO0CB7N8XNN";
 const vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
 const returnUrl = "http://localhost:8080/api/v1/return";
 
@@ -15,14 +15,14 @@ function sortObject(obj) {
     let sorted = {};
     let keys = Object.keys(obj).sort();
     keys.forEach((key) => {
-        sorted[key] = encodeURIComponent(obj[key]).replace(/%20/g, "+");
+        sorted[key] = obj[key];
     });
     return sorted;
 }
 
 export const createPaymentUrl = async (req, res, next) => {
     const { userId, orderId, items, customerInfo, totalPrice, payment } = req.body;
-    const isadmin = req.body.role == 'admin || staff';
+    // const isadmin = req.body.role == 'admin || staff';
 
     const ipAddr =
         req.headers["x-forwarded-for"] ||
@@ -42,7 +42,7 @@ export const createPaymentUrl = async (req, res, next) => {
         vnp_TxnRef: orderId,
         vnp_OrderInfo: `${orderId}`,
         vnp_OrderType: "other",
-        vnp_Amount: totalPrice * 100,
+        vnp_Amount: Math.round(Number(totalPrice) * 100),
         vnp_ReturnUrl: returnUrl,
         vnp_IpAddr: ipAddr,
         vnp_CreateDate: createDate,
@@ -63,19 +63,19 @@ export const createPaymentUrl = async (req, res, next) => {
         totalPrice: totalPrice,
         payment: payment,
     });
-    const dataCart = await Cart.findOne({ userId: newOrder.userId }).populate('products.productId').exec();
-    if (!isadmin) {
-        dataCart.products = dataCart.products.filter((item_cart) => {
-            return !req.body.items.some((item_order) => {
-                if (item_cart.productId._id.toString() === item_order.productId.toString()) {
-                    if (item_cart.status_checked) {
-                        return true;
-                    }
-                    return false;
-                }
-            })
-        })
-    }
+    // const dataCart = await Cart.findOne({ userId: newOrder.userId }).populate('products.productId').exec();
+    // if (!isadmin) {
+    //     dataCart.products = dataCart.products.filter((item_cart) => {
+    //         return !req.body.items.some((item_order) => {
+    //             if (item_cart.productId._id.toString() === item_order.productId.toString()) {
+    //                 if (item_cart.status_checked) {
+    //                     return true;
+    //                 }
+    //                 return false;
+    //             }
+    //         })
+    //     })
+    // }
 
     for (let i of items) {
         const attribute = await Attribute.findOne({
@@ -97,9 +97,9 @@ export const createPaymentUrl = async (req, res, next) => {
         await attribute.save();
     }
     await newOrder.save();
-    if (!isadmin) {
-        await dataCart.save();
-    }
+    // if (!isadmin) {
+    //     await dataCart.save();
+    // }
     res.json({ paymentUrl });
 }
 

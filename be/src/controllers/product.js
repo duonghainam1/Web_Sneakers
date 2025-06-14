@@ -2,17 +2,39 @@ import { StatusCodes } from "http-status-codes";
 import Products from "../models/product.js";
 import Attribute from "../models/attribute.js";
 export const GetAllProduct = async (req, res) => {
-    const { _page = 1, _limit = 12, _search } = req.query;
+    const { page = 1, limit = 12, search, category, size, color } = req.query;
     try {
         const options = {
-            page: _page,
-            limit: _limit,
+            page: page,
+            limit: limit,
             populate: { path: 'attributes', populate: { path: 'sizes' } },
-            sort: { createdAt: -1 }
+            sort: { createdAt: -1 },
+
         }
         const query = {}
-        if (_search) {
-            query.name = { $regex: _search, $options: 'i' }
+        if (search) {
+            query.name = { $regex: search, $options: 'i' }
+        }
+        if (category) {
+            query.category = category;
+        }
+        if (size || color) {
+            const attrCond = {};
+            if (size) attrCond['sizes.size'] = { $in: (Array.isArray(size) ? size : [size]) };
+            if (color) attrCond.color = { $in: (Array.isArray(color) ? color : [color]) };
+
+            const attrIds = await Attribute
+                .find(attrCond, '_id')      // chỉ lấy _id
+                .lean()
+                .then(rows => rows.map(r => r._id));
+
+            if (attrIds.length === 0) {
+                return res.status(StatusCodes.OK).json({
+                    products: { docs: [], totalDocs: 0, page, limit }
+                });
+            }
+
+            query.attributes = { $in: attrIds };
         }
         const products = await Products.paginate(query, options)
         if (!products) {
@@ -43,7 +65,7 @@ export const GetAllProduct = async (req, res) => {
 export const GetProductById = async (req, res) => {
     try {
         const productId = req.params.id;
-        const product = await Products.findById(productId).populate('attributes');
+        const product = await Products.findById(productId).populate('attributes').populate('category');
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
