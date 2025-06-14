@@ -1,46 +1,184 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCategory } from "@/common/hooks/Category/useCategory"
-import { useState } from "react"
+import { useProducts } from "@/common/hooks/Products/useProducts"
+import { Checkbox } from "antd"
+import { useState, useEffect } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+
+interface ProductAttribute {
+    _id: string;
+    productId: string;
+    color: string;
+    images: string[];
+    sizes: {
+        size: string;
+        price: number;
+        stock: number;
+        _id: string;
+    }[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+interface Product {
+    _id: string;
+    name: string;
+    description: string;
+    category: string;
+    stock: number;
+    sku: string;
+    status: string;
+    images: string[];
+    featured: boolean;
+    attributes: ProductAttribute[];
+    createdAt: string;
+    updatedAt: string;
+}
 
 const SideBar_shop = () => {
+    const navigate = useNavigate()
     const [activeGroup, setActiveGroup] = useState<string | null>(null)
     const { data } = useCategory()
+    const { data: products } = useProducts()
+    const [selectedColor, setSelectedColor] = useState<string | null>(null)
+    const [selectedSize, setSelectedSize] = useState<string | null>(null)
+
+    const location = useLocation();
+    const [selectedId, setSelectedId] = useState<string | null>(null)
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const categoryParam = params.get("category");
+        const colorParam = params.get("color");
+        const sizeParam = params.get("size");
+
+        if (categoryParam) {
+            setSelectedId(categoryParam);
+        }
+        if (colorParam) {
+            setSelectedColor(colorParam);
+        }
+        if (sizeParam) {
+            setSelectedSize(sizeParam);
+        }
+    }, [location.search]);
 
     const toggleGroup = (group: string) => {
         setActiveGroup(activeGroup === group ? null : group)
     }
 
+    const handleCategoryChange = (e: any) => {
+        const { checked, value } = e.target;
+        const params = new URLSearchParams(location.search);
+
+        if (value === 'all') {
+            setSelectedId(null);
+            params.delete("category");
+        } else {
+            if (checked) {
+                setSelectedId(value);
+                params.set("category", value);
+            } else {
+                setSelectedId(null);
+                params.delete("category");
+            }
+        }
+        navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+    };
+
+    const handleColorChange = (color: string) => {
+        const params = new URLSearchParams(location.search);
+
+        if (selectedColor === color) {
+            setSelectedColor(null);
+            params.delete("color");
+        } else {
+            setSelectedColor(color);
+            params.set("color", color);
+        }
+
+        navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+    };
+
+    const handleSizeChange = (size: string) => {
+        const params = new URLSearchParams(location.search);
+
+        if (selectedSize === size) {
+            setSelectedSize(null);
+            params.delete("size");
+        } else {
+            setSelectedSize(size);
+            params.set("size", size);
+        }
+
+        navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+    };
+
+    // Extract unique colors and sizes from products
+    const uniqueColors: string[] = Array.from(new Set(
+        products?.products?.docs?.flatMap((product: Product) =>
+            product.attributes?.map((attr: ProductAttribute) => attr.color)
+        ) || []
+    ));
+
+    const uniqueSizes: string[] = Array.from(new Set(
+        products?.products?.docs?.flatMap((product: Product) =>
+            product.attributes?.flatMap((attr: ProductAttribute) =>
+                attr.sizes?.map(size => size.size)
+            )
+        ) || []
+    ));
+
+    // Count products for each color and size
+    const colorCounts: Record<string, number> = uniqueColors.reduce<Record<string, number>>((acc, color) => {
+        acc[color] = products?.products?.docs?.filter((product: Product) =>
+            product.attributes?.some((attr: ProductAttribute) => attr.color === color)
+        ).length || 0;
+        return acc;
+    }, {});
+
+    const sizeCounts: Record<string, number> = uniqueSizes.reduce<Record<string, number>>((acc, size) => {
+        acc[size] = products?.products?.docs?.filter((product: Product) =>
+            product.attributes?.some((attr: ProductAttribute) =>
+                attr.sizes?.some(s => s.size === size)
+            )
+        ).length || 0;
+        return acc;
+    }, {});
+
     return (
-        <div>
-            <div className="basis-1/5 hidden lg:block">
+        <div className="w-[200px]">
+            <div className="basis-1/5 hidden lg:block ">
                 <div className="group">
                     <div className="flex justify-between items-center mb-3 cursor-pointer" onClick={() => toggleGroup('categories')}>
                         <h1 className="font-bold">Danh mục</h1>
-                        {/* <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="dhn-icons">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                    </svg></span> */}
                     </div>
                     <div className={`${activeGroup === 'categories' ? 'block' : 'hidden'}`}>
+                        <div className="flex items-center gap-2 mb-2">
+                            <Checkbox
+                                className="text-base"
+                                value="all"
+                                checked={selectedId === null}
+                                onChange={(e) => handleCategoryChange(e)}
+                            >
+                                Tất cả sản phẩm
+                            </Checkbox>
+                        </div>
                         {data?.map((category: any) => (
-                            <div className="flex justify-between items-center" key={category.id}>
+                            <div className="flex justify-between items-center" key={category?._id}>
                                 <div className="flex items-center gap-2 mb-2">
-                                    <input type="checkbox" className="w-4 h-4 rounded-lg" />
-                                    <p className="text-base">{category?.category_name}</p>
+                                    <Checkbox className="text-base" value={category?._id} checked={selectedId === category?._id} onChange={(e) => handleCategoryChange(e)} >
+                                        {category?.category_name}
+                                    </Checkbox>
                                 </div>
-                                {/* <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="dhn-icons">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                            </svg></span> */}
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="mb-4 group">
+                {/* <div className="mb-4 group">
                     <div className="flex justify-between items-center mb-3 cursor-pointer" onClick={() => toggleGroup('price')}>
                         <h1 className="font-bold">Giá sản phẩm</h1>
-                        {/* <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="dhn-icons">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                    </svg></span> */}
                     </div>
                     <div className={`${activeGroup === 'price' ? 'block' : 'hidden'}`}>
                         <div className="flex gap-3 mb-2">
@@ -48,24 +186,36 @@ const SideBar_shop = () => {
                             <p>$0 - $2000</p>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="group">
                     <div className="flex justify-between items-center mb-3 cursor-pointer" onClick={() => toggleGroup('color')}>
-                        <h1 className="font-bold">Màu sản phẩm</h1>
-                        {/* <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="dhn-icons">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                    </svg></span> */}
+                        <h1 className="font-bold">Màu sắc</h1>
                     </div>
                     <div className={`${activeGroup === 'color' ? 'block' : 'hidden'}`}>
-                        {['Red', 'Blue', 'Orange', 'Black', 'Green', 'Yellow'].map((color, index) => (
+                        <div className="flex items-center gap-2 mb-2">
+                            <Checkbox
+                                className="text-base"
+                                checked={selectedColor === null}
+                                onChange={() => handleColorChange('')}
+                            >
+                                Tất cả màu sắc
+                            </Checkbox>
+                        </div>
+                        {uniqueColors.map((color: string) => (
                             <div className="flex justify-between items-center" key={color}>
                                 <div className="flex items-center gap-2 mb-2">
-                                    <div className={`bg-${color.toLowerCase()}-600 rounded-sm w-5 h-5`} />
-                                    <p className="text-base">{color}</p>
+                                    <Checkbox
+                                        checked={selectedColor === color}
+                                        onChange={() => handleColorChange(color)}
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-5 h-5 rounded-sm`} style={{ backgroundColor: color.toLowerCase() }} />
+                                            <p className="text-base">{color}</p>
+                                        </div>
+                                    </Checkbox>
                                 </div>
-                                <span>({[10, 14, 8, 9, 4, 2][index]})
-                                </span>
+                                <span>({colorCounts[color]})</span>
                             </div>
                         ))}
                     </div>
@@ -73,20 +223,29 @@ const SideBar_shop = () => {
 
                 <div className="group">
                     <div className="flex justify-between items-center mb-3 cursor-pointer" onClick={() => toggleGroup('size')}>
-                        <h1 className="font-bold">Kích thức sản phẩm</h1>
-                        {/* <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="dhn-icons">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                    </svg></span> */}
+                        <h1 className="font-bold">Kích thước</h1>
                     </div>
                     <div className={`${activeGroup === 'size' ? 'block' : 'hidden'}`}>
-                        {['S', 'M', 'L', 'XL', 'XXL', 'XXXL'].map((size, index) => (
+                        <div className="flex items-center gap-2 mb-2">
+                            <Checkbox
+                                className="text-base"
+                                checked={selectedSize === null}
+                                onChange={() => handleSizeChange('')}
+                            >
+                                Tất cả kích thước
+                            </Checkbox>
+                        </div>
+                        {uniqueSizes.map((size: string) => (
                             <div className="flex justify-between items-center" key={size}>
                                 <div className="flex items-center gap-2 mb-2">
-                                    <input type="checkbox" className="w-4 h-4 rounded-lg" />
-                                    <p className="text-base">{size}</p>
+                                    <Checkbox
+                                        checked={selectedSize === size}
+                                        onChange={() => handleSizeChange(size)}
+                                    >
+                                        <p className="text-base">{size}</p>
+                                    </Checkbox>
                                 </div>
-                                <span>({[6, 20, 7, 16, 10, 2][index]})
-                                </span>
+                                <span>({sizeCounts[size]})</span>
                             </div>
                         ))}
                     </div>

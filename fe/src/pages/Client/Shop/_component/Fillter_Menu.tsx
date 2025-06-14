@@ -1,10 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCategory } from '@/common/hooks/Category/useCategory';
 import { MenuOutlined } from '@ant-design/icons';
-import { Drawer, Space } from 'antd'
-import { useState } from 'react';
+import { Checkbox, Drawer, Space } from 'antd'
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 const Fillter_Menu = () => {
     const [open, setOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<string | null>(null)
+    const navigate = useNavigate()
+    const location = useLocation();
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const categoryParam = params.get("category");
+        if (categoryParam) {
+            setSelectedId(categoryParam);
+        }
+    }, [location.search]);
     const showDrawer = () => {
         setOpen(true);
     };
@@ -16,6 +27,24 @@ const Fillter_Menu = () => {
     const toggleGroup = (group: string) => {
         setActiveGroup(activeGroup === group ? null : group)
     }
+    const handleCategoryChange = (e: any) => {
+        const { checked, value } = e.target;
+        const params = new URLSearchParams(location.search);
+
+        if (value === 'all') {
+            setSelectedId(null);
+            params.delete("category");
+        } else {
+            if (checked) {
+                setSelectedId(value);
+                params.set("category", value);
+            } else {
+                setSelectedId(null);
+                params.delete("category");
+            }
+        }
+        navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+    };
     return (
         <>
             <Space>
@@ -37,11 +66,22 @@ const Fillter_Menu = () => {
                                 <h1 className="font-bold">Danh mục</h1>
                             </div>
                             <div className={`${activeGroup === 'categories' ? 'block' : 'hidden'}`}>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Checkbox
+                                        className="text-base"
+                                        value="all"
+                                        checked={selectedId === null}
+                                        onChange={(e) => handleCategoryChange(e)}
+                                    >
+                                        Tất cả sản phẩm
+                                    </Checkbox>
+                                </div>
                                 {data?.map((category: any) => (
-                                    <div className="flex justify-between items-center" key={category.id}>
+                                    <div className="flex justify-between items-center" key={category._id}>
                                         <div className="flex items-center gap-2 mb-2">
-                                            <input type="checkbox" className="w-4 h-4 rounded-lg" />
-                                            <p className="text-base">{category?.category_name}</p>
+                                            <Checkbox className="text-base" value={category?._id} checked={selectedId === category?._id} onChange={(e) => handleCategoryChange(e)} >
+                                                {category?.category_name}
+                                            </Checkbox>
                                         </div>
                                     </div>
                                 ))}

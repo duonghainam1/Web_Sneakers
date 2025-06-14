@@ -30,7 +30,7 @@ const Relater_Products = ({ data_Detail, isLoading }: any) => {
             ) : (
                 <div className="mb-4 grid grid-cols-2 lg:grid-cols-4 gap-4 my-4">
                     {data_Detail?.relatedProducts?.map((product: Products_Type) => {
-                        const firstImage = product.images?.[0];
+                        const firstImage = product?.images?.[0];
                         const { minPrice, maxPrice } = findMinMaxPrices(product?.attributes);
                         return (
                             <>

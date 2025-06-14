@@ -89,7 +89,7 @@ const Page = () => {
             }
         }
         else {
-            // mutate(orders_Data)
+            mutate(orders_Data)
         }
         // mutate(orders_Data)
     }
@@ -201,7 +201,7 @@ const Page = () => {
                             className="w-[200px] lg:w-[300px]"
                             options={[
                                 { value: 'Cash', label: 'Thanh toán khi nhận hàng' },
-                                { value: 'VNPAY', label: 'VNPAY' },
+                                // { value: 'VNPAY', label: 'VNPAY' },
                             ]}
                             onChange={(value) => setPayment(value)}
                         />

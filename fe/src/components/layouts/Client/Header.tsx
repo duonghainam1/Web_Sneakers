@@ -40,11 +40,11 @@ const Header = () => {
                             <li className="dhn-menu"><Link to={`/`}>Trang chủ</Link></li>
                             <li className="dhn-menu relative group">
                                 <Link to={`/shops`} className="flex gap-1 items-center">Sản phẩm
-                                    <span>
+                                    {/* <span>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3 h-3 font-semibold">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                         </svg>
-                                    </span>
+                                    </span> */}
                                 </Link>
                             </li>
                             <li className="dhn-menu"><a href="#">Liên hệ</a></li>
@@ -86,7 +86,14 @@ const Header = () => {
                         )}
                     </div>
                 </nav>
-                {isOpened && <Search />}
+                {isOpened && (
+                    <>
+                        <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={handleOpen}></div>
+                        <div className="fixed top-0 left-0 right-0 z-50">
+                            <Search setIsOpened={setIsOpened} />
+                        </div>
+                    </>
+                )}
             </header>
 
         </>

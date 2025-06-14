@@ -32,7 +32,7 @@ const Description = ({ data_Detail }: any) => {
             </div>
 
             {activeTab === "description" && (
-                <p id="description" className="ha-content">
+                <p id="description" className="whitespace-pre-line">
                     {data_Detail?.product?.description}
                 </p>
             )}

@@ -37,7 +37,7 @@ const Products = ({ products, isLoading }: any) => {
                         const { minPrice, maxPrice } = findMinMaxPrices(product.attributes);
                         return (
                             <>
-                                {product.status === "Out of Stock" ? (
+                                {product?.status === "Out of Stock" ? (
                                     ''
                                 ) : (
                                     <Link to={`/shops/${product._id}`} key={product._id}
