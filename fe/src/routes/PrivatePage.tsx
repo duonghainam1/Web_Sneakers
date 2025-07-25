@@ -7,11 +7,11 @@ interface DecodedToken extends JwtPayload {
     role: string;
 }
 
-interface PrivateRouteProps {
+interface PrivatePageProps {
     children: ReactNode;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
+const PrivatePage: React.FC<PrivatePageProps> = ({ children }) => {
     const navigate = useNavigate();
     const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
     const [messageApi, contextHolder] = message.useMessage();
@@ -28,7 +28,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
 
         try {
             const decoded = jwtDecode<DecodedToken>(token);
-            if (decoded.role !== 'admin') {
+            if (decoded.role === 'user') {
                 messageApi.error('Bạn không có quyền truy cập trang này!');
                 setTimeout(() => {
                     navigate('/');
@@ -52,4 +52,4 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     );
 }
 
-export default PrivateRoute;
+export default PrivatePage;

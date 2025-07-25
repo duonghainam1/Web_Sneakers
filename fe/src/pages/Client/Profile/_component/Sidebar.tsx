@@ -12,7 +12,6 @@ const Sidebar = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const isAdmin = user?.data?.user?.role === 'admin' || user?.data?.user?.role === 'staff';
-    console.log('user', isAdmin);
 
     const showModal = () => {
         setIsModalVisible(true);
@@ -48,7 +47,7 @@ const Sidebar = () => {
         ]),
         getItem(<NavLink to="/profile/list_orders"><p className='hidden lg:block'>Đơn hàng của tôi</p></NavLink>, '2', <TruckOutlined />),
         // getItem(<NavLink to="/admin"><p className='hidden lg:block'>Trang quản trị</p></NavLink>, '2', <TruckOutlined />),
-        isAdmin ? getItem(<NavLink to="/admin"><p className='hidden lg:block'>Trang quản trị</p></NavLink>, '2', <DashboardOutlined />) : null,
+        isAdmin ? getItem(<NavLink to="/admin"><p className='hidden lg:block'>Trang quản trị</p></NavLink>, '4', <DashboardOutlined />) : null,
 
         getItem(
             <button onClick={showModal} className="flex items-center space-x-2">

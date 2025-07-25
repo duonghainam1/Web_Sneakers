@@ -24,7 +24,7 @@ const Header = () => {
     }
     return (
         <>
-            <header className="px-4 pt-2 fixed top-0 left-0 right-0 bg-white h-20 z-50">
+            <header className="px-2 pt-2 fixed top-0 left-0 right-0 bg-white h-20 z-50">
                 <nav className="flex flex-row lg:flex-nowrap justify-between items-center py-2">
                     <div className="lg:basis-2/6 lg:ml-12 flex items-center gap-4">
                         <div className='lg:hidden'>

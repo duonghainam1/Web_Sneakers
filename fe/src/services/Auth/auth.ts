@@ -18,8 +18,8 @@ export const getAuth = async () => {
 export const signIn = async (user: any) => {
     try {
         const data = await instance.post(`/auth/signin`, user);
-        const token = data.data.token;
-        localStorage.setItem("token", token);
+        // const token = data.data.accessToken;
+        // localStorage.setItem("token", token);
         return data;
     } catch (error: any) {
         if (error.response) {
@@ -49,6 +49,8 @@ export const logOut = async () => {
         const data = await instance.post(`/auth/logout`);
         return data;
     } catch (error: any) {
+        console.log(error);
+
         if (error.response) {
             toast.error("Đăng xuất thất bại vui lòng kiểm tra lại", { autoClose: 800 });
         } else {

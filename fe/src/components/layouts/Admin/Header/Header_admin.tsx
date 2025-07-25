@@ -4,21 +4,34 @@ import { SearchProps } from 'antd/es/input';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useAuth } from '@/common/hooks/Auth/useAuth';
 import { useLocalStorage } from '@/common/hooks/useStorage';
+import { logOut } from '@/services/Auth/auth';
+import { useNavigate } from 'react-router-dom';
 
 const { Search } = Input;
 
 const Header_admin = () => {
     const [user] = useLocalStorage("user", {});
+    const navigate = useNavigate();
     const userId = user?.data?.user?._id;
     const {
         token: { colorBgContainer },
     } = theme.useToken();
     const { data } = useAuth(userId)
     const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+    const handleLogout = async () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        await logOut();
+        navigate("/signin");
+
+    }
     const menu = (
         <Menu>
-            <Menu.Item key="logout" icon={<LogoutOutlined />}>
-                Logout
+            <Menu.Item key="/" icon={<LogoutOutlined />}>
+                Quay lại trang chủ
+            </Menu.Item>
+            <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={handleLogout}>
+                Đăng xuất
             </Menu.Item>
         </Menu>
     );

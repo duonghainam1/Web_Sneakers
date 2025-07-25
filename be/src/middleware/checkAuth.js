@@ -2,47 +2,52 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import { StatusCodes } from "http-status-codes";
 
-export const checkAuth = async (req, res, next) => {
+export const verifyToken = async (req, res, next) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
-        if (!token) {
-            return res.status(StatusCodes.UNAUTHORIZED).json({ error: "Bạn cần phải đăng nhập" });
-        }
-        jwt.verify(token, "123456", async (error, decoded) => {
-            if (error) {
-                if (error.name === "TokenExpiredError") {
-                    return res.status(StatusCodes.BAD_REQUEST).json({ error: "Token đã hết hạn" });
-                }
-                if (error.name === "JsonWebTokenError") {
-                    return res.status(StatusCodes.BAD_REQUEST).json({ error: "Token không hợp lệ" });
-                }
-            } else {
-                const user = await User.findOne({ _id: decoded.userId });
-                if (!user) {
-                    return res.status(StatusCodes.NOT_FOUND).json({ error: "Không tìm thấy người dùng" });
-                }
-                if (user.role === "admin") {
-                    req.user = user;
-                    return next();
-                } else if (user.role === "staff") {
-                    const isGetMethod = req.method === "GET";
-                    const isGetProduct = req.originalUrl.includes("/auth");
-                    if (isGetMethod && isGetProduct) {
-                        req.user = user;
-                        next();
-                    } else {
-                        return res.status(StatusCodes.FORBIDDEN).json({ error: "Bạn không có quyền truy cập vào trang này" });
-                    }
-                    req.user = user;
-                    return next();
-                } else {
-                    return res.status(StatusCodes.FORBIDDEN).json({ error: "Bạn không có quyền truy cập vào trang này" });
-                }
+        // Lấy token từ header hoặc cookie
+        const token = req.headers.authorization?.split(" ")[1] || req.cookies.accessToken;
+        const refreshToken = req.cookies.jwt || req.cookies.refreshToken || req.headers["refresh-token"];
 
+        // Nếu không có token nào
+        if (!token && !refreshToken) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Bạn cần phải đăng nhập" });
+        }
+
+        // Thử verify accessToken trước
+        if (token) {
+            try {
+                const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+                const user = await User.findById(decoded.userId);
+                if (!user) {
+                    return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tìm thấy người dùng" });
+                }
+                req.user = user;
+                return next();
+            } catch (error) {
+                // Nếu accessToken lỗi, thử refreshToken
+                if (!refreshToken) {
+                    return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Access token không hợp lệ và không có refresh token" });
+                }
             }
-        });
+        }
+
+        // Verify refreshToken nếu accessToken không có hoặc lỗi
+        if (refreshToken) {
+            try {
+                const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+                const user = await User.findById(decoded.userId);
+                if (!user) {
+                    return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tìm thấy người dùng" });
+                }
+                req.user = user;
+                return next();
+            } catch (error) {
+                return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Refresh token không hợp lệ" });
+            }
+        }
+
     } catch (error) {
         console.error(error);
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: "Lỗi server" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Có lỗi xảy ra trong quá trình xác thực" });
     }
 };

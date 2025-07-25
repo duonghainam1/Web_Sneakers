@@ -74,7 +74,7 @@ const Mini_cart = () => {
         }
         return text;
     };
-    if (isLoading) return <Spin />
+    // if (isLoading) return <Spin />
     return (
         <>
             <Space>
